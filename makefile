@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -Wshadow -std=c99 $(OPT) -I include/ -I include/lua/
 ifeq ($(OS), Windows_NT)
 	MKDIR = @mkdir
 	RM = @rmdir /s /q
-	LIBS = -L lib/ -lraylib_win -lgdi32 -lwinmm
+	LIBS = -L lib/ -lglfw3_win -lgdi32 -lwinmm
 	BIN = out.exe
 else # Linux
 	MKDIR = @mkdir -p
@@ -13,6 +13,7 @@ else # Linux
 	LIBS = -L lib/ -lglfw3 -lGL -lm -ldl
 	BIN = out
 endif
+
 
 BIN_DIR = bin
 OBJ_DIR = obj
