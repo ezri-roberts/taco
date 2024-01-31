@@ -1,46 +1,48 @@
 #include <stdio.h>
-#include "raylib.h"
+#include <stdlib.h>
 #include "engine.h"
+#include "window.h"
 
 void engine_init() {
 
-    engine.sprites_len = 0;
-    engine.canvases_len = 0;
+    // engine.sprites_len = 0;
+    // engine.canvases_len = 0;
 
-    engine.window_width = 1280;
-    engine.window_height = 720;
-    engine.window_title = "Game Window";
+    glfwInit();
+    window_init(&engine.window, 1280, 720, "Game Window");
 
-    InitWindow(engine.window_width, engine.window_height, engine.window_title);
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    engine.gl_version = gladLoadGL(glfwGetProcAddress);
+    if (engine.gl_version == 0) {
+        printf("Failed to initialize OpenGL context\n");
+        exit(-1);
+    }
 
-    engine.fps_limit = 60;
-    engine.delta_time = 0;
-    SetTargetFPS(engine.fps_limit);
+    printf("Loaded OpenGL %d.%d\n",
+           GLAD_VERSION_MAJOR(engine.gl_version),
+           GLAD_VERSION_MINOR(engine.gl_version)
+    );
+
+    glViewport(0, 0, engine.window.width, engine.window.height);
+    printf("Engine initialized.\n") ;
+    // engine.fps_limit = 60;
+    // engine.delta_time = 0;
+    // SetTargetFPS(engine.fps_limit);
 }
 
 void engine_update() {
 
-    while (!WindowShouldClose()) {
+    while (!window_should_close(&engine.window)) {
 
-        engine.delta_time = GetFrameTime();
+        glfwPollEvents();
 
-        BeginDrawing();
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-            ClearBackground(BLACK);
-            DrawRectangle(32, 32, 128, 128, RAYWHITE);
-
-        EndDrawing();
+        glfwSwapBuffers(engine.window.target);
     }
 }
 
 void engine_cleanup() {
 
-    CloseWindow();
-}
-
-void window_set_size(uint16_t w, uint16_t h) {
-    engine.window_width = w;
-    engine.window_height = h;
-    printf("Width: %d, Height: %d\n", w, h);
+    glfwTerminate();
 }

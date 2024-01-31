@@ -10,7 +10,7 @@ ifeq ($(OS), Windows_NT)
 else # Linux
 	MKDIR = @mkdir -p
 	RM = @rm -r
-	LIBS = -L lib/ -lglfw3 -lGL -lm -ldl
+	LIBS = -L lib/ -lglfw3 -lGL -ldl -lm -lX11 -lXi -lXcursor
 	BIN = out
 endif
 
@@ -24,7 +24,7 @@ LUA_OBJS = lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o \
 	lbaselib.o ldblib.o liolib.o lmathlib.o loslib.o ltablib.o lstrlib.o \
     lutf8lib.o loadlib.o lcorolib.o linit.o
 
-OBJS = $(LUA_OBJS) main.o
+OBJS = $(LUA_OBJS) gl.o main.o engine.o window.o
 
 all: create_dir $(BIN_DIR)/$(BIN)
 
