@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "taco/log.h"
 #include "taco/application.h"
+#include "taco/events/event.h"
 
 // Entrypoint
 #include "taco/entrypoint.h"

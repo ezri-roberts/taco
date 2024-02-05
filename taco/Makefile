@@ -94,6 +94,8 @@ endif
 OBJECTS := \
 	$(OBJDIR)/log.o \
 	$(OBJDIR)/application.o \
+	$(OBJDIR)/event.o \
+	$(OBJDIR)/key_event.o \
 
 RESOURCES := \
 
@@ -156,6 +158,12 @@ $(OBJDIR)/log.o: src/log/log.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/application.o: src/taco/application.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/event.o: src/taco/events/event.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/key_event.o: src/taco/events/key_event.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
