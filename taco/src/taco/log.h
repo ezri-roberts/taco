@@ -9,4 +9,11 @@
 #define TC_TRACE(...) log_trace(__VA_ARGS__)
 #define TC_FATAL(...) log_fatal(__VA_ARGS__)
 
+#define TC_ASSERT(condition, message) \
+	if(!(condition)) { \
+		TC_ERROR((message)); \
+		exit(-1); \
+	}
+
+
 #endif // !TC_LOG_H

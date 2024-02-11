@@ -10,6 +10,11 @@ workspace "taco"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+include_dir = {}
+include_dir["glfw"] = "taco/lib/glfw/include"
+
+-- include "taco/lib/glfw"
+
 project "taco"
 	location "taco"
 	kind "SharedLib"
@@ -17,6 +22,8 @@ project "taco"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("obj/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "tcpch.h"
 
 	files
 	{
@@ -26,12 +33,24 @@ project "taco"
 
 	includedirs
 	{
-		"%{prj.name}/include"
+		"%{prj.name}/include",
+		"%{prj.name}/src",
+		"%{include_dir.glfw}"
 	}
 
 	filter "system:linux"
 		cdialect "C99"
 		staticruntime "On"
+
+		libdirs
+		{
+			"taco/lib/",
+		}
+
+		links
+		{
+			"glfw3",
+		}
 
 		defines
 		{
@@ -85,6 +104,12 @@ project "sandbox"
 	filter "system:linux"
 		cdialect "C99"
 		staticruntime "On"
+
+		links
+		{
+			"m", --"GL", "dl", "pthread", "X11", "Xi", "Xcursor", "rt", "Xrandr",
+			-- "glfw3",
+		}
 
 		defines
 		{

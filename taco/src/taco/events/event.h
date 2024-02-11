@@ -1,9 +1,9 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include "tcpch.h"
 #include "../core.h"
 #include "../keycodes.h"
-#include <stdbool.h>
 
 typedef enum {
 
@@ -58,6 +58,7 @@ typedef struct {
 
 // Common event functions.
 bool event_in_category(Event *event, EventCategory category);
+bool event_dispatch(Event *event);
 
 KeyEvent key_event_new();
 KeyPressedEvent key_pressed_event_new();
