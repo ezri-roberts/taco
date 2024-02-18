@@ -12,12 +12,17 @@
 
 typedef struct {
 
-	WindowTarget *target;
-
 	const char *title;
 	uint32_t width;
 	uint32_t height;
 	bool vsync;
+
+} WindowData;
+
+typedef struct {
+
+	WindowTarget *target;
+	WindowData data;
 
 	void (*callback)();
 

@@ -1,11 +1,15 @@
+#include "taco/log.h"
 #include "taco/window.h"
 
 Window window_new(const char *title, uint32_t width, uint32_t height) {
 
+	TC_TRACE("Creating Window.");
+
 	Window window;
-	window.title = title;
-	window.width = width;
-	window.height = height;
+
+	window.data.title = title;
+	window.data.width = width;
+	window.data.height = height;
 
 	int success = glfwInit();
 
@@ -16,7 +20,10 @@ Window window_new(const char *title, uint32_t width, uint32_t height) {
 	window.target = glfwCreateWindow(width, height, title, NULL, NULL);
 
 	TC_ASSERT(window.target, "Failed to create GLFW window.");
-	// glfwMakeContextCurrent(window->target);
+
+	glfwMakeContextCurrent(window.target);
+	glfwSetWindowUserPointer(window.target, &window.data);
+
 
 	return window;
 }
@@ -25,8 +32,8 @@ void window_on_update(Window *window) {
 
 	while (!glfwWindowShouldClose(window->target)) {
 	
-		glfwSwapBuffers(window->target);
 		glfwPollEvents();
+		glfwSwapBuffers(window->target);
 	}
 
 	glfwDestroyWindow(window->target);
