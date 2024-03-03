@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include "tcpch.h"
+#include "taco/events/event.h"
 
 // typedef void WindowTarget;
 #if defined(TC_PLATFORM_LINUX) || defined(TC_PLATFORM_WINDOWS)
@@ -24,7 +25,7 @@ typedef struct {
 	WindowTarget *target;
 	WindowData data;
 
-	void (*callback)();
+	// void (*callback)(Event&);
 
 } Window;
 

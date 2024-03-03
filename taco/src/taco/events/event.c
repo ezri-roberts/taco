@@ -7,6 +7,8 @@ bool event_in_category(Event *event, EventCategory category) {
 
 bool event_dispatch(Event *event) {
 
-	// Dispatch event?
+	event->handled = true;
 	return true;
+
+	// Dispatch event?
 }

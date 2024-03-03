@@ -2,7 +2,6 @@
 #define EVENT_H
 
 #include "tcpch.h"
-#include "../core.h"
 #include "../keycodes.h"
 
 typedef enum {
@@ -55,6 +54,12 @@ typedef struct {
 	Keycode keycode;
 
 } KeyReleasedEvent;
+
+typedef struct {
+
+	Event *event;
+	
+} EventDispatcher;
 
 // Common event functions.
 bool event_in_category(Event *event, EventCategory category);
