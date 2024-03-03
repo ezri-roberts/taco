@@ -8,6 +8,7 @@
 
 #include "taco/core.h"
 #include "taco/log.h"
+#include "raylib.h"
 
 #ifdef TC_PATFORM_WINDOWS
 	#include <Windows.h>

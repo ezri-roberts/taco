@@ -11,7 +11,7 @@ workspace "taco"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
-include_dir["glfw"] = "taco/lib/glfw/include"
+-- include_dir["glfw"] = "taco/lib/glfw/include"
 
 -- include "taco/lib/glfw"
 
@@ -35,7 +35,7 @@ project "taco"
 	{
 		"%{prj.name}/include",
 		"%{prj.name}/src",
-		"%{include_dir.glfw}"
+		-- "%{include_dir.glfw}"
 	}
 
 	filter "system:linux"
@@ -49,7 +49,8 @@ project "taco"
 
 		links
 		{
-			"glfw3",
+			-- "glfw3",
+			"raylib",
 		}
 
 		defines
