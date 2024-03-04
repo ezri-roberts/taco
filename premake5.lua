@@ -12,8 +12,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
 -- include_dir["glfw"] = "taco/lib/glfw/include"
+include_dir["raylib"] = "taco/lib/raylib/src"
 
 -- include "taco/lib/glfw"
+include "taco/lib/raylib"
 
 project "taco"
 	location "taco"
@@ -36,6 +38,7 @@ project "taco"
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		-- "%{include_dir.glfw}"
+		"%{include_dir.raylib}"
 	}
 
 	filter "system:linux"

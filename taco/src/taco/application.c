@@ -10,12 +10,22 @@ App *tc_app_new() {
 	app->layer_stack = layer_stack_new();
 	app->running = true;
 
+	window_set_event_callback(&app->window, tc_app_on_event);
+
 	return app;
+}
+
+void tc_app_on_event(Event *e) {
+
+	TC_INFO("%d", e);
+	// Dispatch event.
 }
 
 void tc_app_run(App *app) {
 
 	while (app->running) {
+
+		if (WindowShouldClose()) app->running = false;
 
 		BeginDrawing();
 		ClearBackground((Color){50, 50, 50, 255});

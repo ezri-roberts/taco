@@ -1,4 +1,5 @@
 #include "taco/window.h"
+#include "taco/events/event.h"
 
 Window window_new(const char *title, uint32_t width, uint32_t height) {
 
@@ -19,6 +20,10 @@ Window window_new(const char *title, uint32_t width, uint32_t height) {
 	return window;
 }
 
+void window_set_event_callback(Window *window, EventCallback callback) {
+	window->callback = callback;
+}
+
 void window_on_update(Window *window) {
 
 	// while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -28,8 +33,8 @@ void window_on_update(Window *window) {
 	// 	ClearBackground((Color){50, 50, 50, 255});
 	//
 	// 	EndDrawing();
-		PollInputEvents();
-		SwapScreenBuffer();
+		// PollInputEvents();
+		// SwapScreenBuffer();
 	// }
 
 }
