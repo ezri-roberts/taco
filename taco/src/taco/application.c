@@ -7,6 +7,7 @@ App *tc_app_new() {
 	App *app = malloc(sizeof(App));
 
 	app->window = window_new("Game Window", 1280, 720);
+	app->layer_stack = layer_stack_new();
 	app->running = true;
 
 	return app;
@@ -14,7 +15,24 @@ App *tc_app_new() {
 
 void tc_app_run(App *app) {
 
-	window_on_update(&app->window);
+	while (app->running) {
+
+		BeginDrawing();
+		ClearBackground((Color){50, 50, 50, 255});
+
+		uint16_t layer_amount = app->layer_stack.length;
+
+		for (int i = 0; i < layer_amount; i++) {
+		
+			Layer *layer = app->layer_stack.layers[i];
+			layer_update(layer);
+		}
+
+		EndDrawing();
+
+		window_on_update(&app->window);
+	}
+
 }
 
 void tc_app_destroy(App *app) {

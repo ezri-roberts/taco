@@ -13,6 +13,7 @@ Window window_new(const char *title, uint32_t width, uint32_t height) {
 
 	InitWindow(width, height, title);
 	SetTargetFPS(window.data.target_fps);
+	SetExitKey(KEY_NULL);
 	window.handle = GetWindowHandle();
 
 	return window;
@@ -20,14 +21,16 @@ Window window_new(const char *title, uint32_t width, uint32_t height) {
 
 void window_on_update(Window *window) {
 
-	while (!WindowShouldClose())    // Detect window close button or ESC key
-	{
-		BeginDrawing();
-
-		ClearBackground((Color){50, 50, 50, 255});
-
-		EndDrawing();
-	}
+	// while (!WindowShouldClose())    // Detect window close button or ESC key
+	// {
+	// 	BeginDrawing();
+	//
+	// 	ClearBackground((Color){50, 50, 50, 255});
+	//
+	// 	EndDrawing();
+		PollInputEvents();
+		SwapScreenBuffer();
+	// }
 
 }
 

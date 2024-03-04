@@ -102,6 +102,7 @@ OBJECTS := \
 	$(OBJDIR)/application.o \
 	$(OBJDIR)/event.o \
 	$(OBJDIR)/key_event.o \
+	$(OBJDIR)/layer.o \
 	$(OBJDIR)/window.o \
 
 RESOURCES := \
@@ -171,6 +172,9 @@ $(OBJDIR)/event.o: src/taco/events/event.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/key_event.o: src/taco/events/key_event.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/layer.o: src/taco/layer.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/window.o: src/taco/window.c

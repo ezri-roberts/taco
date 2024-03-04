@@ -3,10 +3,12 @@
 
 #include "tcpch.h"
 #include "taco/window.h"
+#include "taco/layer.h"
 
 typedef struct {
 
 	Window window;
+	LayerStack layer_stack;
 	bool running;
 } App;
 
