@@ -18,14 +18,14 @@ ifeq ($(config),debug)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DEBUG
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/rlimgui -Ilib/rlimgui/imgui-master
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
-  LDDEPS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
+  LIBS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a lib/rlimgui/bin/debug-linux-x86_64/rlimgui/librlimgui.a
+  LDDEPS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a lib/rlimgui/bin/debug-linux-x86_64/rlimgui/librlimgui.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -47,14 +47,14 @@ ifeq ($(config),release)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_RELEASE
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/rlimgui -Ilib/rlimgui/imgui-master
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
-  LDDEPS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
+  LIBS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a lib/rlimgui/bin/release-linux-x86_64/rlimgui/librlimgui.a
+  LDDEPS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a lib/rlimgui/bin/release-linux-x86_64/rlimgui/librlimgui.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -76,14 +76,14 @@ ifeq ($(config),dist)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DIST
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/rlimgui -Ilib/rlimgui/imgui-master
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
-  LDDEPS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
+  LIBS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a lib/rlimgui/bin/dist-linux-x86_64/rlimgui/librlimgui.a
+  LDDEPS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a lib/rlimgui/bin/dist-linux-x86_64/rlimgui/librlimgui.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS

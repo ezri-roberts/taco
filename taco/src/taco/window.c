@@ -1,5 +1,4 @@
 #include "taco/window.h"
-#include "taco/events/event.h"
 
 Window window_new(const char *title, uint32_t width, uint32_t height) {
 

@@ -11,11 +11,12 @@ workspace "taco"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
--- include_dir["glfw"] = "taco/lib/glfw/include"
 include_dir["raylib"] = "taco/lib/raylib/src"
+include_dir["rlimgui"] = "taco/lib/rlimgui/"
+include_dir["imgui"] = "taco/lib/rlimgui/imgui-master/"
 
--- include "taco/lib/glfw"
 include "taco/lib/raylib"
+include "taco/lib/rlimgui"
 
 project "taco"
 	location "taco"
@@ -37,8 +38,9 @@ project "taco"
 	{
 		"%{prj.name}/include",
 		"%{prj.name}/src",
-		-- "%{include_dir.glfw}"
-		"%{include_dir.raylib}"
+		"%{include_dir.raylib}",
+		"%{include_dir.rlimgui}",
+		"%{include_dir.imgui}",
 	}
 
 	filter "system:linux"
@@ -52,8 +54,8 @@ project "taco"
 
 		links
 		{
-			-- "glfw3",
 			"raylib",
+			"rlimgui",
 		}
 
 		defines
