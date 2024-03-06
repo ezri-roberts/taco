@@ -1,5 +1,5 @@
 CompileFlags:
-  Add: -I/home/user/proj/c/taco/taco/src
-  Add: -I/home/user/proj/c/taco/taco/lib/raylib/src
-  Add: -I/home/user/proj/c/taco/taco/lib/rlimgui/
-  Add: -I/home/user/proj/c/taco/taco/lib/rlimgui/imgui-master/
+  Add: 
+  - -I/home/user/proj/c/taco/taco/src
+  - -I/home/user/proj/c/taco/taco/lib/raylib/src
+  - -I/home/user/proj/c/taco/taco/lib/nuklear/include

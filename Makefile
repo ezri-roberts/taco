@@ -12,24 +12,21 @@ endif
 
 ifeq ($(config),debug)
   raylib_config = debug
-  rlimgui_config = debug
   taco_config = debug
   sandbox_config = debug
 endif
 ifeq ($(config),release)
   raylib_config = release
-  rlimgui_config = release
   taco_config = release
   sandbox_config = release
 endif
 ifeq ($(config),dist)
   raylib_config = dist
-  rlimgui_config = dist
   taco_config = dist
   sandbox_config = dist
 endif
 
-PROJECTS := raylib rlimgui taco sandbox
+PROJECTS := raylib taco sandbox
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -41,13 +38,7 @@ ifneq (,$(raylib_config))
 	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile config=$(raylib_config)
 endif
 
-rlimgui:
-ifneq (,$(rlimgui_config))
-	@echo "==== Building rlimgui ($(rlimgui_config)) ===="
-	@${MAKE} --no-print-directory -C taco/lib/rlimgui -f Makefile config=$(rlimgui_config)
-endif
-
-taco: raylib rlimgui
+taco: raylib
 ifneq (,$(taco_config))
 	@echo "==== Building taco ($(taco_config)) ===="
 	@${MAKE} --no-print-directory -C taco -f Makefile config=$(taco_config)
@@ -61,7 +52,6 @@ endif
 
 clean:
 	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile clean
-	@${MAKE} --no-print-directory -C taco/lib/rlimgui -f Makefile clean
 	@${MAKE} --no-print-directory -C taco -f Makefile clean
 	@${MAKE} --no-print-directory -C sandbox -f Makefile clean
 
@@ -77,7 +67,6 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   raylib"
-	@echo "   rlimgui"
 	@echo "   taco"
 	@echo "   sandbox"
 	@echo ""

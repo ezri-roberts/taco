@@ -1,0 +1,6 @@
+
+A narrative game engine.
+
+Scenes.
+Triggers.
+Dialogue.

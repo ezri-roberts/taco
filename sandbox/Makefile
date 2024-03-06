@@ -16,7 +16,7 @@ ifeq ($(config),debug)
   TARGET = $(TARGETDIR)/sandbox
   OBJDIR = ../obj/debug-linux-x86_64/sandbox
   DEFINES += -DTC_PLATFORM_LINUX -DTC_DEBUG
-  INCLUDES += -Iinclude -I../taco/src
+  INCLUDES += -Iinclude -I../taco/src -I../taco/lib/nuklear/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c99
@@ -43,7 +43,7 @@ ifeq ($(config),release)
   TARGET = $(TARGETDIR)/sandbox
   OBJDIR = ../obj/release-linux-x86_64/sandbox
   DEFINES += -DTC_PLATFORM_LINUX -DTC_RELEASE
-  INCLUDES += -Iinclude -I../taco/src
+  INCLUDES += -Iinclude -I../taco/src -I../taco/lib/nuklear/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
@@ -70,7 +70,7 @@ ifeq ($(config),dist)
   TARGET = $(TARGETDIR)/sandbox
   OBJDIR = ../obj/dist-linux-x86_64/sandbox
   DEFINES += -DTC_PLATFORM_LINUX -DTC_DIST
-  INCLUDES += -Iinclude -I../taco/src
+  INCLUDES += -Iinclude -I../taco/src -I../taco/lib/nuklear/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99

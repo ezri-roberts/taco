@@ -1,5 +1,6 @@
 workspace "taco"
 	architecture "x64"
+	cdialect "C99"
 
 	configurations
 	{
@@ -12,11 +13,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
 include_dir["raylib"] = "taco/lib/raylib/src"
-include_dir["rlimgui"] = "taco/lib/rlimgui/"
-include_dir["imgui"] = "taco/lib/rlimgui/imgui-master/"
+include_dir["nuklear"] = "taco/lib/nuklear/include"
 
 include "taco/lib/raylib"
-include "taco/lib/rlimgui"
 
 project "taco"
 	location "taco"
@@ -39,8 +38,7 @@ project "taco"
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"%{include_dir.raylib}",
-		"%{include_dir.rlimgui}",
-		"%{include_dir.imgui}",
+		"%{include_dir.nuklear}",
 	}
 
 	filter "system:linux"
@@ -55,7 +53,6 @@ project "taco"
 		links
 		{
 			"raylib",
-			"rlimgui",
 		}
 
 		defines
@@ -99,7 +96,8 @@ project "sandbox"
 	includedirs
 	{
 		"%{prj.name}/include",
-		"taco/src"
+		"taco/src",
+		"%{include_dir.nuklear}",
 	}
 
 	links
@@ -108,8 +106,6 @@ project "sandbox"
 	}
 
 	filter "system:linux"
-		cdialect "C99"
-		staticruntime "On"
 
 		links
 		{

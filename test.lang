@@ -1,3 +1,9 @@
 
 Conner: I just don't know.
-	Nothing seems right.
+		Nothing seems right.
+
+		* Cmon.
+			goto: Hallway
+		* Dunno.
+
+scene: Hallway
