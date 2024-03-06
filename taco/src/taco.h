@@ -1,12 +1,15 @@
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef TACO_H
+#define TACO_H 
 
 // Used by engine applications.
-#include "taco/log.h"
 #include "taco/application.h"
-#include "taco/events/event.h"
+#include "taco/layer.h"
+#include "taco/log.h"
+
+#define RAYLIB_NUKLEAR_IMPLEMENTATION
+#include "raylib-nuklear.h"
 
 // Entrypoint
 #include "taco/entrypoint.h"
 
-#endif // !ENGINE_H
+#endif // !TACO_H

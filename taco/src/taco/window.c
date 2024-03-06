@@ -14,6 +14,7 @@ Window window_new(const char *title, uint32_t width, uint32_t height) {
 	InitWindow(width, height, title);
 	SetTargetFPS(window.data.target_fps);
 	SetExitKey(KEY_NULL);
+
 	window.handle = GetWindowHandle();
 
 	return window;
