@@ -11,6 +11,7 @@ Window window_new(const char *title, uint32_t width, uint32_t height) {
 	window.data.height = height;
 	window.data.target_fps = 60;
 
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(width, height, title);
 	SetTargetFPS(window.data.target_fps);
 	SetExitKey(KEY_NULL);
@@ -26,17 +27,11 @@ void window_set_event_callback(Window *window, EventCallback callback) {
 
 void window_on_update(Window *window) {
 
-	// while (!WindowShouldClose())    // Detect window close button or ESC key
-	// {
-	// 	BeginDrawing();
-	//
-	// 	ClearBackground((Color){50, 50, 50, 255});
-	//
-	// 	EndDrawing();
-		// PollInputEvents();
-		// SwapScreenBuffer();
-	// }
+	if (IsWindowResized()) {
 
+		window->data.width = GetScreenWidth();
+		window->data.height = GetScreenHeight();
+	}
 }
 
 void window_destroy(Window *window) {
