@@ -18,14 +18,14 @@ ifeq ($(config),debug)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DEBUG
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/lua/src -Ilib/nuklear/include
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/nuklear/include
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a lib/lua/bin/debug-linux-x86_64/lua/liblua.a
-  LDDEPS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a lib/lua/bin/debug-linux-x86_64/lua/liblua.a
+  LIBS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
+  LDDEPS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -47,14 +47,14 @@ ifeq ($(config),release)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_RELEASE
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/lua/src -Ilib/nuklear/include
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/nuklear/include
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a lib/lua/bin/release-linux-x86_64/lua/liblua.a
-  LDDEPS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a lib/lua/bin/release-linux-x86_64/lua/liblua.a
+  LIBS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
+  LDDEPS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -76,14 +76,14 @@ ifeq ($(config),dist)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DIST
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/lua/src -Ilib/nuklear/include
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/nuklear/include
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a lib/lua/bin/dist-linux-x86_64/lua/liblua.a
-  LDDEPS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a lib/lua/bin/dist-linux-x86_64/lua/liblua.a
+  LIBS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
+  LDDEPS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -102,11 +102,13 @@ OBJECTS := \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/canvas.o \
 	$(OBJDIR)/sprite.o \
+	$(OBJDIR)/script.o \
 	$(OBJDIR)/application.o \
 	$(OBJDIR)/event.o \
 	$(OBJDIR)/key_event.o \
 	$(OBJDIR)/input.o \
 	$(OBJDIR)/layer.o \
+	$(OBJDIR)/scene.o \
 	$(OBJDIR)/window.o \
 
 RESOURCES := \
@@ -178,6 +180,9 @@ $(OBJDIR)/canvas.o: src/renderer/canvas.c
 $(OBJDIR)/sprite.o: src/renderer/sprite.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/script.o: src/script/script.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/application.o: src/taco/application.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -191,6 +196,9 @@ $(OBJDIR)/input.o: src/taco/input.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/layer.o: src/taco/layer.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/scene.o: src/taco/scene.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/window.o: src/taco/window.c

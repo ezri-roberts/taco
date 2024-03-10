@@ -1,5 +1,5 @@
 #include "application.h"
-#include "renderer/canvas.h"
+#include "script/script.h"
 
 App* tc_app_new() {
 
@@ -10,6 +10,11 @@ App* tc_app_new() {
 	app->window = window_new("Game Window", 1280, 720);
 	app->layer_stack = layer_stack_new();
 	app->state = APP_RUNNING;
+
+	script_read_file("test.script");
+	// Lexer lex = lexer_new("#Title");
+	// lexer_next_token(&lex);
+	// lexer_next_token(&lex);
 
 	return app;
 }
@@ -26,23 +31,17 @@ bool tc_app_check_state(App *app, AppState state) {
 
 void tc_app_quit(App *app) {
 
-
+	app->state = APP_QUIT;
 }
 
 void tc_app_run(App *app) {
-
-	Canvas canvas = canvas_new(480, 270);
 
 	while (app->state == APP_RUNNING) {
 
 		if (WindowShouldClose()) app->state = APP_QUIT;
 
-		canvas_update(&canvas);
-
 		BeginDrawing();
 		ClearBackground((Color){50, 50, 50, 255});
-
-		canvas_draw(&canvas, &app->window.data);
 
 		uint16_t layer_amount = app->layer_stack.layer_index;
 

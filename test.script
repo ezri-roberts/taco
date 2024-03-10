@@ -1,0 +1,27 @@
+
+@ Start
+
+`$is_angry false
+`$num 1
+
+Charles: Hey there!
+Charles: What are you doing?
+You look up.
+
+	* Option 1
+		`> num 0
+		`+ num 1
+		#Opt1
+
+	* Option 2
+		`= is_angry true
+		#Opt2
+
+@ Opt1
+
+	Charles: So... You chose Opt1.
+
+@ Opt2
+
+	Charles: I cant believe you chose this.
+	set is_angry = true
