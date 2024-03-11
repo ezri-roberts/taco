@@ -18,7 +18,7 @@ ifeq ($(config),debug)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DEBUG
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/nuklear/include
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/str -Ilib/nuklear/include
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
@@ -47,7 +47,7 @@ ifeq ($(config),release)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_RELEASE
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/nuklear/include
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/str -Ilib/nuklear/include
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
@@ -76,7 +76,7 @@ ifeq ($(config),dist)
   PCH = src/tcpch.h
   GCH = $(OBJDIR)/$(notdir $(PCH)).gch
   DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DIST
-  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/nuklear/include
+  INCLUDES += -Iinclude -Isrc -Ilib/raylib/src -Ilib/str -Ilib/nuklear/include
   FORCE_INCLUDE += -include $(OBJDIR)/$(notdir $(PCH))
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99

@@ -12,21 +12,24 @@ endif
 
 ifeq ($(config),debug)
   raylib_config = debug
+  str_config = debug
   taco_config = debug
   sandbox_config = debug
 endif
 ifeq ($(config),release)
   raylib_config = release
+  str_config = release
   taco_config = release
   sandbox_config = release
 endif
 ifeq ($(config),dist)
   raylib_config = dist
+  str_config = dist
   taco_config = dist
   sandbox_config = dist
 endif
 
-PROJECTS := raylib taco sandbox
+PROJECTS := raylib str taco sandbox
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -36,6 +39,12 @@ raylib:
 ifneq (,$(raylib_config))
 	@echo "==== Building raylib ($(raylib_config)) ===="
 	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile config=$(raylib_config)
+endif
+
+str:
+ifneq (,$(str_config))
+	@echo "==== Building str ($(str_config)) ===="
+	@${MAKE} --no-print-directory -C taco/lib/str -f Makefile config=$(str_config)
 endif
 
 taco: raylib
@@ -52,6 +61,7 @@ endif
 
 clean:
 	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile clean
+	@${MAKE} --no-print-directory -C taco/lib/str -f Makefile clean
 	@${MAKE} --no-print-directory -C taco -f Makefile clean
 	@${MAKE} --no-print-directory -C sandbox -f Makefile clean
 
@@ -67,6 +77,7 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   raylib"
+	@echo "   str"
 	@echo "   taco"
 	@echo "   sandbox"
 	@echo ""

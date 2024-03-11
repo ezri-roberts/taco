@@ -69,100 +69,63 @@ void script_read_file(const char *path) {
     fclose(file);
 }
 
-Line lexer_read_line(const char *str) {
+Line lexer_read_line(char *str) {
 
 	Line line;
 
-	char prefix = str[0];
-	char *val = _remove_prefix(str);
-	_trim_whitespace(val);
+	// char *prefix = lexer_get_line_prefix(str);
+	// TC_INFO("Prefix: %s", prefix);
 
-	// if (_is_symbol_prefix(prefix)) {
+	// if (strlen(prefix) > 1) free(prefix);
+	// char *val = _remove_prefix(str);
+	// _trim_whitespace(val);
+	//
+	// line.prefix = &prefix;
+	// line.contents = val;
+	// line.type = lexer_get_line_type(line.prefix);
+	// TC_INFO("%s, %c, %s", _line_type_tostring(&line), prefix, line.contents);
 
-		line.prefix = &prefix;
-		line.contents = val;
-		line.type = lexer_get_line_type(line.prefix);
-		TC_INFO(_line_type_tostring(&line));
-
-		// printf("|%c|", prefix);
-		// printf("%lu\n", strlen(str));
-		// printf("|%s|\n", val);
-		free(val);
-	// } else { // Dialogue
-	// 	
+	// if (line.type == LINE_TEXT) {
+	//
+	// 	TC_INFO(lexer_get_character_name(str));
 	// }
+
+	// free(val);
 
 	return line;
 }
 
-void lexer_read_char(Lexer *lexer) {
+// char* lexer_get_line_prefix(char *line) {
+//
+// 	if (_is_symbol_prefix(line[0])) { // Not a text line.
+//
+// 		TC_INFO("NOT TEXT!");
+// 		return first;
+// 	} else {
+//
+// 		// char *name = lexer_get_character_name(line);
+// 		char *name = strtok(line, ":");
+// 		return name;
+// 	}
+// }
 
-	if (lexer->read_position >= strlen(lexer->input)) {
-		lexer->ch = 0;
-	} else {
-		lexer->ch = lexer->input[lexer->read_position];
+char* lexer_get_character_name(char *line) {
+
+	int len = 0;
+	char current = line[len];
+
+	while (current != ':') {
+
+		len++;
+		current = line[len];
 	}
 
-	lexer->position = lexer->read_position;
-	lexer->read_position++;
-}
+    char *name = (char *)malloc(len);
 
-Token lexer_next_token(Lexer *lexer) {
+	strncpy(name, line, len);
+	name[len] = '\0';
 
-	Token tok;
-
-	switch (lexer->ch) {
-
-		default:
-			if (_is_letter(lexer->ch)) {
-
-				lexer_read_identifier(lexer, &tok);
-				tok.type = TOKEN_IDENT;
-				// TC_INFO("%s, %s", _token_tostring(&tok), tok.literal);
-				return tok;
-			} else {
-				tok = token_new(TOKEN_ILLEGAL, &lexer->ch);
-			}
-		case '@':
-			tok = token_new(TOKEN_LOCATION, &lexer->ch); break;
-		case '*':
-			tok = token_new(TOKEN_CHOICE, &lexer->ch); break;
-		case '#':
-			tok = token_new(TOKEN_JUMP, &lexer->ch); break;
-		case '$':
-			tok = token_new(TOKEN_DECLARE, &lexer->ch); break;
-		case '+':
-			tok = token_new(TOKEN_PLUS, &lexer->ch); break;
-		case '=':
-			tok = token_new(TOKEN_EQUAL, &lexer->ch); break;
-		case '<':
-			tok = token_new(TOKEN_LESS, &lexer->ch); break;
-		case '>':
-			tok = token_new(TOKEN_GREATER, &lexer->ch); break;
-		case 0:
-			tok = token_new(TOKEN_EOF, "");
-		
-	}
-
-	// TC_INFO("%s, %s", _token_tostring(&tok), tok.literal);
-	printf("%s\n", tok.literal);
-
-	lexer_read_char(lexer);
-	return tok;
-}
-
-void lexer_read_identifier(Lexer *lexer, Token *tok) {
-
-	int pos = lexer->position;
-	
-	while (_is_letter(lexer->ch)) {
-		lexer_read_char(lexer);
-	}
-
-	int len = lexer->position - pos; 
-
-	strncpy(tok->literal, lexer->input + pos, len);
-	tok->literal[len] = '\0';
+	return name;
 }
 
 bool _is_letter(char ch) {

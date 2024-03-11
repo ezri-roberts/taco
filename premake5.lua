@@ -13,9 +13,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
 include_dir["raylib"] = "taco/lib/raylib/src"
+include_dir["str"] = "taco/lib/str"
 include_dir["nuklear"] = "taco/lib/nuklear/include"
 
 include "taco/lib/raylib"
+include "taco/lib/str"
 
 project "taco"
 	location "taco"
@@ -38,6 +40,7 @@ project "taco"
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"%{include_dir.raylib}",
+		"%{include_dir.str}",
 		"%{include_dir.nuklear}",
 	}
 
