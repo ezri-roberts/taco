@@ -56,6 +56,7 @@ project "taco"
 		links
 		{
 			"raylib",
+			"str",
 		}
 
 		defines

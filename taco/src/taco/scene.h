@@ -3,6 +3,8 @@
 
 typedef struct {
 
+	void (*on_attach)();
+	void (*on_detach)();
 	void (*on_update)();
 
 } Scene;

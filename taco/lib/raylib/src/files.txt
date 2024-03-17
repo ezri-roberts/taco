@@ -1,0 +1,15 @@
+config.h
+raylib.h
+raymath.h
+rcamera.h
+rgestures.h
+rlgl.h
+utils.h
+raudio.c
+rcore.c
+rglfw.c
+rmodels.c
+rshapes.c
+rtext.c
+rtextures.c
+utils.c

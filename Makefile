@@ -47,7 +47,7 @@ ifneq (,$(str_config))
 	@${MAKE} --no-print-directory -C taco/lib/str -f Makefile config=$(str_config)
 endif
 
-taco: raylib
+taco: raylib str
 ifneq (,$(taco_config))
 	@echo "==== Building taco ($(taco_config)) ===="
 	@${MAKE} --no-print-directory -C taco -f Makefile config=$(taco_config)

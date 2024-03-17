@@ -24,8 +24,8 @@ ifeq ($(config),debug)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
-  LDDEPS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
+  LIBS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a lib/str/bin/debug-linux-x86_64/str/libstr.a
+  LDDEPS += lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a lib/str/bin/debug-linux-x86_64/str/libstr.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -53,8 +53,8 @@ ifeq ($(config),release)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
-  LDDEPS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
+  LIBS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a lib/str/bin/release-linux-x86_64/str/libstr.a
+  LDDEPS += lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a lib/str/bin/release-linux-x86_64/str/libstr.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -82,8 +82,8 @@ ifeq ($(config),dist)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
-  LDDEPS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
+  LIBS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a lib/str/bin/dist-linux-x86_64/str/libstr.a
+  LDDEPS += lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a lib/str/bin/dist-linux-x86_64/str/libstr.a
   ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
   LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
