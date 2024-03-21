@@ -133,3 +133,54 @@ project "sandbox"
 	filter "configurations:dist"
 		defines "TC_DIST"
 		optimize "On"
+
+project "taco-shell"
+	location "taco-shell"
+	kind "ConsoleApp"
+	language "C"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("obj/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.c",
+	}
+
+	includedirs
+	{
+		"%{prj.name}/include",
+		"taco/src",
+		"%{include_dir.nuklear}",
+	}
+
+	links
+	{
+		"taco"
+	}
+
+	filter "system:linux"
+
+		links
+		{
+			"m", --"GL", "dl", "pthread", "X11", "Xi", "Xcursor", "rt", "Xrandr",
+			-- "glfw3",
+		}
+
+		defines
+		{
+			"TC_PLATFORM_LINUX",
+		}
+
+	filter "configurations:debug"
+		defines "TC_DEBUG"
+		symbols "On"
+
+	filter "configurations:release"
+		defines "TC_RELEASE"
+		optimize "On"
+
+	filter "configurations:dist"
+		defines "TC_DIST"
+		optimize "On"

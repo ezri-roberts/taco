@@ -2,12 +2,12 @@
 
 App* tc_app_new() {
 
-	TC_TRACE("Creating app.");
+	TC_INFO("Creating App.");
 
 	App *app = malloc(sizeof(App));
 
 	app->window = window_new("Game Window", 1280, 720);
-	app->layer_stack = layer_stack_new();
+	app->scene_list = scene_list_new();
 	app->state = APP_RUNNING;
 
 	return app;
@@ -34,14 +34,16 @@ void tc_app_run(App *app) {
 
 		if (WindowShouldClose()) app->state = APP_QUIT;
 
+		app->fps = GetFPS();
+
 		BeginDrawing();
 		ClearBackground((Color){50, 50, 50, 255});
 
-		uint16_t layer_amount = app->layer_stack.layer_index;
+		uint16_t layer_amount = app->layer_stack->used;
 
 		for (int i = 0; i <= layer_amount-1; i++) {
 
-			Layer *layer = app->layer_stack.layers[i];
+			Layer *layer = app->layer_stack->layers[i];
 			if (layer->on_update) layer->on_update(GetFrameTime());
 		}
 
@@ -52,12 +54,27 @@ void tc_app_run(App *app) {
 
 }
 
+void tc_app_set_scene(App *app, const char *name) {
+
+	for (int i = 0; i <= app->scene_list.used; i++) {
+
+		if (app->scene_list.scenes[i]->name == name) {
+
+			TC_INFO("Set scene to: %s", name);
+
+			app->current_scene = app->scene_list.scenes[i];
+			app->layer_stack = &app->current_scene->layer_stack;
+			break;
+		}
+	}
+}
+
 void tc_app_destroy(App *app) {
 
-	layer_stack_destory(&app->layer_stack);
+	scene_list_destroy(&app->scene_list);
 	window_destroy(&app->window);
 	free(app);
 	app = NULL;
 
-	TC_TRACE("Destroyed app.");
+	TC_INFO("Destroyed App.");
 }

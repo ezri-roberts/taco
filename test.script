@@ -1,9 +1,8 @@
-
 # This is a comment. It will be ignored.
 
-$is_angry = false
-$num = 2
-$text = "Hey."
+$is_angry false
+$num 2
+$text Hey.
 
 @ Start
 
@@ -12,10 +11,10 @@ $text = "Hey."
 	You look up.
 
 	- Option 1
-		? $num > 0
+		> $num 0
 			Good choice!
 			*show charles_happy
-			> Opt1	
+			~ Opt1	
 		;
 
 	- Option 2

@@ -15,21 +15,24 @@ ifeq ($(config),debug)
   str_config = debug
   taco_config = debug
   sandbox_config = debug
+  taco_shell_config = debug
 endif
 ifeq ($(config),release)
   raylib_config = release
   str_config = release
   taco_config = release
   sandbox_config = release
+  taco_shell_config = release
 endif
 ifeq ($(config),dist)
   raylib_config = dist
   str_config = dist
   taco_config = dist
   sandbox_config = dist
+  taco_shell_config = dist
 endif
 
-PROJECTS := raylib str taco sandbox
+PROJECTS := raylib str taco sandbox taco-shell
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -59,11 +62,18 @@ ifneq (,$(sandbox_config))
 	@${MAKE} --no-print-directory -C sandbox -f Makefile config=$(sandbox_config)
 endif
 
+taco-shell: taco
+ifneq (,$(taco_shell_config))
+	@echo "==== Building taco-shell ($(taco_shell_config)) ===="
+	@${MAKE} --no-print-directory -C taco-shell -f Makefile config=$(taco_shell_config)
+endif
+
 clean:
 	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile clean
 	@${MAKE} --no-print-directory -C taco/lib/str -f Makefile clean
 	@${MAKE} --no-print-directory -C taco -f Makefile clean
 	@${MAKE} --no-print-directory -C sandbox -f Makefile clean
+	@${MAKE} --no-print-directory -C taco-shell -f Makefile clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -80,5 +90,6 @@ help:
 	@echo "   str"
 	@echo "   taco"
 	@echo "   sandbox"
+	@echo "   taco-shell"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

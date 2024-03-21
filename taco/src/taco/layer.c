@@ -16,45 +16,47 @@ Layer* layer_new(const char *name) {
 LayerStack layer_stack_new() {
 
 	LayerStack stack;
-	stack.layer_index = 0;
-	stack.overlay_index = OVERLAY_INDEX_START;
+
+	stack.layers = malloc(128 * sizeof(Layer));
+	stack.used = 0;
+	stack.size = 128;
 
 	return stack;
-}
-
-void layer_stack_destory(LayerStack *stack) {
-
-	TC_TRACE("Destroying layer stack.");
-	uint16_t layer_amount = stack->layer_index;
-
-	for (int i = 0; i <= layer_amount-1; i++) {
-
-		Layer *layer = stack->layers[i];
-		if (layer->on_detach) layer->on_detach();
-
-		TC_TRACE("Destroying Layer: 0x%x", layer);
-		free(layer);
-		layer = NULL;
-	}
-	
 }
 
 void layer_stack_push(LayerStack *stack, Layer *layer) {
 
 	if (layer->on_attach) layer->on_attach();
-	stack->layers[stack->layer_index] = layer;
-	stack->layer_index++;
 
-}
+	if (stack->used == stack->size) {
+		stack->size *= 2;
+		stack->layers = realloc(stack->layers, stack->size * sizeof(Layer));
+	}
+	stack->layers[stack->used++] = layer;
 
-void layer_stack_push_overlay(LayerStack *stack, Layer *overlay) {
-
-	overlay->on_attach();
-	stack->layers[stack->overlay_index] = overlay;
-	stack->overlay_index++;
 }
 
 void layer_stack_pop(LayerStack *stack, Layer *layer) {
 
+}
+
+void layer_stack_destory(LayerStack *stack) {
+
+	TC_INFO("Destroying Layer Stack: '0x%x'", stack);
+
+	for (int i = 0; i < stack->used; i++) {
+
+		Layer *layer = stack->layers[i];
+		if (layer->on_detach) layer->on_detach();
+
+		TC_INFO("Destroying Layer: 0x%x", layer);
+		free(layer);
+		layer = NULL;
+	}
+
+	free(stack->layers);
+	stack->layers = NULL;
+	stack->used = stack->size = 0;
+	
 }
 

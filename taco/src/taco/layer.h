@@ -19,9 +19,10 @@ typedef struct {
 
 typedef struct {
 
-	Layer *layers[MAX_LAYERS];
-	uint16_t layer_index;
-	uint16_t overlay_index;
+	Layer **layers;
+
+	size_t used;
+	size_t size;
 
 } LayerStack;
 

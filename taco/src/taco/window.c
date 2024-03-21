@@ -2,7 +2,7 @@
 
 Window window_new(const char *title, uint32_t width, uint32_t height) {
 
-	TC_TRACE("Creating Window.");
+	TC_INFO("Creating Window.");
 
 	Window window;
 
@@ -37,5 +37,5 @@ void window_on_update(Window *window) {
 void window_destroy(Window *window) {
 
 	CloseWindow();
-	TC_TRACE("Destroyed window.");
+	TC_INFO("Destroyed Window.");
 }

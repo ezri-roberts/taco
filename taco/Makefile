@@ -102,7 +102,6 @@ OBJECTS := \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/canvas.o \
 	$(OBJDIR)/sprite.o \
-	$(OBJDIR)/script.o \
 	$(OBJDIR)/application.o \
 	$(OBJDIR)/event.o \
 	$(OBJDIR)/key_event.o \
@@ -178,9 +177,6 @@ $(OBJDIR)/canvas.o: src/renderer/canvas.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/sprite.o: src/renderer/sprite.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/script.o: src/script/script.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/application.o: src/taco/application.c
