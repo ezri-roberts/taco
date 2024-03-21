@@ -1,5 +1,5 @@
-local log = require "lib.log"
-local inspect = require "lib.pprint"
+local log = require "log"
+local inspect = require "pprint"
 
 Script = {}
 Script.vars = {}
@@ -101,6 +101,16 @@ function Script.load(file)
 				local expr = line_data.contents:gsub("%$", "Script.vars.")
 				line_data.expr = expr
 
+				local block, err = load(expr)
+
+				if (block) then
+					block()
+				end
+
+				if (err) then
+					log.error(err)
+				end
+
 			elseif (line_data.type == "condition") then
 
 				local expr = line_data.contents:gsub("%$", "Script.vars.")
@@ -108,6 +118,16 @@ function Script.load(file)
 
 				line_data.expr = expr
 				current_condition = line_data
+
+				local block, err = load(expr)
+
+				if (block) then
+					block()
+				end
+
+				if (err) then
+					log.error(err)
+				end
 
 			elseif (line_data.type == "condition_end") then
 				current_condition = nil
@@ -129,3 +149,5 @@ function Script.load(file)
 	inspect(tree)
 
 end
+
+Script.load("test.script")
