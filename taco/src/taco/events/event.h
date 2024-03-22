@@ -55,11 +55,8 @@ typedef struct {
 
 } KeyReleasedEvent;
 
-typedef struct {
-
-	Event *event;
-	
-} EventDispatcher;
+// Event callback function pointer.
+typedef void (*EventCallback)(Event*);
 
 // Common event functions.
 bool event_in_category(Event *event, EventCategory category);

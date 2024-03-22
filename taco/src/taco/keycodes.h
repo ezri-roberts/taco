@@ -1,6 +1,8 @@
 #ifndef KEYCODES_H
 #define KEYCODES_H
 
+#include "tcpch.h"
+
 typedef enum {
 
 	SPACE               = 32,

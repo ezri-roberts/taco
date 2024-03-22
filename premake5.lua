@@ -1,5 +1,6 @@
 workspace "taco"
 	architecture "x64"
+	cdialect "C99"
 
 	configurations
 	{
@@ -11,9 +12,10 @@ workspace "taco"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
-include_dir["glfw"] = "taco/lib/glfw/include"
+include_dir["raylib"] = "taco/lib/raylib/src"
+include_dir["nuklear"] = "taco/lib/nuklear/include"
 
--- include "taco/lib/glfw"
+include "taco/lib/raylib"
 
 project "taco"
 	location "taco"
@@ -35,7 +37,8 @@ project "taco"
 	{
 		"%{prj.name}/include",
 		"%{prj.name}/src",
-		"%{include_dir.glfw}"
+		"%{include_dir.raylib}",
+		"%{include_dir.nuklear}",
 	}
 
 	filter "system:linux"
@@ -49,7 +52,7 @@ project "taco"
 
 		links
 		{
-			"glfw3",
+			"raylib",
 		}
 
 		defines
@@ -93,7 +96,8 @@ project "sandbox"
 	includedirs
 	{
 		"%{prj.name}/include",
-		"taco/src"
+		"taco/src",
+		"%{include_dir.nuklear}",
 	}
 
 	links
@@ -102,8 +106,57 @@ project "sandbox"
 	}
 
 	filter "system:linux"
-		cdialect "C99"
-		staticruntime "On"
+
+		links
+		{
+			"m", --"GL", "dl", "pthread", "X11", "Xi", "Xcursor", "rt", "Xrandr",
+			-- "glfw3",
+		}
+
+		defines
+		{
+			"TC_PLATFORM_LINUX",
+		}
+
+	filter "configurations:debug"
+		defines "TC_DEBUG"
+		symbols "On"
+
+	filter "configurations:release"
+		defines "TC_RELEASE"
+		optimize "On"
+
+	filter "configurations:dist"
+		defines "TC_DIST"
+		optimize "On"
+
+project "taco-shell"
+	location "taco-shell"
+	kind "ConsoleApp"
+	language "C"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("obj/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.c",
+	}
+
+	includedirs
+	{
+		"%{prj.name}/include",
+		"taco/src",
+		"%{include_dir.nuklear}",
+	}
+
+	links
+	{
+		"taco"
+	}
+
+	filter "system:linux"
 
 		links
 		{

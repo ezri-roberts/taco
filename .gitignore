@@ -1,4 +1,5 @@
 bin/
 obj/
-taco/lib/raylib/
+taco/lib/raylib/obj
+taco/lib/raylib/bin
 run.sh

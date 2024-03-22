@@ -1,0 +1,30 @@
+# This is a comment. It will be ignored.
+
+$is_angry false
+$num 2
+$text Hey.
+
+@ Start
+
+	Charles: Hey there!
+	Charles: What are you doing?
+	You look up.
+
+	- Option 1
+		> $num 0
+			Good choice!
+			*show charles_happy
+			~ Opt1	
+		;
+
+	- Option 2
+		> Opt2
+
+@ Opt1
+
+	Charles: So... You chose Opt1.
+
+@ Opt2
+
+	Charles: I cant believe you chose this.
+	*scene death
