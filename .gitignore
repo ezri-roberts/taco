@@ -2,4 +2,5 @@ bin/
 obj/
 taco/lib/raylib/obj
 taco/lib/raylib/bin
-run.sh
+assets/
+.clangd

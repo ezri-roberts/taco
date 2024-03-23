@@ -34,6 +34,10 @@ void test_layer_update(float delta_time) {
 	nk_end(ctx);
 
 	DrawNuklear(ctx);
+
+	if (input_key_pressed(D)) {
+		tc_app_set_scene(app, "scene2");
+	}
 }
 
 App *tc_app_create() {
@@ -47,6 +51,9 @@ App *tc_app_create() {
 	
 	Scene *default_scene = scene_new("default");
 	scene_list_add(&app->scene_list, default_scene);
+	Scene *scene_two = scene_new("scene2");
+	scene_list_add(&app->scene_list, scene_two);
+
 	layer_stack_push(&default_scene->layer_stack, test_layer);
 	tc_app_set_scene(app, "default");
 	

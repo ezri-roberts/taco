@@ -1,4 +1,5 @@
 #include "application.h"
+#include "packer.h"
 
 App* tc_app_new() {
 
@@ -9,6 +10,8 @@ App* tc_app_new() {
 	app->window = window_new("Game Window", 1280, 720);
 	app->scene_list = scene_list_new();
 	app->state = APP_RUNNING;
+
+	pack("assets");
 
 	return app;
 }

@@ -19,11 +19,14 @@ endif
 # #############################################
 
 RESCOMP = windres
-INCLUDES += -Iinclude -I../taco/src -I../taco/lib/raylib/src -I../taco/lib/nuklear/include
+DEFINES +=
+INCLUDES += -Isrc
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-LINKCMD = $(CC) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
+LIBS +=
+LDDEPS +=
+LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
 define PREBUILDCMDS
 endef
 define PRELINKCMDS
@@ -32,37 +35,28 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug)
-TARGETDIR = ../bin/debug-linux-x86_64/sandbox
-TARGET = $(TARGETDIR)/sandbox
-OBJDIR = ../obj/debug-linux-x86_64/sandbox
-DEFINES += -DTC_PLATFORM_LINUX -DTC_DEBUG
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c99
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g
-LIBS += ../bin/debug-linux-x86_64/taco/libtaco.so -lm
-LDDEPS += ../bin/debug-linux-x86_64/taco/libtaco.so
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64
+TARGETDIR = bin/debug-linux-x86_64/packer
+TARGET = $(TARGETDIR)/libpacker.a
+OBJDIR = obj/debug-linux-x86_64/packer
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
-TARGETDIR = ../bin/release-linux-x86_64/sandbox
-TARGET = $(TARGETDIR)/sandbox
-OBJDIR = ../obj/release-linux-x86_64/sandbox
-DEFINES += -DTC_PLATFORM_LINUX -DTC_RELEASE
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
-LIBS += ../bin/release-linux-x86_64/taco/libtaco.so -lm
-LDDEPS += ../bin/release-linux-x86_64/taco/libtaco.so
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64 -s
+TARGETDIR = bin/release-linux-x86_64/packer
+TARGET = $(TARGETDIR)/libpacker.a
+OBJDIR = obj/release-linux-x86_64/packer
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
 
 else ifeq ($(config),dist)
-TARGETDIR = ../bin/dist-linux-x86_64/sandbox
-TARGET = $(TARGETDIR)/sandbox
-OBJDIR = ../obj/dist-linux-x86_64/sandbox
-DEFINES += -DTC_PLATFORM_LINUX -DTC_DIST
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
-LIBS += ../bin/dist-linux-x86_64/taco/libtaco.so -lm
-LDDEPS += ../bin/dist-linux-x86_64/taco/libtaco.so
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64 -s
+TARGETDIR = bin/dist-linux-x86_64/packer
+TARGET = $(TARGETDIR)/libpacker.a
+OBJDIR = obj/dist-linux-x86_64/packer
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -std=c99
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
 
 endif
 
@@ -76,8 +70,8 @@ endif
 GENERATED :=
 OBJECTS :=
 
-GENERATED += $(OBJDIR)/sandbox.o
-OBJECTS += $(OBJDIR)/sandbox.o
+GENERATED += $(OBJDIR)/packer.o
+OBJECTS += $(OBJDIR)/packer.o
 
 # Rules
 # #############################################
@@ -87,7 +81,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking sandbox
+	@echo Linking packer
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -108,7 +102,7 @@ else
 endif
 
 clean:
-	@echo Cleaning sandbox
+	@echo Cleaning packer
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -141,7 +135,7 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/sandbox.o: src/sandbox.c
+$(OBJDIR)/packer.o: src/packer.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
