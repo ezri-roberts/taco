@@ -2,7 +2,7 @@
 #define EVENT_H
 
 #include "tcpch.h"
-#include "../keycodes.h"
+#include "taco/keycodes.h"
 
 typedef enum {
 
@@ -26,10 +26,11 @@ typedef enum {
 
 typedef struct {
 
-	const char *name;
-	bool handled;
-	int category;
+	sapp_event event;
 	EventType type;
+	const char *name;
+	int category;
+	bool handled;
 
 } Event;
 

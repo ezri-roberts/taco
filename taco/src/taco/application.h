@@ -7,13 +7,6 @@
 #include "taco/layer.h"
 #include "taco/scene.h"
 
-#define SOKOL_IMPL
-#define SOKOL_GLES3
-#include "sokol_app.h"
-#include "sokol_gfx.h"
-#include "sokol_log.h"
-#include "sokol_glue.h"
-
 typedef enum {
 
 	APP_RUNNING,
