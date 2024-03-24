@@ -14,6 +14,7 @@
 #define RES_TYPE_UNDEFINED 0
 #define RES_TYPE_IMAGE 1
 #define RES_TYPE_AUDIO 2
+#define RES_TYPE_SCRIPT 3
 
 typedef struct {
 

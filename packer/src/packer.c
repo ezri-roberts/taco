@@ -2,6 +2,7 @@
 
 static const char* file_types[3][3] = {
 	{"png", "jpg", "jpeg"},
+	{"mp3", "wav", "ogg"},
 };
 
 void pack(const char *path) {

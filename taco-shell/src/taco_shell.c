@@ -4,17 +4,19 @@ struct nk_context *ctx;
 App *app;
 
 enum nk_collapse_states states;
+Font font;
 
 void test_layer_attach() {
 
-	Font font = LoadFont("InterVariable.ttf");
-	ctx = InitNuklearEx(font, 16);
+	font = LoadFont("InterVariable.ttf");
+	ctx = InitNuklearEx(font, 12);
 	TC_INFO("Layer attached.");
 }
 
 void test_layer_detach() {
 
 	UnloadNuklear(ctx);
+	UnloadFont(font);
 	TC_INFO("Layer detached.");
 }
 
