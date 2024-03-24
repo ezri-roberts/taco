@@ -13,11 +13,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
 include_dir["packer"] = "packer/src"
-include_dir["raylib"] = "taco/lib/raylib/src"
-include_dir["nuklear"] = "taco/lib/nuklear/include"
+include_dir["sokol"] = "taco/lib/sokol"
 
 include "packer"
-include "taco/lib/raylib"
+-- include "taco/lib/sokol"
 
 project "taco"
 	location "taco"
@@ -38,8 +37,7 @@ project "taco"
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"%{include_dir.packer}",
-		"%{include_dir.raylib}",
-		"%{include_dir.nuklear}",
+		"%{include_dir.sokol}",
 	}
 
 	pchheader "tcpch.h"
@@ -56,7 +54,6 @@ project "taco"
 		links
 		{
 			"packer",
-			"raylib",
 		}
 
 		defines
@@ -101,8 +98,6 @@ project "sandbox"
 	{
 		"%{prj.name}/include",
 		"taco/src",
-		"%{include_dir.raylib}",
-		"%{include_dir.nuklear}",
 	}
 
 	links
@@ -153,8 +148,6 @@ project "taco-shell"
 	{
 		"%{prj.name}/include",
 		"taco/src",
-		"%{include_dir.raylib}",
-		"%{include_dir.nuklear}",
 	}
 
 	links

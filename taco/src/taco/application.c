@@ -1,6 +1,7 @@
 #include "application.h"
 #include "packer.h"
 
+
 App* tc_app_new() {
 
 	TC_INFO("Creating App.");
@@ -33,27 +34,27 @@ void tc_app_quit(App *app) {
 
 void tc_app_run(App *app) {
 
-	while (app->state == APP_RUNNING) {
-
-		if (WindowShouldClose()) app->state = APP_QUIT;
-
-		app->fps = GetFPS();
-
-		BeginDrawing();
-		ClearBackground((Color){50, 50, 50, 255});
-
-		uint16_t layer_amount = app->layer_stack->used;
-
-		for (int i = 0; i <= layer_amount-1; i++) {
-
-			Layer *layer = app->layer_stack->layers[i];
-			if (layer->on_update) layer->on_update(GetFrameTime());
-		}
-
-		EndDrawing();
-
-		window_on_update(&app->window);
-	}
+	// while (app->state == APP_RUNNING) {
+	//
+	// 	if (WindowShouldClose()) app->state = APP_QUIT;
+	//
+	// 	app->fps = GetFPS();
+	//
+	// 	BeginDrawing();
+	// 	ClearBackground((Color){50, 50, 50, 255});
+	//
+	// 	uint16_t layer_amount = app->layer_stack->used;
+	//
+	// 	for (int i = 0; i <= layer_amount-1; i++) {
+	//
+	// 		Layer *layer = app->layer_stack->layers[i];
+	// 		if (layer->on_update) layer->on_update(GetFrameTime());
+	// 	}
+	//
+	// 	EndDrawing();
+	//
+	// 	window_on_update(&app->window);
+	// }
 
 }
 

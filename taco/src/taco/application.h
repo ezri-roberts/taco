@@ -19,7 +19,14 @@ typedef enum {
 
 typedef struct {
 
-	Window window;
+	sg_pass_action pass_action;
+} RenderState;
+
+typedef struct {
+
+	RenderState render_state;
+
+	TcWindow window;
 	LayerStack *layer_stack;
 	AppState state;
 
@@ -37,5 +44,8 @@ void tc_app_on_event(Event *e);
 bool tc_app_check_state(App *app, AppState state);
 void tc_app_set_scene(App *app, const char *name);
 void tc_app_quit(App *app);
+void sk_init(void);
+void sk_frame(void);
+void sk_cleanup(void);
 
 #endif // !APPLICATION_H

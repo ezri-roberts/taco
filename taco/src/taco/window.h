@@ -21,12 +21,12 @@ typedef struct {
 
 	EventCallback callback;
 
-} Window;
+} TcWindow;
 
-Window window_new(const char *title, uint32_t width, uint32_t height);
-void window_destroy(Window *window);
-void window_on_update(Window *window);
-bool window_should_close(Window *window);
-void window_set_event_callback(Window *window, EventCallback callback);
+TcWindow window_new(const char *title, uint32_t width, uint32_t height);
+void window_destroy(TcWindow *window);
+void window_on_update(TcWindow *window);
+bool window_should_close(TcWindow *window);
+void window_set_event_callback(TcWindow *window, EventCallback callback);
 
 #endif // !WINDOW_H

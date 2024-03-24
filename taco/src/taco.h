@@ -6,9 +6,6 @@
 #include "taco/layer.h"
 #include "taco/log.h"
 
-#define RAYLIB_NUKLEAR_IMPLEMENTATION
-#include "raylib-nuklear.h"
-
 // Entrypoint
 #include "taco/entrypoint.h"
 
