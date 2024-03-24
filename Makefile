@@ -10,21 +10,18 @@ endif
 
 ifeq ($(config),debug)
   packer_config = debug
-  raylib_config = debug
   taco_config = debug
   sandbox_config = debug
   taco_shell_config = debug
 
 else ifeq ($(config),release)
   packer_config = release
-  raylib_config = release
   taco_config = release
   sandbox_config = release
   taco_shell_config = release
 
 else ifeq ($(config),dist)
   packer_config = dist
-  raylib_config = dist
   taco_config = dist
   sandbox_config = dist
   taco_shell_config = dist
@@ -33,7 +30,7 @@ else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := packer raylib taco sandbox taco-shell
+PROJECTS := packer taco sandbox taco-shell
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -45,13 +42,7 @@ ifneq (,$(packer_config))
 	@${MAKE} --no-print-directory -C packer -f Makefile config=$(packer_config)
 endif
 
-raylib:
-ifneq (,$(raylib_config))
-	@echo "==== Building raylib ($(raylib_config)) ===="
-	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile config=$(raylib_config)
-endif
-
-taco: packer raylib
+taco: packer
 ifneq (,$(taco_config))
 	@echo "==== Building taco ($(taco_config)) ===="
 	@${MAKE} --no-print-directory -C taco -f Makefile config=$(taco_config)
@@ -71,7 +62,6 @@ endif
 
 clean:
 	@${MAKE} --no-print-directory -C packer -f Makefile clean
-	@${MAKE} --no-print-directory -C taco/lib/raylib -f Makefile clean
 	@${MAKE} --no-print-directory -C taco -f Makefile clean
 	@${MAKE} --no-print-directory -C sandbox -f Makefile clean
 	@${MAKE} --no-print-directory -C taco-shell -f Makefile clean
@@ -88,7 +78,6 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   packer"
-	@echo "   raylib"
 	@echo "   taco"
 	@echo "   sandbox"
 	@echo "   taco-shell"

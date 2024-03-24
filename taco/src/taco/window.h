@@ -12,12 +12,12 @@ typedef struct {
 	uint32_t target_fps;
 	bool vsync;
 
-} WindowData;
+} TcWindowData;
 
 typedef struct {
 
 	void *handle;
-	WindowData data;
+	TcWindowData data;
 
 	EventCallback callback;
 

@@ -22,7 +22,7 @@ RESCOMP = windres
 PCH = src/tcpch.h
 PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
 GCH = $(PCH_PLACEHOLDER).gch
-INCLUDES += -Iinclude -Isrc -I../packer/src -Ilib/raylib/src -Ilib/nuklear/include
+INCLUDES += -Iinclude -Isrc -I../packer/src -Ilib/sokol
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -41,8 +41,8 @@ OBJDIR = ../obj/debug-linux-x86_64/taco
 DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
-LIBS += ../packer/bin/debug-linux-x86_64/packer/libpacker.a lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
-LDDEPS += ../packer/bin/debug-linux-x86_64/packer/libpacker.a lib/raylib/bin/debug-linux-x86_64/raylib/libraylib.a
+LIBS += ../packer/bin/debug-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LDDEPS += ../packer/bin/debug-linux-x86_64/packer/libpacker.a
 ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so
 
 else ifeq ($(config),release)
@@ -52,8 +52,8 @@ OBJDIR = ../obj/release-linux-x86_64/taco
 DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
-LIBS += ../packer/bin/release-linux-x86_64/packer/libpacker.a lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
-LDDEPS += ../packer/bin/release-linux-x86_64/packer/libpacker.a lib/raylib/bin/release-linux-x86_64/raylib/libraylib.a
+LIBS += ../packer/bin/release-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LDDEPS += ../packer/bin/release-linux-x86_64/packer/libpacker.a
 ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
 
 else ifeq ($(config),dist)
@@ -63,8 +63,8 @@ OBJDIR = ../obj/dist-linux-x86_64/taco
 DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
-LIBS += ../packer/bin/dist-linux-x86_64/packer/libpacker.a lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
-LDDEPS += ../packer/bin/dist-linux-x86_64/packer/libpacker.a lib/raylib/bin/dist-linux-x86_64/raylib/libraylib.a
+LIBS += ../packer/bin/dist-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LDDEPS += ../packer/bin/dist-linux-x86_64/packer/libpacker.a
 ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
 
 endif

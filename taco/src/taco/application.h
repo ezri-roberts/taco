@@ -7,6 +7,13 @@
 #include "taco/layer.h"
 #include "taco/scene.h"
 
+#define SOKOL_IMPL
+#define SOKOL_GLES3
+#include "sokol_app.h"
+#include "sokol_gfx.h"
+#include "sokol_log.h"
+#include "sokol_glue.h"
+
 typedef enum {
 
 	APP_RUNNING,
@@ -47,5 +54,8 @@ void tc_app_quit(App *app);
 void sk_init(void);
 void sk_frame(void);
 void sk_cleanup(void);
+App* tc_app_init(void);
+void tc_app_frame(void);
+void tc_app_cleanup(void);
 
 #endif // !APPLICATION_H

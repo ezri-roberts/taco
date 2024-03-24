@@ -5,9 +5,9 @@
 
 typedef struct {
 
-	Texture2D texture;
-	BlendMode blend_mode;
-	Color color;
+	// Texture2D texture;
+	// BlendMode blend_mode;
+	// Color color;
 
 } Sprite;
 

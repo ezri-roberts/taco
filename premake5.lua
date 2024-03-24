@@ -40,6 +40,11 @@ project "taco"
 		"%{include_dir.sokol}",
 	}
 
+	links
+	{
+		"packer",
+	}
+
 	pchheader "tcpch.h"
 
 	filter "system:linux"
@@ -53,7 +58,7 @@ project "taco"
 
 		links
 		{
-			"packer",
+    		"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
 		defines
@@ -97,7 +102,9 @@ project "sandbox"
 	includedirs
 	{
 		"%{prj.name}/include",
+		"%{include_dir.packer}",
 		"taco/src",
+		"%{include_dir.sokol}",
 	}
 
 	links
@@ -109,8 +116,7 @@ project "sandbox"
 
 		links
 		{
-			"m", --"GL", "dl", "pthread", "X11", "Xi", "Xcursor", "rt", "Xrandr",
-			-- "glfw3",
+    		"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
 		defines
@@ -147,7 +153,9 @@ project "taco-shell"
 	includedirs
 	{
 		"%{prj.name}/include",
+		"%{include_dir.packer}",
 		"taco/src",
+		"%{include_dir.sokol}",
 	}
 
 	links
@@ -159,8 +167,7 @@ project "taco-shell"
 
 		links
 		{
-			"m", --"GL", "dl", "pthread", "X11", "Xi", "Xcursor", "rt", "Xrandr",
-			-- "glfw3",
+			"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
 		defines

@@ -19,7 +19,7 @@ endif
 # #############################################
 
 RESCOMP = windres
-INCLUDES += -Iinclude -I../taco/src -I../taco/lib/raylib/src -I../taco/lib/nuklear/include
+INCLUDES += -Iinclude -I../packer/src -I../taco/src -I../taco/lib/sokol
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -38,7 +38,7 @@ OBJDIR = ../obj/debug-linux-x86_64/sandbox
 DEFINES += -DTC_PLATFORM_LINUX -DTC_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g
-LIBS += ../bin/debug-linux-x86_64/taco/libtaco.so -lm
+LIBS += ../bin/debug-linux-x86_64/taco/libtaco.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
 LDDEPS += ../bin/debug-linux-x86_64/taco/libtaco.so
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64
 
@@ -49,7 +49,7 @@ OBJDIR = ../obj/release-linux-x86_64/sandbox
 DEFINES += -DTC_PLATFORM_LINUX -DTC_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
-LIBS += ../bin/release-linux-x86_64/taco/libtaco.so -lm
+LIBS += ../bin/release-linux-x86_64/taco/libtaco.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
 LDDEPS += ../bin/release-linux-x86_64/taco/libtaco.so
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64 -s
 
@@ -60,7 +60,7 @@ OBJDIR = ../obj/dist-linux-x86_64/sandbox
 DEFINES += -DTC_PLATFORM_LINUX -DTC_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
-LIBS += ../bin/dist-linux-x86_64/taco/libtaco.so -lm
+LIBS += ../bin/dist-linux-x86_64/taco/libtaco.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
 LDDEPS += ../bin/dist-linux-x86_64/taco/libtaco.so
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64 -s
 

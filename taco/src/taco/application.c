@@ -1,6 +1,29 @@
 #include "application.h"
 #include "packer.h"
 
+void sk_init(void) {
+
+    sg_setup(&(sg_desc){
+        .environment = sglue_environment(),
+        .logger.func = slog_func,
+    });
+
+}
+
+void sk_frame(void) {
+
+    sg_begin_pass(&(sg_pass){.action = (sg_pass_action) {
+        .colors[0] = { .load_action=SG_LOADACTION_CLEAR, .clear_value={0.0f, 0.0f, 0.0f, 1.0f } }
+    }, .swapchain = sglue_swapchain() });
+    sg_end_pass();
+    sg_commit();
+}
+
+void sk_cleanup(void) {
+
+    sg_shutdown();
+	tc_app_cleanup();
+}
 
 App* tc_app_new() {
 
@@ -12,7 +35,7 @@ App* tc_app_new() {
 	app->scene_list = scene_list_new();
 	app->state = APP_RUNNING;
 
-	pack("assets");
+	// pac("assets");
 
 	return app;
 }
@@ -76,7 +99,7 @@ void tc_app_set_scene(App *app, const char *name) {
 void tc_app_destroy(App *app) {
 
 	scene_list_destroy(&app->scene_list);
-	window_destroy(&app->window);
+	// window_destroy(&app->window);
 	free(app);
 	app = NULL;
 
