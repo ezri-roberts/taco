@@ -5,11 +5,6 @@
 
 #if defined(TC_PLATFORM_LINUX) || defined(TC_PLATFORM_WINDOWS)
 
-extern App* app_create();
-extern App* tc_app_init(void);
-extern void tc_app_frame(void);
-extern void tc_app_cleanup(void);
-
 inline sapp_desc sokol_main(int argc, char* argv[]) {
 
     (void)argc; (void)argv;

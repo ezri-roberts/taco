@@ -26,10 +26,10 @@ typedef enum {
 
 typedef struct {
 
-	sapp_event event;
-	EventType type;
+	const sapp_event event;
+	const EventType type;
 	const char *name;
-	int category;
+	const int category;
 	bool handled;
 
 } Event;

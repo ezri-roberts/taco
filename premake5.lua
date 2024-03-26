@@ -16,7 +16,6 @@ include_dir["packer"] = "packer/src"
 include_dir["sokol"] = "engine/lib/sokol"
 
 include "packer"
--- include "taco/lib/sokol"
 
 project "engine"
 	location "engine"
@@ -117,21 +116,13 @@ project "runtime"
     		"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
-		-- defines
-		-- {
-		-- 	"TC_PLATFORM_LINUX",
-		-- }
-
 	filter "configurations:debug"
-		defines "TC_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
-		defines "TC_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
-		defines "TC_DIST"
 		optimize "On"
 
 project "editor"
@@ -168,19 +159,11 @@ project "editor"
 			"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
-		-- defines
-		-- {
-		-- 	"TC_PLATFORM_LINUX",
-		-- }
-
 	filter "configurations:debug"
-		defines "TC_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
-		defines "TC_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
-		defines "TC_DIST"
 		optimize "On"

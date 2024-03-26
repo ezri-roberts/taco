@@ -44,9 +44,10 @@ void tc_app_on_event(Event *e);
 bool tc_app_check_state(App *app, AppState state);
 void tc_app_set_scene(App *app, const char *name);
 void tc_app_quit(App *app);
-App* tc_app_init(void);
-void tc_app_frame(void);
-void tc_app_cleanup(void);
+
+extern App* tc_app_init(void);
+extern void tc_app_frame(void);
+extern void tc_app_cleanup(void);
 
 void sokol_init(void);
 void sokol_frame(void);
