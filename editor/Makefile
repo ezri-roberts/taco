@@ -19,7 +19,7 @@ endif
 # #############################################
 
 RESCOMP = windres
-INCLUDES += -Iinclude -I../packer/src -I../taco/src -I../taco/lib/sokol
+INCLUDES += -Iinclude -I../packer/src -I../engine/src -I../engine/lib/sokol
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -32,37 +32,37 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug)
-TARGETDIR = ../bin/debug-linux-x86_64/sandbox
-TARGET = $(TARGETDIR)/sandbox
-OBJDIR = ../obj/debug-linux-x86_64/sandbox
-DEFINES += -DTC_PLATFORM_LINUX -DTC_DEBUG
+TARGETDIR = ../bin/debug-linux-x86_64/editor
+TARGET = $(TARGETDIR)/editor
+OBJDIR = ../obj/debug-linux-x86_64/editor
+DEFINES += -DTC_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g
-LIBS += ../bin/debug-linux-x86_64/taco/libtaco.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
-LDDEPS += ../bin/debug-linux-x86_64/taco/libtaco.so
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64
+LIBS += ../bin/debug-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LDDEPS += ../bin/debug-linux-x86_64/engine/libengine.so
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../engine' -m64
 
 else ifeq ($(config),release)
-TARGETDIR = ../bin/release-linux-x86_64/sandbox
-TARGET = $(TARGETDIR)/sandbox
-OBJDIR = ../obj/release-linux-x86_64/sandbox
-DEFINES += -DTC_PLATFORM_LINUX -DTC_RELEASE
+TARGETDIR = ../bin/release-linux-x86_64/editor
+TARGET = $(TARGETDIR)/editor
+OBJDIR = ../obj/release-linux-x86_64/editor
+DEFINES += -DTC_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
-LIBS += ../bin/release-linux-x86_64/taco/libtaco.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
-LDDEPS += ../bin/release-linux-x86_64/taco/libtaco.so
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64 -s
+LIBS += ../bin/release-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LDDEPS += ../bin/release-linux-x86_64/engine/libengine.so
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../engine' -m64 -s
 
 else ifeq ($(config),dist)
-TARGETDIR = ../bin/dist-linux-x86_64/sandbox
-TARGET = $(TARGETDIR)/sandbox
-OBJDIR = ../obj/dist-linux-x86_64/sandbox
-DEFINES += -DTC_PLATFORM_LINUX -DTC_DIST
+TARGETDIR = ../bin/dist-linux-x86_64/editor
+TARGET = $(TARGETDIR)/editor
+OBJDIR = ../obj/dist-linux-x86_64/editor
+DEFINES += -DTC_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
-LIBS += ../bin/dist-linux-x86_64/taco/libtaco.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
-LDDEPS += ../bin/dist-linux-x86_64/taco/libtaco.so
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../taco' -m64 -s
+LIBS += ../bin/dist-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LDDEPS += ../bin/dist-linux-x86_64/engine/libengine.so
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../engine' -m64 -s
 
 endif
 
@@ -76,8 +76,8 @@ endif
 GENERATED :=
 OBJECTS :=
 
-GENERATED += $(OBJDIR)/sandbox.o
-OBJECTS += $(OBJDIR)/sandbox.o
+GENERATED += $(OBJDIR)/editor.o
+OBJECTS += $(OBJDIR)/editor.o
 
 # Rules
 # #############################################
@@ -87,7 +87,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking sandbox
+	@echo Linking editor
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -108,7 +108,7 @@ else
 endif
 
 clean:
-	@echo Cleaning sandbox
+	@echo Cleaning editor
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -141,7 +141,7 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/sandbox.o: src/sandbox.c
+$(OBJDIR)/editor.o: src/editor.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

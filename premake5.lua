@@ -13,13 +13,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include_dir = {}
 include_dir["packer"] = "packer/src"
-include_dir["sokol"] = "taco/lib/sokol"
+include_dir["sokol"] = "engine/lib/sokol"
 
 include "packer"
 -- include "taco/lib/sokol"
 
-project "taco"
-	location "taco"
+project "engine"
+	location "engine"
 	kind "SharedLib"
 	language "C"
 
@@ -34,7 +34,6 @@ project "taco"
 
 	includedirs
 	{
-		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"%{include_dir.packer}",
 		"%{include_dir.sokol}",
@@ -70,7 +69,6 @@ project "taco"
 
 		postbuildcommands
 		{
-			-- ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/sandbox")
 		}	
 
 	filter "configurations:debug"
@@ -85,8 +83,8 @@ project "taco"
 		defines "TC_DIST"
 		optimize "On"
 
-project "sandbox"
-	location "sandbox"
+project "runtime"
+	location "runtime"
 	kind "ConsoleApp"
 	language "C"
 
@@ -103,13 +101,13 @@ project "sandbox"
 	{
 		"%{prj.name}/include",
 		"%{include_dir.packer}",
-		"taco/src",
+		"engine/src",
 		"%{include_dir.sokol}",
 	}
 
 	links
 	{
-		"taco"
+		"engine"
 	}
 
 	filter "system:linux"
@@ -119,10 +117,10 @@ project "sandbox"
     		"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
-		defines
-		{
-			"TC_PLATFORM_LINUX",
-		}
+		-- defines
+		-- {
+		-- 	"TC_PLATFORM_LINUX",
+		-- }
 
 	filter "configurations:debug"
 		defines "TC_DEBUG"
@@ -136,8 +134,8 @@ project "sandbox"
 		defines "TC_DIST"
 		optimize "On"
 
-project "taco-shell"
-	location "taco-shell"
+project "editor"
+	location "editor"
 	kind "ConsoleApp"
 	language "C"
 
@@ -154,13 +152,13 @@ project "taco-shell"
 	{
 		"%{prj.name}/include",
 		"%{include_dir.packer}",
-		"taco/src",
+		"engine/src",
 		"%{include_dir.sokol}",
 	}
 
 	links
 	{
-		"taco"
+		"engine"
 	}
 
 	filter "system:linux"
@@ -170,10 +168,10 @@ project "taco-shell"
 			"X11", "Xi", "Xcursor", "EGL", "GL", "dl", "pthread", "m"
 		}
 
-		defines
-		{
-			"TC_PLATFORM_LINUX",
-		}
+		-- defines
+		-- {
+		-- 	"TC_PLATFORM_LINUX",
+		-- }
 
 	filter "configurations:debug"
 		defines "TC_DEBUG"

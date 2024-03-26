@@ -2,7 +2,7 @@
 #define EVENT_H
 
 #include "tcpch.h"
-#include "taco/keycodes.h"
+#include "engine/keycodes.h"
 
 typedef enum {
 
@@ -34,37 +34,11 @@ typedef struct {
 
 } Event;
 
-typedef struct {
-
-	Event event;
-	Keycode keycode;
-
-} KeyEvent;
-
-typedef struct {
-
-	Event event;
-	Keycode keycode;
-	bool is_repeat;
-
-} KeyPressedEvent;
-
-typedef struct {
-
-	Event event;
-	Keycode keycode;
-
-} KeyReleasedEvent;
-
 // Event callback function pointer.
 typedef void (*EventCallback)(Event*);
 
-// Common event functions.
+Event event_new();
 bool event_in_category(Event *event, EventCategory category);
 bool event_dispatch(Event *event);
-
-KeyEvent key_event_new();
-KeyPressedEvent key_pressed_event_new();
-KeyReleasedEvent key_released_event_new();
 
 #endif // !EVENT_H

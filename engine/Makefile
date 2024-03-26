@@ -22,7 +22,7 @@ RESCOMP = windres
 PCH = src/tcpch.h
 PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
 GCH = $(PCH_PLACEHOLDER).gch
-INCLUDES += -Iinclude -Isrc -I../packer/src -Ilib/sokol
+INCLUDES += -Isrc -I../packer/src -Ilib/sokol
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -35,37 +35,37 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug)
-TARGETDIR = ../bin/debug-linux-x86_64/taco
-TARGET = $(TARGETDIR)/libtaco.so
-OBJDIR = ../obj/debug-linux-x86_64/taco
+TARGETDIR = ../bin/debug-linux-x86_64/engine
+TARGET = $(TARGETDIR)/libengine.so
+OBJDIR = ../obj/debug-linux-x86_64/engine
 DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
 LIBS += ../packer/bin/debug-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
 LDDEPS += ../packer/bin/debug-linux-x86_64/packer/libpacker.a
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so
+ALL_LDFLAGS += $(LDFLAGS) -L../taco/lib -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so
 
 else ifeq ($(config),release)
-TARGETDIR = ../bin/release-linux-x86_64/taco
-TARGET = $(TARGETDIR)/libtaco.so
-OBJDIR = ../obj/release-linux-x86_64/taco
+TARGETDIR = ../bin/release-linux-x86_64/engine
+TARGET = $(TARGETDIR)/libengine.so
+OBJDIR = ../obj/release-linux-x86_64/engine
 DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
 LIBS += ../packer/bin/release-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
 LDDEPS += ../packer/bin/release-linux-x86_64/packer/libpacker.a
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
+ALL_LDFLAGS += $(LDFLAGS) -L../taco/lib -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so -s
 
 else ifeq ($(config),dist)
-TARGETDIR = ../bin/dist-linux-x86_64/taco
-TARGET = $(TARGETDIR)/libtaco.so
-OBJDIR = ../obj/dist-linux-x86_64/taco
+TARGETDIR = ../bin/dist-linux-x86_64/engine
+TARGET = $(TARGETDIR)/libengine.so
+OBJDIR = ../obj/dist-linux-x86_64/engine
 DEFINES += -DLOG_USE_COLOR -DTC_PLATFORM_LINUX -DTC_BUILD_DYNAMIC -DTC_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
 LIBS += ../packer/bin/dist-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
 LDDEPS += ../packer/bin/dist-linux-x86_64/packer/libpacker.a
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libtaco.so -s
+ALL_LDFLAGS += $(LDFLAGS) -L../taco/lib -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so -s
 
 endif
 
@@ -84,7 +84,6 @@ GENERATED += $(OBJDIR)/camera.o
 GENERATED += $(OBJDIR)/canvas.o
 GENERATED += $(OBJDIR)/event.o
 GENERATED += $(OBJDIR)/input.o
-GENERATED += $(OBJDIR)/key_event.o
 GENERATED += $(OBJDIR)/layer.o
 GENERATED += $(OBJDIR)/log.o
 GENERATED += $(OBJDIR)/scene.o
@@ -95,7 +94,6 @@ OBJECTS += $(OBJDIR)/camera.o
 OBJECTS += $(OBJDIR)/canvas.o
 OBJECTS += $(OBJDIR)/event.o
 OBJECTS += $(OBJDIR)/input.o
-OBJECTS += $(OBJDIR)/key_event.o
 OBJECTS += $(OBJDIR)/layer.o
 OBJECTS += $(OBJDIR)/log.o
 OBJECTS += $(OBJDIR)/scene.o
@@ -110,7 +108,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking taco
+	@echo Linking engine
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -131,7 +129,7 @@ else
 endif
 
 clean:
-	@echo Cleaning taco
+	@echo Cleaning engine
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -164,6 +162,24 @@ endif
 # File Rules
 # #############################################
 
+$(OBJDIR)/application.o: src/engine/application.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/event.o: src/engine/events/event.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/input.o: src/engine/input.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/layer.o: src/engine/layer.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/scene.o: src/engine/scene.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/window.o: src/engine/window.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/log.o: src/log/log.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -174,27 +190,6 @@ $(OBJDIR)/canvas.o: src/renderer/canvas.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/sprite.o: src/renderer/sprite.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/application.o: src/taco/application.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/event.o: src/taco/events/event.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/key_event.o: src/taco/events/key_event.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/input.o: src/taco/input.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/layer.o: src/taco/layer.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/scene.o: src/taco/scene.c
-	@echo "$(notdir $<)"
-	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/window.o: src/taco/window.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

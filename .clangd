@@ -1,7 +1,5 @@
 CompileFlags:
   Add: 
-  - -I/home/user/proj/c/taco/taco/src
-  - -I/home/user/proj/c/taco/taco/lib/raylib/src
-  - -I/home/user/proj/c/taco/taco/lib/nuklear/include
-  - -I/home/user/proj/c/taco/taco/lib/sokol
+  - -I/home/user/proj/c/taco/engine/src
+  - -I/home/user/proj/c/taco/engine/lib/sokol
   - -I/home/user/proj/c/taco/packer/src

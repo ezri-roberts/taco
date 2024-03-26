@@ -10,27 +10,27 @@ endif
 
 ifeq ($(config),debug)
   packer_config = debug
-  taco_config = debug
-  sandbox_config = debug
-  taco_shell_config = debug
+  engine_config = debug
+  runtime_config = debug
+  editor_config = debug
 
 else ifeq ($(config),release)
   packer_config = release
-  taco_config = release
-  sandbox_config = release
-  taco_shell_config = release
+  engine_config = release
+  runtime_config = release
+  editor_config = release
 
 else ifeq ($(config),dist)
   packer_config = dist
-  taco_config = dist
-  sandbox_config = dist
-  taco_shell_config = dist
+  engine_config = dist
+  runtime_config = dist
+  editor_config = dist
 
 else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := packer taco sandbox taco-shell
+PROJECTS := packer engine runtime editor
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -42,29 +42,29 @@ ifneq (,$(packer_config))
 	@${MAKE} --no-print-directory -C packer -f Makefile config=$(packer_config)
 endif
 
-taco: packer
-ifneq (,$(taco_config))
-	@echo "==== Building taco ($(taco_config)) ===="
-	@${MAKE} --no-print-directory -C taco -f Makefile config=$(taco_config)
+engine: packer
+ifneq (,$(engine_config))
+	@echo "==== Building engine ($(engine_config)) ===="
+	@${MAKE} --no-print-directory -C engine -f Makefile config=$(engine_config)
 endif
 
-sandbox: taco
-ifneq (,$(sandbox_config))
-	@echo "==== Building sandbox ($(sandbox_config)) ===="
-	@${MAKE} --no-print-directory -C sandbox -f Makefile config=$(sandbox_config)
+runtime: engine
+ifneq (,$(runtime_config))
+	@echo "==== Building runtime ($(runtime_config)) ===="
+	@${MAKE} --no-print-directory -C runtime -f Makefile config=$(runtime_config)
 endif
 
-taco-shell: taco
-ifneq (,$(taco_shell_config))
-	@echo "==== Building taco-shell ($(taco_shell_config)) ===="
-	@${MAKE} --no-print-directory -C taco-shell -f Makefile config=$(taco_shell_config)
+editor: engine
+ifneq (,$(editor_config))
+	@echo "==== Building editor ($(editor_config)) ===="
+	@${MAKE} --no-print-directory -C editor -f Makefile config=$(editor_config)
 endif
 
 clean:
 	@${MAKE} --no-print-directory -C packer -f Makefile clean
-	@${MAKE} --no-print-directory -C taco -f Makefile clean
-	@${MAKE} --no-print-directory -C sandbox -f Makefile clean
-	@${MAKE} --no-print-directory -C taco-shell -f Makefile clean
+	@${MAKE} --no-print-directory -C engine -f Makefile clean
+	@${MAKE} --no-print-directory -C runtime -f Makefile clean
+	@${MAKE} --no-print-directory -C editor -f Makefile clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -78,8 +78,8 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   packer"
-	@echo "   taco"
-	@echo "   sandbox"
-	@echo "   taco-shell"
+	@echo "   engine"
+	@echo "   runtime"
+	@echo "   editor"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"
