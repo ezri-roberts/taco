@@ -6,11 +6,11 @@
 
 typedef enum {
 
-	NONE = 0,
-	WINDOW_CLOSE, WINDOW_RESIZE, WINDOW_FOCUS, WINDOW_LOST_FOCUS, WINDOW_MOVED,
+	EVENT_NONE = 0,
+	WINDOW_CLOSE, WINDOW_RESIZE, WINDOW_FOCUS, WINDOW_UNFOCUS, WINDOW_MOVE,
 	APP_TICK, APP_UPDATE, APP_RENDER,
-	KEY_PRESSED, KEY_RELEASED,
-	MOUSE_BUTTON_PRESSED, MOUSE_BUTTON_RELEASED, MOUSE_MOVED, MOUSE_SCROLLED
+	KEY_PRESS, KEY_RELEASE,
+	MOUSE_PRESS, MOUSE_RELEASE, MOUSE_MOVE, MOUSE_SCROLL
 
 } EventType;
 
@@ -26,10 +26,10 @@ typedef enum {
 
 typedef struct {
 
-	const sapp_event event;
-	const EventType type;
 	const char *name;
-	const int category;
+	const sapp_event *data;
+	EventType type;
+	int category;
 	bool handled;
 
 } Event;
@@ -37,8 +37,9 @@ typedef struct {
 // Event callback function pointer.
 typedef void (*EventCallback)(Event*);
 
-Event event_new();
-bool event_in_category(Event *event, EventCategory category);
-bool event_dispatch(Event *event);
+Event event_new(EventType type);
+bool event_in_category(Event *e, EventCategory category);
+void event_dispatch(Event *e, EventCallback callback);
+void event_tostring(char *str, Event *e);
 
 #endif // !EVENT_H

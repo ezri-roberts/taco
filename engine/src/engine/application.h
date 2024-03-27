@@ -3,9 +3,9 @@
 
 #include "tcpch.h"
 #include "input.h"
-#include "engine/window.h"
-#include "engine/layer.h"
-#include "engine/scene.h"
+#include "window.h"
+#include "layer.h"
+#include "scene.h"
 
 typedef enum {
 
@@ -52,5 +52,6 @@ extern void tc_app_cleanup(void);
 void sokol_init(void);
 void sokol_frame(void);
 void sokol_cleanup(void);
+void sokol_event_callback(const sapp_event *e);
 
 #endif // !APPLICATION_H

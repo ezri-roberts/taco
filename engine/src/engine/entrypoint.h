@@ -9,8 +9,6 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
 
     (void)argc; (void)argv;
 
-	TC_INFO("Initializing Engine.");
-
 	App *app = tc_app_init();
 	TcWindowData *win_data = &app->window.data;
 
@@ -18,6 +16,7 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
         .init_cb = sokol_init,
         .frame_cb = sokol_frame,
         .cleanup_cb = sokol_cleanup,
+		.event_cb = sokol_event_callback,
         .width = (int)win_data->width,
         .height = (int)win_data->height,
         .window_title = win_data->title,

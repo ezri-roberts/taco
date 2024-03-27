@@ -27,25 +27,69 @@ void sokol_cleanup(void) {
 	TC_INFO("Terminating Engine.");
 }
 
+// Handle the event data sokol gives out.
+void sokol_event_callback(const sapp_event *e) {
+
+	Event event;
+	event.data = e;
+
+	switch (e->type) {
+		default:
+			event = event_new(EVENT_NONE);
+		case SAPP_EVENTTYPE_KEY_DOWN:
+			event = event_new(KEY_PRESS); break;
+		case SAPP_EVENTTYPE_KEY_UP:
+			event = event_new(KEY_RELEASE); break;
+		case SAPP_EVENTTYPE_MOUSE_MOVE:
+			event = event_new(MOUSE_MOVE); break;
+		case SAPP_EVENTTYPE_MOUSE_SCROLL:
+			event = event_new(MOUSE_SCROLL); break;
+		case SAPP_EVENTTYPE_MOUSE_DOWN:
+			event = event_new(MOUSE_PRESS); break;
+		case SAPP_EVENTTYPE_MOUSE_UP:
+			event = event_new(MOUSE_RELEASE); break;
+		case SAPP_EVENTTYPE_RESIZED:
+			event = event_new(WINDOW_RESIZE); break;
+		case SAPP_EVENTTYPE_QUIT_REQUESTED:
+			event = event_new(WINDOW_CLOSE); break;
+		case SAPP_EVENTTYPE_FOCUSED:
+			event = event_new(WINDOW_FOCUS); break;
+		case SAPP_EVENTTYPE_UNFOCUSED:
+			event = event_new(WINDOW_UNFOCUS); break;
+	}
+
+	if (event.type != EVENT_NONE) {
+		char event_str[256];
+		event_tostring(event_str, &event);
+		TC_INFO(event_str);
+	}
+}
+
 App* tc_app_new() {
 
+	const char *backend;
+	#if defined(SOKOL_GLES3)
+		backend = "GLES3";
+	#elif defined(SOKOL_D3D11)
+		backend = "D3D11";
+	#endif
+
+	TC_INFO("Initializing Engine. (%s Backend.)", backend);
 	TC_INFO("Creating App.");
 
 	App *app = malloc(sizeof(App));
 
 	app->window = window_new("Game Window", 1280, 720);
+	app->window.callback = tc_app_on_event;
 	app->scene_list = scene_list_new();
 	app->state = APP_RUNNING;
-
-	// pac("assets");
 
 	return app;
 }
 
 void tc_app_on_event(Event *e) {
 
-	TC_INFO("%d", e);
-	// Dispatch event.
+	TC_INFO("Event 0x%x", e);
 }
 
 bool tc_app_check_state(App *app, AppState state) {
@@ -101,7 +145,6 @@ void tc_app_set_scene(App *app, const char *name) {
 void tc_app_destroy(App *app) {
 
 	scene_list_destroy(&app->scene_list);
-	// window_destroy(&app->window);
 	free(app);
 	app = NULL;
 
