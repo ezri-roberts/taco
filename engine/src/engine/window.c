@@ -14,10 +14,6 @@ TcWindow window_new(const char *title, int width, int height) {
 	return window;
 }
 
-void window_set_event_callback(TcWindow *window, EventCallback callback) {
-	window->callback = callback;
-}
-
 void window_on_update(TcWindow *window) {
 
 }

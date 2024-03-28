@@ -35,11 +35,11 @@ typedef struct {
 } Event;
 
 // Event callback function pointer.
-typedef void (*EventCallback)(Event*);
+typedef bool (*EventCallback)(Event*, void*);
 
 Event event_new(EventType type);
 bool event_in_category(Event *e, EventCategory category);
-void event_dispatch(Event *e, EventCallback callback);
+bool event_dispatch(Event *e, EventType type, EventCallback callback, void *data);
 void event_tostring(char *str, Event *e);
 
 #endif // !EVENT_H

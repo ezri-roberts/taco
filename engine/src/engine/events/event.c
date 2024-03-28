@@ -33,7 +33,7 @@ Event event_new(EventType type) {
 
 void event_tostring(char *str, Event *e) {
 
-	char type[256];
+	char type[128];
 
 	switch (e->type) {
 		case KEY_PRESS: 	 sprintf(type, "Key Press");	  break;
@@ -52,15 +52,26 @@ void event_tostring(char *str, Event *e) {
 		case APP_RENDER:	 sprintf(type, "App Render"); 	  break;
 	}
 
-	sprintf(str, "Event Type: %s.", type);
+	sprintf(str, "%s", type);
 }
 
 bool event_in_category(Event *e, EventCategory category) {
 	return e->category & category;
 }
 
-void event_dispatch(Event *e, EventCallback callback) {
+bool event_dispatch(Event *e, EventType type, EventCallback callback, void *data) {
 
-	// event->handled = callback(event);
-	// Dispatch event?
+	if (type == e->type && callback != NULL) {
+
+		// Log out event info.
+		char event_str[128];
+		event_tostring(event_str, e);
+		TC_INFO("Dispatching Event: 0x%x, Type: %s.", e, event_str);
+
+		e->handled = callback(e, data);
+
+		return true;
+	}
+
+	return false;
 }
