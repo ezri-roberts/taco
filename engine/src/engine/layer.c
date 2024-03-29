@@ -8,6 +8,7 @@ Layer* layer_new(const char *name) {
 	layer->on_attach = NULL;
 	layer->on_detach = NULL;
 	layer->on_update = NULL;
+	layer->on_event = NULL;
 	layer->enabled = true;
 
 	return layer;
@@ -17,9 +18,9 @@ LayerStack layer_stack_new() {
 
 	LayerStack stack;
 
-	stack.layers = malloc(128 * sizeof(Layer));
+	stack.layers = malloc(LAYER_STACK_SIZE * sizeof(Layer));
 	stack.used = 0;
-	stack.size = 128;
+	stack.size = LAYER_STACK_SIZE;
 
 	return stack;
 }
@@ -40,6 +41,14 @@ void layer_stack_pop(LayerStack *stack, Layer *layer) {
 
 }
 
+int layer_stack_size(LayerStack *stack) {
+	return stack->used;
+}
+
+Layer* layer_stack_get(LayerStack *stack, int index) {
+	return stack->layers[index];
+}
+
 void layer_stack_destory(LayerStack *stack) {
 
 	TC_INFO("Destroying Layer Stack: '0x%x'", stack);
@@ -56,7 +65,7 @@ void layer_stack_destory(LayerStack *stack) {
 
 	free(stack->layers);
 	stack->layers = NULL;
-	stack->used = stack->size = 0;
-	
+	stack->used = 0;
+	stack->size = 0;
 }
 

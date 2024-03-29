@@ -25,6 +25,7 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
         .icon.sokol_default = true,
         .logger.func = sokol_log_callback,
     };
+
 }
 
 #endif // !TC_PLATFORM_LINUX

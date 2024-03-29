@@ -9,11 +9,11 @@
 
 typedef enum {
 
-	APP_RUNNING,
-	APP_UNFOCUSED,
-	APP_PAUSED,
-	APP_QUIT_REQUESTED,
-	APP_QUIT,
+	APP_STATE_RUNNING,
+	APP_STATE_UNFOCUSED,
+	APP_STATE_PAUSED,
+	APP_STATE_QUIT_REQUESTED,
+	APP_STATE_QUIT,
 	
 } AppState;
 
@@ -40,7 +40,7 @@ App* tc_app_new();
 void tc_app_run(App *app);
 App* tc_app_create(); // Defined in client.
 void tc_app_destroy(App *app);
-bool tc_app_on_event(Event *e, void *data);
+void tc_app_on_event(Event *e, void *data);
 bool tc_app_on_window_close(Event *e, void *data);
 bool tc_app_check_state(App *app, AppState state);
 void tc_app_set_scene(App *app, const char *name);

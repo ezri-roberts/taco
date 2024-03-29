@@ -3,6 +3,7 @@
 static const char* file_types[3][3] = {
 	{"png", "jpg", "jpeg"},
 	{"mp3", "wav", "ogg"},
+	{"txt"},
 };
 
 void pack(const char *path) {
@@ -54,8 +55,7 @@ void pack_get_paths(Pack *pack, const char *parent) {
 			pack_get_paths(pack, full_path);
         } else {
             printf("File: %s | ", full_path);
-			// pack_add_path(pack, full_path);
-			pack_add_resource(full_path);
+			pack_add_resource(pack, full_path);
         }
 	}
 
@@ -63,10 +63,21 @@ void pack_get_paths(Pack *pack, const char *parent) {
 	closedir(dir);
 }
 
-void pack_add_resource(const char path[PATH_SIZE]) {
+void pack_add_resource(Pack *pack, const char path[PATH_SIZE]) {
 
 	Resource res = resource_new(path);
+	ResourceList *list;
 
+	switch (res.type) {
+		case RES_TYPE_IMAGE:
+			list = &pack->images;	
+			pack->images_size++;
+		case RES_TYPE_AUDIO:
+			list = &pack->audio;	
+			pack->audio_size++;
+	}
+
+	resource_list_add(list, res);
 }
 
 void pack_add_path(Pack *pack, char path[PATH_SIZE]) {
@@ -123,6 +134,10 @@ void resource_list_add(ResourceList *list, Resource resource) {
 	}
 
 	list->items[list->used++] = resource;
+}
+
+Resource* resource_list_get(ResourceList *list, int index) {
+	return &list->items[index];
 }
 
 void resource_list_destroy(ResourceList *list) {
@@ -182,8 +197,8 @@ const char* _get_ext(const char *path) {
 
 uint8_t _get_ext_type(const char *ext) {
 
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
+	for (int i = 0; i < RES_TYPES; i++) {
+		for (int j = 0; j < RES_TYPES; j++) {
 
 			const char *e = file_types[i][j];
 			if (strcmp(e, ext)) return i + 1;

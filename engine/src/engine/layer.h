@@ -1,10 +1,10 @@
 #ifndef LAYER_H
 #define LAYER_H
 
-#define MAX_LAYERS 200
-#define OVERLAY_INDEX_START 150
+#define LAYER_STACK_SIZE 128
 
 #include "tcpch.h"
+#include "events/event.h"
 
 typedef struct {
 
@@ -13,7 +13,9 @@ typedef struct {
 
 	void (*on_attach)();
 	void (*on_detach)();
-	void (*on_update)(float delta_time);
+	void (*on_update)();
+
+	EventCallback on_event;
 
 } Layer;
 
@@ -31,7 +33,7 @@ LayerStack layer_stack_new();
 void layer_stack_destory(LayerStack *stack);
 void layer_stack_push(LayerStack *stack, Layer *layer);
 void layer_stack_pop(LayerStack *stack, Layer *layer);
-void layer_stack_push_overlay(LayerStack *stack, Layer *overlay);
-void layer_stack_pop_overlay(LayerStack *stack, Layer *overlay);
+Layer* layer_stack_get(LayerStack *stack, int index);
+int layer_stack_size(LayerStack *stack);
 
 #endif // !LAYER_H

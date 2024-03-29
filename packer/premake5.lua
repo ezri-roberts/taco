@@ -9,6 +9,14 @@ includedirs {"src/"}
 
 files
 {
+	"lib/rres/src/external/aes.h",
+	"lib/rres/src/external/qoi.h",
+	"lib/rres/src/external/lz4.h",
+	"lib/rres/src/external/monocypher.h",
+	"lib/rres/src/rres.h",
+	"lib/rres/src/external/aes.c",
+	"lib/rres/src/external/lz4.c",
+	"lib/rres/src/external/monocypher.c",
     "src/packer.h",
     "src/packer.c",
 }

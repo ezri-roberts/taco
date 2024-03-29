@@ -1,4 +1,5 @@
 #include "application.h"
+#include "engine/layer.h"
 #include "packer.h"
 
 App* tc_app_new() {
@@ -17,7 +18,10 @@ App* tc_app_new() {
 
 	app->window = window_new("Game Window", 1280, 720);
 	app->scene_list = scene_list_new();
-	app->state = APP_RUNNING;
+	app->layer_stack = NULL;
+	app->state = APP_STATE_RUNNING;
+
+	// pack("assets/");
 
 	return app;
 }
@@ -27,37 +31,28 @@ bool tc_app_check_state(App *app, AppState state) {
 }
 
 void tc_app_quit(App *app) {
-
-	app->state = APP_QUIT;
+	app->state = APP_STATE_QUIT_REQUESTED;
 }
 
 void tc_app_run(App *app) {
 
-	// while (app->state == APP_RUNNING) {
-	//
-	// 	if (WindowShouldClose()) app->state = APP_QUIT;
-	//
-	// 	app->fps = GetFPS();
-	//
-	// 	BeginDrawing();
-	// 	ClearBackground((Color){50, 50, 50, 255});
-	//
-	// 	uint16_t layer_amount = app->layer_stack->used;
-	//
-	// 	for (int i = 0; i <= layer_amount-1; i++) {
-	//
-	// 		Layer *layer = app->layer_stack->layers[i];
-	// 		if (layer->on_update) layer->on_update(GetFrameTime());
-	// 	}
-	//
-	// 	EndDrawing();
-	//
-	// 	window_on_update(&app->window);
-	// }
+	if (app->state == APP_STATE_QUIT_REQUESTED) {
+		sapp_quit();
+	}
 
+	if (app->layer_stack) { // Stack is null if no scene is currently active.
+
+		int layer_amount = layer_stack_size(app->layer_stack);
+
+		for (int i = 0; i <= layer_amount-1; i++) {
+
+			Layer *layer = layer_stack_get(app->layer_stack, i);
+			if (layer->on_update) layer->on_update();
+		}
+	}
 }
 
-bool tc_app_on_event(Event *e, void *data) {
+void tc_app_on_event(Event *e, void *data) {
 
 	App *app = (App*)data;
 	EventCallback callback = NULL;
@@ -67,12 +62,29 @@ bool tc_app_on_event(Event *e, void *data) {
 			callback = tc_app_on_window_close;
 	}
 
-	return event_dispatch(e, e->type, callback, &app->window.data);
+	bool dispatched = event_dispatch(e, e->type, callback, data);
+
+	// If dispatched event returns false, propagate it through the layers.
+	if (!dispatched && app->layer_stack) {
+
+		int layer_amount = layer_stack_size(app->layer_stack);
+
+		for (int i = layer_amount; i > 0; i--) {
+
+			Layer *layer = layer_stack_get(app->layer_stack, i);
+			if (layer->on_event) layer->on_event(e, data);
+			// If the event has been handled we don't want to propagate it further.
+			if (e->handled) break;
+		}
+	}
 }
 
 bool tc_app_on_window_close(Event *e, void *data) {
 
-	TcWindowData *win_data = (TcWindowData*)data;
+	App *app = (App*)data;
+
+	sapp_cancel_quit();
+	tc_app_quit(app);
 
 	return true;
 }
@@ -119,6 +131,8 @@ void sokol_frame(void) {
     }, .swapchain = sglue_swapchain() });
     sg_end_pass();
     sg_commit();
+
+	tc_app_run((App*)sapp_userdata());
 }
 
 void sokol_cleanup(void) {
