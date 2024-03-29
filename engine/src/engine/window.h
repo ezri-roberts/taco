@@ -26,4 +26,7 @@ void window_destroy(TcWindow *window);
 void window_on_update(TcWindow *window);
 bool window_should_close(TcWindow *window);
 
+// Event callbacks.
+bool window_on_resize(const Event *e, void *data);
+
 #endif // !WINDOW_H

@@ -1,8 +1,7 @@
 #include "application.h"
-#include "engine/layer.h"
 #include "packer.h"
 
-App* tc_app_new() {
+App* app_new() {
 
 	const char *backend;
 	#if defined(SOKOL_GLES3)
@@ -26,15 +25,15 @@ App* tc_app_new() {
 	return app;
 }
 
-bool tc_app_check_state(App *app, AppState state) {
+bool app_check_state(App *app, AppState state) {
 	return (app->state == state);
 }
 
-void tc_app_quit(App *app) {
+void app_quit(App *app) {
 	app->state = APP_STATE_QUIT_REQUESTED;
 }
 
-void tc_app_run(App *app) {
+void app_run(App *app) {
 
 	if (app->state == APP_STATE_QUIT_REQUESTED) {
 		sapp_quit();
@@ -52,17 +51,23 @@ void tc_app_run(App *app) {
 	}
 }
 
-void tc_app_on_event(Event *e, void *data) {
+void app_on_event(Event *e, void *data) {
 
 	App *app = (App*)data;
 	EventCallback callback = NULL;
+	void *pass_data = data;
 
 	switch (e->type) {
 		case WINDOW_CLOSE:
-			callback = tc_app_on_window_close;
+			callback = app_on_quit;
+			break;
+		case WINDOW_RESIZE:
+			callback = window_on_resize;
+			pass_data = &app->window.data;
+			break;
 	}
 
-	bool dispatched = event_dispatch(e, e->type, callback, data);
+	bool dispatched = event_dispatch(e, e->type, callback, pass_data);
 
 	// If dispatched event returns false, propagate it through the layers.
 	if (!dispatched && app->layer_stack) {
@@ -79,17 +84,22 @@ void tc_app_on_event(Event *e, void *data) {
 	}
 }
 
-bool tc_app_on_window_close(Event *e, void *data) {
+bool app_on_quit(const Event *e, void *data) {
 
 	App *app = (App*)data;
 
 	sapp_cancel_quit();
-	tc_app_quit(app);
+	app_quit(app);
 
 	return true;
 }
 
-void tc_app_set_scene(App *app, const char *name) {
+bool app_on_key(const Event *e, void *data) {
+
+	return true;
+}
+
+void app_set_scene(App *app, const char *name) {
 
 	for (int i = 0; i <= app->scene_list.used; i++) {
 
@@ -104,7 +114,7 @@ void tc_app_set_scene(App *app, const char *name) {
 	}
 }
 
-void tc_app_destroy(App *app) {
+void app_destroy(App *app) {
 
 	scene_list_destroy(&app->scene_list);
 	free(app);
@@ -132,13 +142,13 @@ void sokol_frame(void) {
     sg_end_pass();
     sg_commit();
 
-	tc_app_run((App*)sapp_userdata());
+	app_run((App*)sapp_userdata());
 }
 
 void sokol_cleanup(void) {
 
     sg_shutdown();
-	tc_app_cleanup();
+	app_cleanup();
 
 	TC_INFO("Terminating Engine.");
 }
@@ -174,7 +184,7 @@ void sokol_event_callback(const sapp_event *e) {
 			event = event_new(WINDOW_UNFOCUS); break;
 	}
 
-	tc_app_on_event(&event, sapp_userdata());
+	app_on_event(&event, sapp_userdata());
 }
 
 void sokol_log_callback(

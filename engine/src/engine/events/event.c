@@ -1,6 +1,6 @@
 #include "event.h"
 
-Event event_new(EventType type) {
+Event event_new(const EventType type) {
 
 	Event e;
 	e.type = type;
@@ -31,7 +31,7 @@ Event event_new(EventType type) {
 	return e;
 }
 
-void event_tostring(char *str, Event *e) {
+void event_tostring(char *str, const Event *e) {
 
 	char type[128];
 
@@ -55,18 +55,18 @@ void event_tostring(char *str, Event *e) {
 	sprintf(str, "%s", type);
 }
 
-bool event_in_category(Event *e, EventCategory category) {
+bool event_in_category(const Event *e, const EventCategory category) {
 	return e->category & category;
 }
 
-bool event_dispatch(Event *e, EventType type, EventCallback callback, void *data) {
+bool event_dispatch(Event *e, const EventType type, const EventCallback callback, void *data) {
 
 	if (type == e->type && callback != NULL) {
 
 		// Log out event info.
 		char event_str[128];
 		event_tostring(event_str, e);
-		TC_INFO("Dispatching Event: 0x%x, Type: %s.", e, event_str);
+		TC_INFO("[Event Dispatch] %s.", event_str);
 
 		e->handled = callback(e, data);
 

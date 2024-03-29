@@ -2,20 +2,20 @@
 
 App *app;
 
-App* tc_app_init() {
+App* app_init() {
 
-	app = tc_app_new();
+	app = app_new();
 
 	return app;
 }
 
-void tc_app_frame() {
+void app_frame() {
 
 }
 
-void tc_app_cleanup() {
+void app_cleanup() {
 
-	tc_app_destroy(app);
+	app_destroy(app);
 }
 
 // App *tc_app_create() {

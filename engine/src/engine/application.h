@@ -36,19 +36,23 @@ typedef struct {
 	uint32_t fps;
 } App;
 
-App* tc_app_new();
-void tc_app_run(App *app);
-App* tc_app_create(); // Defined in client.
-void tc_app_destroy(App *app);
-void tc_app_on_event(Event *e, void *data);
-bool tc_app_on_window_close(Event *e, void *data);
-bool tc_app_check_state(App *app, AppState state);
-void tc_app_set_scene(App *app, const char *name);
-void tc_app_quit(App *app);
+App* app_new();
+void app_run(App *app);
+App* app_create(); // Defined in client.
+void app_destroy(App *app);
+void app_on_event(Event *e, void *data);
+bool app_check_state(App *app, AppState state);
+void app_set_scene(App *app, const char *name);
+void app_quit(App *app);
 
-extern App* tc_app_init(void);
-extern void tc_app_frame(void);
-extern void tc_app_cleanup(void);
+// Event callbacks.
+bool app_on_quit(const Event *e, void *data);
+bool app_on_key(const Event *e, void *data);
+
+// Defined in user implementation.
+extern App* app_init(void);
+extern void app_frame(void);
+extern void app_cleanup(void);
 
 // Sokol callback functions.
 void sokol_init(void);

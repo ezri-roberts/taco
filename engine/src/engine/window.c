@@ -18,6 +18,16 @@ void window_on_update(TcWindow *window) {
 
 }
 
+bool window_on_resize(const Event *e, void *data) {
+
+	TcWindowData *win_data = (TcWindowData*)data;
+
+	win_data->width = sapp_width();
+	win_data->height = sapp_height();
+
+	return true;
+}
+
 void window_destroy(TcWindow *window) {
 
 	TC_INFO("Destroyed Window.");

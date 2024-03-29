@@ -9,7 +9,7 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
 
     (void)argc; (void)argv;
 
-	App *app = tc_app_init();
+	App *app = app_init();
 	TcWindowData *win_data = &app->window.data;
 
     return (sapp_desc){
