@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "engine/core.h"
 
@@ -21,6 +22,7 @@
 #include "sokol_gfx.h"
 #include "sokol_log.h"
 #include "sokol_glue.h"
+#include "sokol_gl.h"
 
 #include "engine/log.h"
 

@@ -1,5 +1,6 @@
 #include "application.h"
-#include "packer.h"
+#include "dbui/dbui.h"
+// #include "packer.h"
 
 App* app_new() {
 
@@ -127,34 +128,70 @@ void app_destroy(App *app) {
 
 void sokol_init(void) {
 
+	App *app = (App*)sapp_userdata();
+
     sg_setup(&(sg_desc){
         .environment = sglue_environment(),
         .logger.func = slog_func,
     });
 
+	sgl_setup(&(sgl_desc_t){
+        .logger.func = slog_func,
+    });
+
+	app->dbui_state.bg = (DBUIColor){ 90.0f, 95.0f, 100.0f };
+	dbui_init(&app->dbui_state);
+
+	app->render_state.pass_action = (sg_pass_action) {
+        .colors[0] = {.load_action=SG_LOADACTION_CLEAR, .clear_value={0.0f, 0.0f, 0.0f, 1.0f}}
+    };
 }
 
 void sokol_frame(void) {
 
-    sg_begin_pass(&(sg_pass){.action = (sg_pass_action) {
-        .colors[0] = { .load_action=SG_LOADACTION_CLEAR, .clear_value={0.0f, 0.0f, 0.0f, 1.0f } }
-    }, .swapchain = sglue_swapchain() });
+	App *app = (App*)sapp_userdata();
+	RenderState *state = &app->render_state;
+	DBUIState *dbui_state = &app->dbui_state;
+
+	app_run(app);
+
+	mu_begin(&dbui_state->mu_ctx);
+    dbui_test_window(dbui_state);
+    mu_end(&dbui_state->mu_ctx);
+
+	dbui_begin(sapp_width(), sapp_height());
+	mu_Command* cmd = 0;
+	while(mu_next_command(&dbui_state->mu_ctx, &cmd)) {
+		switch (cmd->type) {
+			case MU_COMMAND_TEXT: dbui_draw_text(cmd->text.str, cmd->text.pos, cmd->text.color); break;
+			case MU_COMMAND_RECT: dbui_draw_rect(cmd->rect.rect, cmd->rect.color); break;
+			case MU_COMMAND_ICON: dbui_draw_icon(cmd->icon.id, cmd->icon.rect, cmd->icon.color); break;
+			case MU_COMMAND_CLIP: dbui_set_clip_rect(cmd->clip.rect); break;
+		}
+	}
+	dbui_end();
+
+    sg_begin_pass(&(sg_pass){.action = state->pass_action, .swapchain = sglue_swapchain()});
+	dbui_draw();
     sg_end_pass();
     sg_commit();
-
-	app_run((App*)sapp_userdata());
 }
 
 void sokol_cleanup(void) {
 
-    sg_shutdown();
 	app_cleanup();
+	sgl_shutdown();
+    sg_shutdown();
 
 	TC_INFO("Terminating Engine.");
 }
 
 // Handle the event data sokol gives out.
 void sokol_event_callback(const sapp_event *e) {
+
+	App *app = (App*)sapp_userdata();
+
+	dbui_event(&app->dbui_state, e);
 
 	Event event;
 	event.data = e;

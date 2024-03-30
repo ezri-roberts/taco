@@ -14,8 +14,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 include_dir = {}
 include_dir["packer"] = "packer/src"
 include_dir["sokol"] = "engine/lib/sokol"
+include_dir["microui"] = "engine/lib/microui/src"
 
 include "packer"
+include "engine/lib/microui"
 
 project "engine"
 	location "engine"
@@ -36,10 +38,12 @@ project "engine"
 		"%{prj.name}/src",
 		"%{include_dir.packer}",
 		"%{include_dir.sokol}",
+		"%{include_dir.microui}",
 	}
 
 	links
 	{
+		"microui",
 		"packer",
 	}
 
@@ -98,10 +102,10 @@ project "runtime"
 
 	includedirs
 	{
-		"%{prj.name}/include",
 		"%{include_dir.packer}",
-		"engine/src",
 		"%{include_dir.sokol}",
+		"%{include_dir.microui}",
+		"engine/src",
 	}
 
 	links
@@ -141,10 +145,10 @@ project "editor"
 
 	includedirs
 	{
-		"%{prj.name}/include",
-		"%{include_dir.packer}",
-		"engine/src",
+		"%{include_dir.include}",
 		"%{include_dir.sokol}",
+		"%{include_dir.microui}",
+		"engine/src",
 	}
 
 	links

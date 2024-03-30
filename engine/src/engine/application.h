@@ -6,6 +6,7 @@
 #include "window.h"
 #include "layer.h"
 #include "scene.h"
+#include "dbui/dbui.h"
 
 typedef enum {
 
@@ -25,6 +26,7 @@ typedef struct {
 typedef struct {
 
 	RenderState render_state;
+	DBUIState dbui_state;
 
 	TcWindow window;
 	LayerStack *layer_stack;

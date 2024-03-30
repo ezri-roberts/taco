@@ -1,5 +1,6 @@
 CompileFlags:
   Add: 
   - -I/home/user/proj/c/taco/engine/src
-  - -I/home/user/proj/c/taco/engine/lib/sokol
   - -I/home/user/proj/c/taco/packer/src
+  - -I/home/user/proj/c/taco/engine/lib/sokol
+  - -I/home/user/proj/c/taco/engine/lib/microui/src
