@@ -58,6 +58,7 @@ void app_on_event(Event *e, void *data) {
 	EventCallback callback = NULL;
 	void *pass_data = data;
 
+
 	switch (e->type) {
 		case WINDOW_CLOSE:
 			callback = app_on_quit;
@@ -191,34 +192,34 @@ void sokol_event_callback(const sapp_event *e) {
 
 	App *app = (App*)sapp_userdata();
 
-	dbui_event(&app->dbui_state, e);
-
 	Event event;
-	event.data = e;
+
+	dbui_event(&app->dbui_state, e);
+	// TC_TRACE("%d", event.data.window_width);
 
 	switch (e->type) {
 		default:
-			event = event_new(EVENT_NONE);
+			event = event_new(EVENT_NONE, e);
 		case SAPP_EVENTTYPE_KEY_DOWN:
-			event = event_new(KEY_PRESS); break;
+			event = event_new(KEY_PRESS, e); break;
 		case SAPP_EVENTTYPE_KEY_UP:
-			event = event_new(KEY_RELEASE); break;
+			event = event_new(KEY_RELEASE, e); break;
 		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			event = event_new(MOUSE_MOVE); break;
+			event = event_new(MOUSE_MOVE, e); break;
 		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			event = event_new(MOUSE_SCROLL); break;
+			event = event_new(MOUSE_SCROLL, e); break;
 		case SAPP_EVENTTYPE_MOUSE_DOWN:
-			event = event_new(MOUSE_PRESS); break;
+			event = event_new(MOUSE_PRESS, e); break;
 		case SAPP_EVENTTYPE_MOUSE_UP:
-			event = event_new(MOUSE_RELEASE); break;
+			event = event_new(MOUSE_RELEASE, e); break;
 		case SAPP_EVENTTYPE_RESIZED:
-			event = event_new(WINDOW_RESIZE); break;
+			event = event_new(WINDOW_RESIZE, e); break;
 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
-			event = event_new(WINDOW_CLOSE); break;
+			event = event_new(WINDOW_CLOSE, e); break;
 		case SAPP_EVENTTYPE_FOCUSED:
-			event = event_new(WINDOW_FOCUS); break;
+			event = event_new(WINDOW_FOCUS, e); break;
 		case SAPP_EVENTTYPE_UNFOCUSED:
-			event = event_new(WINDOW_UNFOCUS); break;
+			event = event_new(WINDOW_UNFOCUS, e); break;
 	}
 
 	app_on_event(&event, sapp_userdata());

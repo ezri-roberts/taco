@@ -24,20 +24,21 @@ typedef enum {
 
 } EventCategory;
 
-typedef struct {
+typedef struct Event {
 
 	const char *name;
-	const sapp_event *data;
 	EventType type;
 	int category;
 	bool handled;
+	sapp_event data;
 
 } Event;
 
 // Event callback function pointer.
 typedef bool (*EventCallback)(const Event*, void*);
 
-Event event_new(const EventType type);
+Event event_new(const EventType type, const sapp_event *data);
+void event_copy_data(Event *event, sapp_event *e);
 bool event_in_category(const Event *e, const EventCategory category);
 bool event_dispatch(Event *e, const EventType type, const EventCallback callback, void *data);
 void event_tostring(char *str, const Event *e);

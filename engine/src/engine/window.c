@@ -22,8 +22,8 @@ bool window_on_resize(const Event *e, void *data) {
 
 	TcWindowData *win_data = (TcWindowData*)data;
 
-	win_data->width = sapp_width();
-	win_data->height = sapp_height();
+	win_data->width = e->data.window_width;
+	win_data->height = e->data.window_height;
 
 	return true;
 }

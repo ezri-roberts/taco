@@ -1,34 +1,35 @@
 #include "event.h"
 
-Event event_new(const EventType type) {
+Event event_new(const EventType type, const sapp_event *data) {
 
-	Event e;
-	e.type = type;
+	Event event;
+	event.type = type;
+	event.data = *data;
 
 	int cat_key_input = EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT;
 	int cat_mouse_input = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_INPUT;
 	int cat_mouse_btn = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON
 		| EVENT_CATEGORY_INPUT;
 
-	switch (e.type) {
+	switch (event.type) {
 		case EVENT_NONE: break;
-		case KEY_PRESS: 			e.category = cat_key_input; 			 break;
-		case KEY_RELEASE: 			e.category = cat_key_input; 			 break;
-		case MOUSE_MOVE: 			e.category = EVENT_CATEGORY_MOUSE; 		 break;
-		case MOUSE_SCROLL: 			e.category = cat_mouse_input; 			 break;
-		case MOUSE_PRESS:  			e.category = cat_mouse_btn; 			 break;
-		case MOUSE_RELEASE: 		e.category = cat_mouse_btn; 			 break;
-		case WINDOW_RESIZE:			e.category = EVENT_CATEGORY_APPLICATION; break;
-		case WINDOW_CLOSE:			e.category = EVENT_CATEGORY_APPLICATION; break;
-		case WINDOW_FOCUS:			e.category = EVENT_CATEGORY_APPLICATION; break;
-		case WINDOW_UNFOCUS:		e.category = EVENT_CATEGORY_APPLICATION; break;
-		case WINDOW_MOVE:			e.category = EVENT_CATEGORY_APPLICATION; break;
-		case APP_TICK:				e.category = EVENT_CATEGORY_APPLICATION; break;
-		case APP_UPDATE:			e.category = EVENT_CATEGORY_APPLICATION; break;
-		case APP_RENDER:			e.category = EVENT_CATEGORY_APPLICATION; break;
+		case KEY_PRESS: 			event.category = cat_key_input; 			 break;
+		case KEY_RELEASE: 			event.category = cat_key_input; 			 break;
+		case MOUSE_MOVE: 			event.category = EVENT_CATEGORY_MOUSE; 		 break;
+		case MOUSE_SCROLL: 			event.category = cat_mouse_input; 			 break;
+		case MOUSE_PRESS:  			event.category = cat_mouse_btn; 			 break;
+		case MOUSE_RELEASE: 		event.category = cat_mouse_btn; 			 break;
+		case WINDOW_RESIZE:			event.category = EVENT_CATEGORY_APPLICATION; break;
+		case WINDOW_CLOSE:			event.category = EVENT_CATEGORY_APPLICATION; break;
+		case WINDOW_FOCUS:			event.category = EVENT_CATEGORY_APPLICATION; break;
+		case WINDOW_UNFOCUS:		event.category = EVENT_CATEGORY_APPLICATION; break;
+		case WINDOW_MOVE:			event.category = EVENT_CATEGORY_APPLICATION; break;
+		case APP_TICK:				event.category = EVENT_CATEGORY_APPLICATION; break;
+		case APP_UPDATE:			event.category = EVENT_CATEGORY_APPLICATION; break;
+		case APP_RENDER:			event.category = EVENT_CATEGORY_APPLICATION; break;
 	}
 
-	return e;
+	return event;
 }
 
 void event_tostring(char *str, const Event *e) {
