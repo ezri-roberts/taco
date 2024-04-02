@@ -9,23 +9,29 @@ Shraybn uses **Lua** for scripting game code, as well as **Shrift**, a custom sc
 ### Shrift
 
 ```
-$is_tired false
+# Comment.
+$is_tired false                 # Define a variable.
 
-@ Start
+@ Start                         # Create a dialogue "location."
 
+    # Dialogue.
     Charles: Hey there!
     Charles: What are you doing?
 
+    # Choices.
     - Errands.
+
         I neede a few things.
+        # Check if the variabls "is_tired" is true.
         = $is_tired true
             They get pretty exhausting!
         ;
-        ~ Errands
+        ~ Errands               # Jump to the "Errands" location.
 
     - Not much.
+
         I'm just taking a walk!
-        ~ Not Much
+        ~ Not Much              # Jump tp the "Not Much" location.
 
 @ Errands
 
