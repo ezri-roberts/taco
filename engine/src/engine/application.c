@@ -1,5 +1,4 @@
 #include "application.h"
-#include "dbui/dbui.h"
 // #include "packer.h"
 
 App* app_new() {
@@ -50,6 +49,14 @@ void app_run(App *app) {
 			if (layer->on_update) layer->on_update();
 		}
 	}
+
+	input_state_update(&app->input_state);
+
+	if (key_is_released(SPACE)) {
+		TC_TRACE("SPACE!");
+	}	
+
+	app_frame();
 }
 
 void app_on_event(Event *e, void *data) {
@@ -66,6 +73,14 @@ void app_on_event(Event *e, void *data) {
 		case WINDOW_RESIZE:
 			callback = window_on_resize;
 			pass_data = &app->window.data;
+			break;
+		case KEY_PRESS:
+			callback = app_on_key;
+			pass_data = &app->input_state;
+			break;
+		case KEY_RELEASE:
+			callback = app_on_key;
+			pass_data = &app->input_state;
 			break;
 	}
 
@@ -97,6 +112,9 @@ bool app_on_quit(const Event *e, void *data) {
 }
 
 bool app_on_key(const Event *e, void *data) {
+
+	InputState *state = (InputState*)data;
+	input_state_handle_event(state, e);
 
 	return true;
 }

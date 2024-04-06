@@ -11,6 +11,7 @@ App* app_init() {
 
 void app_frame() {
 
+	TC_TRACE("FRAME!");
 }
 
 void app_cleanup() {

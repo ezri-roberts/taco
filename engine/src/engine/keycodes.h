@@ -3,6 +3,8 @@
 
 #include "tcpch.h"
 
+#define KEYCODES_NUM 120
+
 typedef enum {
 
 	SPACE               = 32,

@@ -28,6 +28,7 @@ typedef struct {
 	RenderState render_state;
 	DBUIState dbui_state;
 
+	InputState input_state;
 	TcWindow window;
 	LayerStack *layer_stack;
 	AppState state;

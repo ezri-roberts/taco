@@ -67,7 +67,6 @@ bool event_dispatch(Event *e, const EventType type, const EventCallback callback
 		// Log out event info.
 		char event_str[128];
 		event_tostring(event_str, e);
-		TC_INFO("[Event Dispatch] %s.", event_str);
 
 		e->handled = callback(e, data);
 
