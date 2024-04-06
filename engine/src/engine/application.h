@@ -40,7 +40,7 @@ typedef struct {
 } App;
 
 App* app_new();
-void app_run(App *app);
+void app_run(void *data);
 App* app_create(); // Defined in client.
 void app_destroy(App *app);
 void app_on_event(Event *e, void *data);
@@ -53,9 +53,9 @@ bool app_on_quit(const Event *e, void *data);
 bool app_on_key(const Event *e, void *data);
 
 // Defined in user implementation.
-extern App* app_init(void);
-extern void app_frame(void);
-extern void app_cleanup(void);
+extern void app_init(App *app);
+extern void app_frame(App *app);
+extern void app_cleanup(App *app);
 
 // Sokol callback functions.
 void sokol_init(void);

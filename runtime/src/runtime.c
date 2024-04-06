@@ -1,28 +1,14 @@
 #include "taco.h"
 
-App *app;
+void app_init(App *app) {
 
-App* app_init() {
-
-	app = app_new();
-
-	return app;
 }
 
-void app_frame() {
+void app_frame(App *app) {
 
-	TC_TRACE("FRAME!");
 }
 
-void app_cleanup() {
+void app_cleanup(App *app) {
 
 	app_destroy(app);
 }
-
-// App *tc_app_create() {
-//
-// 	app = tc_app_new();
-// 	
-// 	return app;
-// }
-

@@ -121,12 +121,15 @@ project "runtime"
 		}
 
 	filter "configurations:debug"
+		defines "TC_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
+		defines "TC_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
+		defines "TC_DIST"
 		optimize "On"
 
 project "editor"
@@ -164,10 +167,13 @@ project "editor"
 		}
 
 	filter "configurations:debug"
+		defines "TC_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
+		defines "TC_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
+		defines "TC_DIST"
 		optimize "On"

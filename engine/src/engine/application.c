@@ -33,7 +33,9 @@ void app_quit(App *app) {
 	app->state = APP_STATE_QUIT_REQUESTED;
 }
 
-void app_run(App *app) {
+void app_run(void *data) {
+
+	App *app = (App*)data;
 
 	if (app->state == APP_STATE_QUIT_REQUESTED) {
 		sapp_quit();
@@ -55,8 +57,6 @@ void app_run(App *app) {
 	if (key_is_released(SPACE)) {
 		TC_TRACE("SPACE!");
 	}	
-
-	app_frame();
 }
 
 void app_on_event(Event *e, void *data) {
@@ -148,6 +148,7 @@ void app_destroy(App *app) {
 void sokol_init(void) {
 
 	App *app = (App*)sapp_userdata();
+	app_init((App*)sapp_userdata());
 
     sg_setup(&(sg_desc){
         .environment = sglue_environment(),
@@ -173,6 +174,7 @@ void sokol_frame(void) {
 	DBUIState *dbui_state = &app->dbui_state;
 
 	app_run(app);
+	app_frame((App*)sapp_userdata());
 
 	mu_begin(&dbui_state->mu_ctx);
     dbui_test_window(dbui_state);
@@ -198,7 +200,7 @@ void sokol_frame(void) {
 
 void sokol_cleanup(void) {
 
-	app_cleanup();
+	app_cleanup((App*)sapp_userdata());
 	sgl_shutdown();
     sg_shutdown();
 

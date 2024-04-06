@@ -19,7 +19,6 @@ endif
 # #############################################
 
 RESCOMP = windres
-DEFINES +=
 INCLUDES += -I../packer/src -I../engine/lib/sokol -I../engine/lib/microui/src -I../engine/src
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
@@ -36,6 +35,7 @@ ifeq ($(config),debug)
 TARGETDIR = ../bin/debug-linux-x86_64/runtime
 TARGET = $(TARGETDIR)/runtime
 OBJDIR = ../obj/debug-linux-x86_64/runtime
+DEFINES += -DTC_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g
 LIBS += ../bin/debug-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
@@ -46,6 +46,7 @@ else ifeq ($(config),release)
 TARGETDIR = ../bin/release-linux-x86_64/runtime
 TARGET = $(TARGETDIR)/runtime
 OBJDIR = ../obj/release-linux-x86_64/runtime
+DEFINES += -DTC_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 LIBS += ../bin/release-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
@@ -56,6 +57,7 @@ else ifeq ($(config),dist)
 TARGETDIR = ../bin/dist-linux-x86_64/runtime
 TARGET = $(TARGETDIR)/runtime
 OBJDIR = ../obj/dist-linux-x86_64/runtime
+DEFINES += -DTC_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 LIBS += ../bin/dist-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
