@@ -2,12 +2,8 @@
 #define INPUT_H
 
 #include "tcpch.h"
-#include "keycodes.h"
+#include "input_codes.h"
 #include "events/event.h"
-
-#define KEYCODE_MAX 512
-#define BIT_INDEX(key) ((key) / 8)
-#define BIT_MASK(key) (1 << ((key) % 8))
 
 typedef struct {
 
@@ -16,21 +12,24 @@ typedef struct {
 	bool down_previous;
 	bool pressed;
 	bool released;
-} Control;
+} Input;
 
 typedef struct {
 
 	// uint8_t key_down[KEYCODE_MAX / 8];
-	Control controls[KEYCODES_NUM];
+	Input inputs[INPUT_CODE_NUM];
 
 } InputState;
 
 InputState input_state_new();
 bool input_state_handle_event(InputState *state, const Event *event);
+bool _handle_key(InputState *state, const Event *event);
+bool _handle_mouse(InputState *state, const Event *event);
 void input_state_update(InputState *state);
+void input_state_reset(InputState *state);
 
-bool key_is_down(uint16_t keycode);
-bool key_is_pressed(uint16_t keycode);
-bool key_is_released(uint16_t keycode);
+bool input_down(uint16_t keycode);
+bool input_pressed(uint16_t keycode);
+bool input_released(uint16_t keycode);
 
 #endif // !INPUT_H

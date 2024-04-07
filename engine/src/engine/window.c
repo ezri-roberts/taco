@@ -1,4 +1,5 @@
 #include "window.h"
+#include "engine/input.h"
 
 TcWindow window_new(const char *title, int width, int height) {
 
@@ -24,6 +25,20 @@ bool window_on_resize(const Event *e, void *data) {
 
 	win_data->width = e->data.window_width;
 	win_data->height = e->data.window_height;
+
+	return true;
+}
+
+bool window_on_focus(const Event *event, void *data) {
+
+	InputState *state = (InputState*)data;
+
+	return true;
+}
+
+bool window_on_unfocus(const Event *event, void *data) {
+
+	InputState *state = (InputState*)data;
 
 	return true;
 }

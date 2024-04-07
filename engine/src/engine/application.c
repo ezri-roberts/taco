@@ -1,4 +1,5 @@
 #include "application.h"
+#include "engine/events/event.h"
 // #include "packer.h"
 
 App* app_new() {
@@ -19,6 +20,7 @@ App* app_new() {
 	app->scene_list = scene_list_new();
 	app->layer_stack = NULL;
 	app->state = APP_STATE_RUNNING;
+	app->input_state = input_state_new();
 
 	// pack("assets/");
 
@@ -53,10 +55,6 @@ void app_run(void *data) {
 	}
 
 	input_state_update(&app->input_state);
-
-	if (key_is_released(SPACE)) {
-		TC_TRACE("SPACE!");
-	}	
 }
 
 void app_on_event(Event *e, void *data) {
@@ -64,7 +62,6 @@ void app_on_event(Event *e, void *data) {
 	App *app = (App*)data;
 	EventCallback callback = NULL;
 	void *pass_data = data;
-
 
 	switch (e->type) {
 		case WINDOW_CLOSE:
@@ -80,6 +77,22 @@ void app_on_event(Event *e, void *data) {
 			break;
 		case KEY_RELEASE:
 			callback = app_on_key;
+			pass_data = &app->input_state;
+			break;
+		case MOUSE_PRESS:
+			callback = app_on_key;
+			pass_data = &app->input_state;
+			break;
+		case MOUSE_RELEASE:
+			callback = app_on_key;
+			pass_data = &app->input_state;
+			break;
+		case WINDOW_UNFOCUS:
+			callback = window_on_unfocus;
+			pass_data = &app->input_state;
+			break;
+		case WINDOW_FOCUS:
+			callback = window_on_focus;
 			pass_data = &app->input_state;
 			break;
 	}
@@ -215,11 +228,10 @@ void sokol_event_callback(const sapp_event *e) {
 	Event event;
 
 	dbui_event(&app->dbui_state, e);
-	// TC_TRACE("%d", event.data.window_width);
 
 	switch (e->type) {
 		default:
-			event = event_new(EVENT_NONE, e);
+			event = event_new(EVENT_NONE, e); break;
 		case SAPP_EVENTTYPE_KEY_DOWN:
 			event = event_new(KEY_PRESS, e); break;
 		case SAPP_EVENTTYPE_KEY_UP:

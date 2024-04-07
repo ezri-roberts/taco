@@ -3,6 +3,7 @@
 
 #include "tcpch.h"
 #include "events/event.h"
+#include "input.h"
 
 typedef struct {
 
@@ -27,6 +28,8 @@ void window_on_update(TcWindow *window);
 bool window_should_close(TcWindow *window);
 
 // Event callbacks.
-bool window_on_resize(const Event *e, void *data);
+bool window_on_resize(const Event *event, void *data);
+bool window_on_focus(const Event *event, void *data);
+bool window_on_unfocus(const Event *event, void *data);
 
 #endif // !WINDOW_H

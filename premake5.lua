@@ -1,4 +1,4 @@
-workspace "taco"
+workspace "shraybn"
 	architecture "x64"
 	cdialect "C99"
 
@@ -55,7 +55,7 @@ project "engine"
 
 		libdirs
 		{
-			"taco/lib/",
+			"engine/lib/",
 		}
 
 		links
