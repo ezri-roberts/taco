@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 #include "input_codes.h"
 #include "events/event.h"
 
@@ -12,24 +12,24 @@ typedef struct {
 	bool down_previous;
 	bool pressed;
 	bool released;
-} Input;
+} shrinput;
 
 typedef struct {
 
 	// uint8_t key_down[KEYCODE_MAX / 8];
-	Input inputs[INPUT_CODE_NUM];
+	shrinput inputs[INPUT_CODE_NUM];
 
-} InputState;
+} shrinput_state;
 
-InputState input_state_new();
-bool input_state_handle_event(InputState *state, const Event *event);
-bool _handle_key(InputState *state, const Event *event);
-bool _handle_mouse(InputState *state, const Event *event);
-void input_state_update(InputState *state);
-void input_state_reset(InputState *state);
+shrinput_state shrinput_state_new();
+bool shrinput_state_handle_event(shrinput_state *state, const shrevent *event);
+void shrinput_state_update(shrinput_state *state);
+void shrinput_state_reset(shrinput_state *state);
+bool _handle_key(shrinput_state *state, const shrevent *event);
+bool _handle_mouse(shrinput_state *state, const shrevent *event);
 
-bool input_down(uint16_t keycode);
-bool input_pressed(uint16_t keycode);
-bool input_released(uint16_t keycode);
+bool input_down(uint16_t input_code);
+bool input_pressed(uint16_t input_code);
+bool input_released(uint16_t input_code);
 
 #endif // !INPUT_H

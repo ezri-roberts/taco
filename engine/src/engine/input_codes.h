@@ -1,7 +1,7 @@
 #ifndef KEYCODES_H
 #define KEYCODES_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 
 #define INPUT_CODE_NUM 123
 
@@ -134,6 +134,6 @@ typedef enum {
 	KEY_RIGHTSUPER          = 347,
 	KEY_MENU                = 348,
 
-} InputCode;
+} shrinput_code;
 
 #endif // !KEYCODES_H

@@ -1,8 +1,8 @@
 #include "event.h"
 
-Event event_new(const EventType type, const sapp_event *data) {
+shrevent shrevent_new(const shrevent_type type, const sapp_event *data) {
 
-	Event event;
+	shrevent event;
 	event.type = type;
 	event.data = *data;
 
@@ -32,11 +32,11 @@ Event event_new(const EventType type, const sapp_event *data) {
 	return event;
 }
 
-void event_tostring(char *str, const Event *e) {
+void shrevent_tostring(char *str, const shrevent *event) {
 
 	char type[128];
 
-	switch (e->type) {
+	switch (event->type) {
 		case KEY_PRESS: 	 sprintf(type, "Key Press");	  break;
 		case KEY_RELEASE: 	 sprintf(type, "Key Release");	  break;
 		case MOUSE_MOVE: 	 sprintf(type, "Mouse Move");	  break;
@@ -56,20 +56,20 @@ void event_tostring(char *str, const Event *e) {
 	sprintf(str, "%s", type);
 }
 
-bool event_in_category(const Event *e, const EventCategory category) {
-	return e->category & category;
+bool shrevent_in_category(const shrevent *event, const shrevent_category category) {
+	return event->category & category;
 }
 
-bool event_dispatch(Event *e, const EventType type, const EventCallback callback, void *data) {
+bool shrevent_dispatch(shrevent *event, const shrevent_type type, const shrevent_callback callback, void *data) {
 
-	if (type == e->type && callback != NULL) {
+	if (type == event->type && callback != NULL) {
 
 		// Log out event info.
 		char event_str[128];
-		event_tostring(event_str, e);
+		shrevent_tostring(event_str, event);
 		TC_INFO("Dispatch Event '%s'", event_str);
 
-		e->handled = callback(e, data);
+		event->handled = callback(event, data);
 
 		return true;
 	}

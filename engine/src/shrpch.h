@@ -1,5 +1,5 @@
-#ifndef TCPCH_H
-#define TCPCH_H
+#ifndef SHRPCH_H
+#define SHRPCH_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,11 +9,11 @@
 
 #include "engine/core.h"
 
-#ifdef TC_PLATFORM_LINUX
+#ifdef SHR_PLATFORM_LINUX
 	#define SOKOL_GLES3
 #endif // DEBUG
 
-#ifdef TC_PATFORM_WINDOWS
+#ifdef SHR_PATFORM_WINDOWS
 	#include <Windows.h>
 	#define SOKOL_D3D11
 #endif // DEBUG
@@ -26,4 +26,4 @@
 
 #include "engine/log.h"
 
-#endif // !TCPCH_H
+#endif // !SHRPCH_H

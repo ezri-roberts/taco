@@ -2,7 +2,7 @@
 #include "engine/events/event.h"
 // #include "packer.h"
 
-App* app_new() {
+shrapp* shrapp_new() {
 
 	const char *backend;
 	#if defined(SOKOL_GLES3)
@@ -14,30 +14,30 @@ App* app_new() {
 	TC_INFO("Initializing Engine. (%s Backend.)", backend);
 	TC_INFO("Creating App.");
 
-	App *app = malloc(sizeof(App));
+	shrapp *app = malloc(sizeof(shrapp));
 
-	app->window = window_new("Game Window", 1280, 720);
-	app->scene_list = scene_list_new();
+	app->window = shrwindow_new("Game Window", 1280, 720);
+	app->scene_list = shrscene_list_new();
 	app->layer_stack = NULL;
 	app->state = APP_STATE_RUNNING;
-	app->input_state = input_state_new();
+	app->input_state = shrinput_state_new();
 
 	// pack("assets/");
 
 	return app;
 }
 
-bool app_check_state(App *app, AppState state) {
+bool shrapp_check_state(shrapp *app, shrapp_state state) {
 	return (app->state == state);
 }
 
-void app_quit(App *app) {
+void shrapp_quit(shrapp *app) {
 	app->state = APP_STATE_QUIT_REQUESTED;
 }
 
-void app_run(void *data) {
+void shrapp_run(void *data) {
 
-	App *app = (App*)data;
+	shrapp *app = (shrapp*)data;
 
 	if (app->state == APP_STATE_QUIT_REQUESTED) {
 		sapp_quit();
@@ -45,94 +45,94 @@ void app_run(void *data) {
 
 	if (app->layer_stack) { // Stack is null if no scene is currently active.
 
-		int layer_amount = layer_stack_size(app->layer_stack);
+		int layer_amount = shrlayer_stack_size(app->layer_stack);
 
 		for (int i = 0; i <= layer_amount-1; i++) {
 
-			Layer *layer = layer_stack_get(app->layer_stack, i);
+			shrlayer *layer = shrlayer_stack_get(app->layer_stack, i);
 			if (layer->on_update) layer->on_update();
 		}
 	}
 
-	input_state_update(&app->input_state);
+	shrinput_state_update(&app->input_state);
 }
 
-void app_on_event(Event *e, void *data) {
+void shrapp_on_event(shrevent *event, void *data) {
 
-	App *app = (App*)data;
-	EventCallback callback = NULL;
+	shrapp *app = (shrapp*)data;
+	shrevent_callback callback = NULL;
 	void *pass_data = data;
 
-	switch (e->type) {
+	switch (event->type) {
 		case WINDOW_CLOSE:
-			callback = app_on_quit;
+			callback = shrapp_on_quit;
 			break;
 		case WINDOW_RESIZE:
-			callback = window_on_resize;
+			callback = shrwindow_on_resize;
 			pass_data = &app->window.data;
 			break;
 		case KEY_PRESS:
-			callback = app_on_key;
+			callback = shrapp_on_key;
 			pass_data = &app->input_state;
 			break;
 		case KEY_RELEASE:
-			callback = app_on_key;
+			callback = shrapp_on_key;
 			pass_data = &app->input_state;
 			break;
 		case MOUSE_PRESS:
-			callback = app_on_key;
+			callback = shrapp_on_key;
 			pass_data = &app->input_state;
 			break;
 		case MOUSE_RELEASE:
-			callback = app_on_key;
+			callback = shrapp_on_key;
 			pass_data = &app->input_state;
 			break;
 		case WINDOW_UNFOCUS:
-			callback = window_on_unfocus;
+			callback = shrwindow_on_unfocus;
 			pass_data = &app->input_state;
 			break;
 		case WINDOW_FOCUS:
-			callback = window_on_focus;
+			callback = shrwindow_on_focus;
 			pass_data = &app->input_state;
 			break;
 	}
 
-	bool dispatched = event_dispatch(e, e->type, callback, pass_data);
+	bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
 
 	// If dispatched event returns false, propagate it through the layers.
 	if (!dispatched && app->layer_stack) {
 
-		int layer_amount = layer_stack_size(app->layer_stack);
+		int layer_amount = shrlayer_stack_size(app->layer_stack);
 
 		for (int i = layer_amount; i > 0; i--) {
 
-			Layer *layer = layer_stack_get(app->layer_stack, i);
-			if (layer->on_event) layer->on_event(e, data);
+			shrlayer *layer = shrlayer_stack_get(app->layer_stack, i);
+			if (layer->on_event) layer->on_event(event, data);
 			// If the event has been handled we don't want to propagate it further.
-			if (e->handled) break;
+			if (event->handled) break;
 		}
 	}
 }
 
-bool app_on_quit(const Event *e, void *data) {
+bool shrapp_on_quit(const shrevent *event, void *data) {
 
-	App *app = (App*)data;
+	shrapp *app = (shrapp*)data;
 
 	sapp_cancel_quit();
-	app_quit(app);
+	shrapp_quit(app);
 
 	return true;
 }
 
-bool app_on_key(const Event *e, void *data) {
+bool shrapp_on_key(const shrevent *event, void *data) {
 
-	InputState *state = (InputState*)data;
-	input_state_handle_event(state, e);
+	shrinput_state *state = (shrinput_state*)data;
+	shrinput_state_handle_event(state, event);
 
 	return true;
 }
 
-void app_set_scene(App *app, const char *name) {
+void shrapp_set_scene(shrapp *app, const char *name) {
 
 	for (int i = 0; i <= app->scene_list.used; i++) {
 
@@ -147,9 +147,9 @@ void app_set_scene(App *app, const char *name) {
 	}
 }
 
-void app_destroy(App *app) {
+void shrapp_destroy(shrapp *app) {
 
-	scene_list_destroy(&app->scene_list);
+	shrscene_list_destroy(&app->scene_list);
 	free(app);
 	app = NULL;
 
@@ -160,8 +160,8 @@ void app_destroy(App *app) {
 
 void sokol_init(void) {
 
-	App *app = (App*)sapp_userdata();
-	app_init((App*)sapp_userdata());
+	shrapp *app = (shrapp*)sapp_userdata();
+	shrapp_init((shrapp*)sapp_userdata());
 
     sg_setup(&(sg_desc){
         .environment = sglue_environment(),
@@ -182,12 +182,12 @@ void sokol_init(void) {
 
 void sokol_frame(void) {
 
-	App *app = (App*)sapp_userdata();
-	RenderState *state = &app->render_state;
+	shrapp *app = (shrapp*)sapp_userdata();
+	render_state *state = &app->render_state;
 	DBUIState *dbui_state = &app->dbui_state;
 
-	app_run(app);
-	app_frame((App*)sapp_userdata());
+	shrapp_run(app);
+	shrapp_frame((shrapp*)sapp_userdata());
 
 	mu_begin(&dbui_state->mu_ctx);
     dbui_test_window(dbui_state);
@@ -213,7 +213,7 @@ void sokol_frame(void) {
 
 void sokol_cleanup(void) {
 
-	app_cleanup((App*)sapp_userdata());
+	shrapp_cleanup((shrapp*)sapp_userdata());
 	sgl_shutdown();
     sg_shutdown();
 
@@ -223,38 +223,38 @@ void sokol_cleanup(void) {
 // Handle the event data sokol gives out.
 void sokol_event_callback(const sapp_event *e) {
 
-	App *app = (App*)sapp_userdata();
+	shrapp *app = (shrapp*)sapp_userdata();
 
-	Event event;
+	shrevent event;
 
 	dbui_event(&app->dbui_state, e);
 
 	switch (e->type) {
 		default:
-			event = event_new(EVENT_NONE, e); break;
+			event = shrevent_new(EVENT_NONE, e); break;
 		case SAPP_EVENTTYPE_KEY_DOWN:
-			event = event_new(KEY_PRESS, e); break;
+			event = shrevent_new(KEY_PRESS, e); break;
 		case SAPP_EVENTTYPE_KEY_UP:
-			event = event_new(KEY_RELEASE, e); break;
+			event = shrevent_new(KEY_RELEASE, e); break;
 		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			event = event_new(MOUSE_MOVE, e); break;
+			event = shrevent_new(MOUSE_MOVE, e); break;
 		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			event = event_new(MOUSE_SCROLL, e); break;
+			event = shrevent_new(MOUSE_SCROLL, e); break;
 		case SAPP_EVENTTYPE_MOUSE_DOWN:
-			event = event_new(MOUSE_PRESS, e); break;
+			event = shrevent_new(MOUSE_PRESS, e); break;
 		case SAPP_EVENTTYPE_MOUSE_UP:
-			event = event_new(MOUSE_RELEASE, e); break;
+			event = shrevent_new(MOUSE_RELEASE, e); break;
 		case SAPP_EVENTTYPE_RESIZED:
-			event = event_new(WINDOW_RESIZE, e); break;
+			event = shrevent_new(WINDOW_RESIZE, e); break;
 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
-			event = event_new(WINDOW_CLOSE, e); break;
+			event = shrevent_new(WINDOW_CLOSE, e); break;
 		case SAPP_EVENTTYPE_FOCUSED:
-			event = event_new(WINDOW_FOCUS, e); break;
+			event = shrevent_new(WINDOW_FOCUS, e); break;
 		case SAPP_EVENTTYPE_UNFOCUSED:
-			event = event_new(WINDOW_UNFOCUS, e); break;
+			event = shrevent_new(WINDOW_UNFOCUS, e); break;
 	}
 
-	app_on_event(&event, sapp_userdata());
+	shrapp_on_event(&event, sapp_userdata());
 }
 
 void sokol_log_callback(

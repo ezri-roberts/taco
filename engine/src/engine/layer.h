@@ -3,7 +3,7 @@
 
 #define LAYER_STACK_SIZE 128
 
-#include "tcpch.h"
+#include "shrpch.h"
 #include "events/event.h"
 
 typedef struct {
@@ -15,25 +15,25 @@ typedef struct {
 	void (*on_detach)();
 	void (*on_update)();
 
-	EventCallback on_event;
+	shrevent_callback on_event;
 
-} Layer;
+} shrlayer;
 
 typedef struct {
 
-	Layer **layers;
+	shrlayer **layers;
 
 	size_t used;
 	size_t size;
 
-} LayerStack;
+} shrlayer_stack;
 
-Layer* layer_new(const char *name);
-LayerStack layer_stack_new();
-void layer_stack_destory(LayerStack *stack);
-void layer_stack_push(LayerStack *stack, Layer *layer);
-void layer_stack_pop(LayerStack *stack, Layer *layer);
-Layer* layer_stack_get(LayerStack *stack, int index);
-int layer_stack_size(LayerStack *stack);
+shrlayer* shrlayer_new(const char *name);
+shrlayer_stack shrlayer_stack_new();
+void shrlayer_stack_destory(shrlayer_stack *stack);
+void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer);
+void shrlayer_stack_pop(shrlayer_stack *stack, shrlayer *layer);
+shrlayer* shrlayer_stack_get(shrlayer_stack *stack, int index);
+int shrlayer_stack_size(shrlayer_stack *stack);
 
 #endif // !LAYER_H

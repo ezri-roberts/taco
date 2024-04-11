@@ -1,8 +1,8 @@
 #include "layer.h"
 
-Layer* layer_new(const char *name) {
+shrlayer* shrlayer_new(const char *name) {
 
-	Layer *layer = malloc(sizeof(Layer));
+	shrlayer *layer = malloc(sizeof(shrlayer));
 
 	layer->name = name;
 	layer->on_attach = NULL;
@@ -14,48 +14,48 @@ Layer* layer_new(const char *name) {
 	return layer;
 }
 
-LayerStack layer_stack_new() {
+shrlayer_stack shrlayer_stack_new() {
 
-	LayerStack stack;
+	shrlayer_stack stack;
 
-	stack.layers = malloc(LAYER_STACK_SIZE * sizeof(Layer));
+	stack.layers = malloc(LAYER_STACK_SIZE * sizeof(shrlayer));
 	stack.used = 0;
 	stack.size = LAYER_STACK_SIZE;
 
 	return stack;
 }
 
-void layer_stack_push(LayerStack *stack, Layer *layer) {
+void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer) {
 
 	if (layer->on_attach) layer->on_attach();
 
 	if (stack->used == stack->size) {
 		stack->size *= 2;
-		stack->layers = realloc(stack->layers, stack->size * sizeof(Layer));
+		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
 	}
 	stack->layers[stack->used++] = layer;
 
 }
 
-void layer_stack_pop(LayerStack *stack, Layer *layer) {
+void shrlayer_stack_pop(shrlayer_stack *stack, shrlayer *layer) {
 
 }
 
-int layer_stack_size(LayerStack *stack) {
+int shrlayer_stack_size(shrlayer_stack *stack) {
 	return stack->used;
 }
 
-Layer* layer_stack_get(LayerStack *stack, int index) {
+shrlayer* shrlayer_stack_get(shrlayer_stack *stack, int index) {
 	return stack->layers[index];
 }
 
-void layer_stack_destory(LayerStack *stack) {
+void shrlayer_stack_destory(shrlayer_stack *stack) {
 
 	TC_INFO("Destroying Layer Stack: '0x%x'", stack);
 
 	for (int i = 0; i < stack->used; i++) {
 
-		Layer *layer = stack->layers[i];
+		shrlayer *layer = stack->layers[i];
 		if (layer->on_detach) layer->on_detach();
 
 		TC_INFO("Destroying Layer: 0x%x", layer);

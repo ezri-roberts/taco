@@ -1,16 +1,12 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 
 typedef struct {
 
-	// Texture2D texture;
-	// BlendMode blend_mode;
-	// Color color;
+} shrsprite;
 
-} Sprite;
-
-Sprite sprite_new();
+shrsprite shrsprite_new();
 
 #endif // !SPRITE_H

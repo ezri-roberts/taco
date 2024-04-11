@@ -3,15 +3,15 @@
 
 #include "engine/application.h"
 
-#if defined(TC_PLATFORM_LINUX) || defined(TC_PLATFORM_WINDOWS)
+#if defined(SHR_PLATFORM_LINUX) || defined(SHR_PLATFORM_WINDOWS)
 
 inline sapp_desc sokol_main(int argc, char* argv[]) {
 
     (void)argc; (void)argv;
 
-	App *app = app_new();
+	shrapp *app = shrapp_new();
 	// App *app = app_init();
-	TcWindowData *win_data = &app->window.data;
+	shrwindow_data *win_data = &app->window.data;
 
     return (sapp_desc){
         .init_cb = sokol_init,
@@ -29,5 +29,5 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
 
 }
 
-#endif // !TC_PLATFORM_LINUX
+#endif // !SHR_PLATFORM_LINUX
 #endif // !ENTRYPOINT_H

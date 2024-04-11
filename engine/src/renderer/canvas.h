@@ -1,19 +1,16 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 #include "engine/window.h"
 
 typedef struct {
 
-	// RenderTexture2D target;
-	// Rectangle source;
-	// Rectangle dest;
 	void (*on_update)();
-} Canvas;
+} shrcanvas;
 
-Canvas canvas_new(int width, int height);
-void canvas_update(Canvas *canvas);
-void canvas_draw(Canvas *canvas, TcWindowData *win_data);
+shrcanvas shrcanvas_new(int width, int height);
+void shrcanvas_update(shrcanvas *canvas);
+void shrcanvas_draw(shrcanvas *canvas, shrwindow_data *win_data);
 
 #endif // !CANVAS_H

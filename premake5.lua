@@ -47,7 +47,7 @@ project "engine"
 		"packer",
 	}
 
-	pchheader "tcpch.h"
+	pchheader "shrpch.h"
 
 	filter "system:linux"
 		cdialect "C99"
@@ -66,8 +66,8 @@ project "engine"
 		defines
 		{
 			"LOG_USE_COLOR",		-- So the log library outputs color.
-			"TC_PLATFORM_LINUX",
-			"TC_BUILD_DYNAMIC",
+			"SHR_PLATFORM_LINUX",
+			"SHR_BUILD_DYNAMIC",
 		}
 
 		postbuildcommands
@@ -75,15 +75,15 @@ project "engine"
 		}	
 
 	filter "configurations:debug"
-		defines "TC_DEBUG"
+		defines "SHR_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
-		defines "TC_RELEASE"
+		defines "SHR_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
-		defines "TC_DIST"
+		defines "SHR_DIST"
 		optimize "On"
 
 project "runtime"
@@ -121,15 +121,15 @@ project "runtime"
 		}
 
 	filter "configurations:debug"
-		defines "TC_DEBUG"
+		defines "SHR_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
-		defines "TC_RELEASE"
+		defines "SHR_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
-		defines "TC_DIST"
+		defines "SHR_DIST"
 		optimize "On"
 
 project "editor"
@@ -167,13 +167,13 @@ project "editor"
 		}
 
 	filter "configurations:debug"
-		defines "TC_DEBUG"
+		defines "SHR_DEBUG"
 		symbols "On"
 
 	filter "configurations:release"
-		defines "TC_RELEASE"
+		defines "SHR_RELEASE"
 		optimize "On"
 
 	filter "configurations:dist"
-		defines "TC_DIST"
+		defines "SHR_DIST"
 		optimize "On"

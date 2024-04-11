@@ -1,7 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 
 typedef enum {
 
@@ -11,7 +11,7 @@ typedef enum {
 	KEY_PRESS, KEY_RELEASE,
 	MOUSE_PRESS, MOUSE_RELEASE, MOUSE_MOVE, MOUSE_SCROLL
 
-} EventType;
+} shrevent_type;
 
 typedef enum {
 
@@ -21,25 +21,25 @@ typedef enum {
 	EVENT_CATEGORY_MOUSE = BIT(3),
 	EVENT_CATEGORY_MOUSE_BUTTON = BIT(4)
 
-} EventCategory;
+} shrevent_category;
 
-typedef struct Event {
+typedef struct event {
 
 	const char *name;
-	EventType type;
+	shrevent_type type;
 	int category;
 	bool handled;
 	sapp_event data;
 
-} Event;
+} shrevent;
 
 // Event callback function pointer.
-typedef bool (*EventCallback)(const Event*, void*);
+typedef bool (*shrevent_callback)(const shrevent*, void*);
 
-Event event_new(const EventType type, const sapp_event *data);
-void event_copy_data(Event *event, sapp_event *e);
-bool event_in_category(const Event *e, const EventCategory category);
-bool event_dispatch(Event *e, const EventType type, const EventCallback callback, void *data);
-void event_tostring(char *str, const Event *e);
+shrevent shrevent_new(const shrevent_type type, const sapp_event *data);
+void shrevent_copy_data(shrevent *event, sapp_event *e);
+bool shrevent_in_category(const shrevent *event, const shrevent_category category);
+bool shrevent_dispatch(shrevent *event, const shrevent_type type, const shrevent_callback callback, void *data);
+void shrevent_tostring(char *str, const shrevent *event);
 
 #endif // !EVENT_H

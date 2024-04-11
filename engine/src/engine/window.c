@@ -1,11 +1,12 @@
 #include "window.h"
+#include "engine/events/event.h"
 #include "engine/input.h"
 
-TcWindow window_new(const char *title, int width, int height) {
+shrwindow shrwindow_new(const char *title, int width, int height) {
 
 	TC_INFO("Creating Window.");
 
-	TcWindow window;
+	shrwindow window;
 
 	window.data.title = title;
 	window.data.width = width;
@@ -15,35 +16,35 @@ TcWindow window_new(const char *title, int width, int height) {
 	return window;
 }
 
-void window_on_update(TcWindow *window) {
+void shrwindow_on_update(shrwindow *window) {
 
 }
 
-bool window_on_resize(const Event *e, void *data) {
+bool shrwindow_on_resize(const shrevent *event, void *data) {
 
-	TcWindowData *win_data = (TcWindowData*)data;
+	shrwindow_data *win_data = (shrwindow_data*)data;
 
-	win_data->width = e->data.window_width;
-	win_data->height = e->data.window_height;
+	win_data->width = event->data.window_width;
+	win_data->height = event->data.window_height;
 
 	return true;
 }
 
-bool window_on_focus(const Event *event, void *data) {
+bool shrwindow_on_focus(const shrevent *event, void *data) {
 
-	InputState *state = (InputState*)data;
-
-	return true;
-}
-
-bool window_on_unfocus(const Event *event, void *data) {
-
-	InputState *state = (InputState*)data;
+	shrinput_state *state = (shrinput_state*)data;
 
 	return true;
 }
 
-void window_destroy(TcWindow *window) {
+bool shrwindow_on_unfocus(const shrevent *event, void *data) {
+
+	shrinput_state *state = (shrinput_state*)data;
+
+	return true;
+}
+
+void shrwindow_destroy(shrwindow *window) {
 
 	TC_INFO("Destroyed Window.");
 }

@@ -1,50 +1,50 @@
 #include "scene.h"
 
-Scene* scene_new(const char *name) {
+shrscene* shrscene_new(const char *name) {
 
-	Scene *scene = malloc(sizeof(Scene));
+	shrscene *scene = malloc(sizeof(shrscene));
 
 	scene->name = name;
 	scene->on_attach = NULL;
 	scene->on_detach = NULL;
 	scene->on_update = NULL;
-	scene->layer_stack = layer_stack_new();
+	scene->layer_stack = shrlayer_stack_new();
 
 	return scene;
 }
 
-SceneList scene_list_new() {
+shrscene_list shrscene_list_new() {
 
-	SceneList list;
+	shrscene_list list;
 
-	list.scenes = malloc(128 * sizeof(Scene));
+	list.scenes = malloc(128 * sizeof(shrscene));
 	list.used = 0;
 	list.size = 128;
 
 	return list;
 }
 
-void scene_list_add(SceneList *list, Scene *scene) {
+void shrscene_list_add(shrscene_list *list, shrscene *scene) {
 
 	TC_INFO("Added Scene: '0x%x'", scene);
 
 	if (list->used == list->size) {
 		list->size *= 2;
-		list->scenes = realloc(list->scenes, list->size * sizeof(Scene));
+		list->scenes = realloc(list->scenes, list->size * sizeof(shrscene));
 	}
 	list->scenes[list->used++] = scene;
 }
 
-void scene_list_destroy(SceneList *list) {
+void shrscene_list_destroy(shrscene_list *list) {
 
 	TC_INFO("Destroying Scene List: '0x%x'", list);
 
 	for (int i = 0; i < list->used; i++) {
 
-		Scene *scene = list->scenes[i];
+		shrscene *scene = list->scenes[i];
 
 		TC_INFO("Destroying Scene: '0x%x'", scene);
-		layer_stack_destory(&scene->layer_stack);
+		shrlayer_stack_destory(&scene->layer_stack);
 		free(scene);
 		scene = NULL;
 	}

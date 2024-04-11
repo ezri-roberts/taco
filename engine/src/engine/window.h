@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 #include "events/event.h"
 #include "input.h"
 
@@ -13,23 +13,23 @@ typedef struct {
 	int target_fps;
 	bool vsync;
 
-} TcWindowData;
+} shrwindow_data;
 
 typedef struct {
 
 	void *handle;
-	TcWindowData data;
+	shrwindow_data data;
 
-} TcWindow;
+} shrwindow;
 
-TcWindow window_new(const char *title, int width, int height);
-void window_destroy(TcWindow *window);
-void window_on_update(TcWindow *window);
-bool window_should_close(TcWindow *window);
+shrwindow shrwindow_new(const char *title, int width, int height);
+void shrwindow_destroy(shrwindow *window);
+void shrwindow_on_update(shrwindow *window);
+bool shrwindow_should_close(shrwindow *window);
 
 // Event callbacks.
-bool window_on_resize(const Event *event, void *data);
-bool window_on_focus(const Event *event, void *data);
-bool window_on_unfocus(const Event *event, void *data);
+bool shrwindow_on_resize(const shrevent *event, void *data);
+bool shrwindow_on_focus(const shrevent *event, void *data);
+bool shrwindow_on_unfocus(const shrevent *event, void *data);
 
 #endif // !WINDOW_H

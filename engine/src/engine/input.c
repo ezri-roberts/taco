@@ -1,35 +1,35 @@
 #include "input.h"
 #include "application.h"
 
-InputState input_state_new() {
+shrinput_state shrinput_state_new() {
 
-	InputState state;
-	input_state_reset(&state);
+	shrinput_state state;
+	shrinput_state_reset(&state);
 
 	return state;
 }
 
-void input_state_reset(InputState *state) {
+void shrinput_state_reset(shrinput_state *state) {
 	memset(state->inputs, 0, sizeof(state->inputs));
 	TC_INFO("Input State Reset.");
 }
 
-bool input_state_handle_event(InputState *state, const Event *event) {
+bool shrinput_state_handle_event(shrinput_state *state, const shrevent *event) {
 
-	if (event_in_category(event, EVENT_CATEGORY_KEYBOARD)) {
+	if (shrevent_in_category(event, EVENT_CATEGORY_KEYBOARD)) {
 		return _handle_key(state, event);
-	} else if (event_in_category(event, EVENT_CATEGORY_MOUSE_BUTTON)) {
+	} else if (shrevent_in_category(event, EVENT_CATEGORY_MOUSE_BUTTON)) {
 		return _handle_mouse(state, event);
 	}
 
 	return false;
 }
 
-void input_state_update(InputState *state) {
+void shrinput_state_update(shrinput_state *state) {
 
 	for (int i = 0; i < INPUT_CODE_NUM; i++) {
 	
-		Input *input = &state->inputs[i];
+		shrinput *input = &state->inputs[i];
 
 		input->down_previous = input->down;
 		input->down = input->value > 0;
@@ -45,7 +45,7 @@ bool input_down(uint16_t input_code) {
 		return false;
 	}
 
-	App *app = (App*)sapp_userdata();
+	shrapp *app = (shrapp*)sapp_userdata();
 	return app->input_state.inputs[input_code].down;
 }
 
@@ -56,7 +56,7 @@ bool input_pressed(uint16_t input_code) {
 		return false;
 	}
 
-	App *app = (App*)sapp_userdata();
+	shrapp *app = (shrapp*)sapp_userdata();
 	return app->input_state.inputs[input_code].pressed;
 }
 
@@ -67,14 +67,14 @@ bool input_released(uint16_t input_code) {
 		return false;
 	}
 
-	App *app = (App*)sapp_userdata();
+	shrapp *app = (shrapp*)sapp_userdata();
 	return app->input_state.inputs[input_code].released;
 }
 
-bool _handle_key(InputState *state, const Event *event) {
+bool _handle_key(shrinput_state *state, const shrevent *event) {
 
 	uint16_t input_code = event->data.key_code;
-	Input *input = &state->inputs[input_code];
+	shrinput *input = &state->inputs[input_code];
 
 	if (event->type == KEY_PRESS) {
 		input->value = 1;
@@ -87,10 +87,10 @@ bool _handle_key(InputState *state, const Event *event) {
 	return false;
 }
 
-bool _handle_mouse(InputState *state, const Event *event) {
+bool _handle_mouse(shrinput_state *state, const shrevent *event) {
 
 	uint16_t input_code = event->data.mouse_button;
-	Input *input = &state->inputs[input_code];
+	shrinput *input = &state->inputs[input_code];
 
 	if (event->type == MOUSE_PRESS) {
 		input->value = 1;

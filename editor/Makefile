@@ -35,7 +35,7 @@ ifeq ($(config),debug)
 TARGETDIR = ../bin/debug-linux-x86_64/editor
 TARGET = $(TARGETDIR)/editor
 OBJDIR = ../obj/debug-linux-x86_64/editor
-DEFINES += -DTC_DEBUG
+DEFINES += -DSHR_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g
 LIBS += ../bin/debug-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
@@ -46,7 +46,7 @@ else ifeq ($(config),release)
 TARGETDIR = ../bin/release-linux-x86_64/editor
 TARGET = $(TARGETDIR)/editor
 OBJDIR = ../obj/release-linux-x86_64/editor
-DEFINES += -DTC_RELEASE
+DEFINES += -DSHR_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 LIBS += ../bin/release-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
@@ -57,7 +57,7 @@ else ifeq ($(config),dist)
 TARGETDIR = ../bin/dist-linux-x86_64/editor
 TARGET = $(TARGETDIR)/editor
 OBJDIR = ../obj/dist-linux-x86_64/editor
-DEFINES += -DTC_DIST
+DEFINES += -DSHR_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 LIBS += ../bin/dist-linux-x86_64/engine/libengine.so -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm

@@ -1,14 +1,14 @@
-#include "taco.h"
+#include "shraybn.h"
 
-void app_init(App *app) {
-
-}
-
-void app_frame(App *app) {
+void shrapp_init(shrapp *app) {
 
 }
 
-void app_cleanup(App *app) {
+void shrapp_frame(shrapp *app) {
 
-	app_destroy(app);
+}
+
+void shrapp_cleanup(shrapp *app) {
+
+	shrapp_destroy(app);
 }

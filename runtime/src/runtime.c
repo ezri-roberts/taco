@@ -1,24 +1,22 @@
-#include "taco.h"
+#include "shraybn.h"
 
-void app_init(App *app) {
+void shrapp_init(shrapp *app) {
 
 }
 
-void app_frame(App *app) {
+void shrapp_frame(shrapp *app) {
 
-	if (input_down(MOUSE_LEFT)) {
-
+	if (input_pressed(MOUSE_LEFT)) {
 		TC_TRACE("Left Mouse!");
 	}
 
 	if (input_pressed(KEY_A)) {
-
 		TC_TRACE("A!");
 	}
 
 }
 
-void app_cleanup(App *app) {
+void shrapp_cleanup(shrapp *app) {
 
-	app_destroy(app);
+	shrapp_destroy(app);
 }

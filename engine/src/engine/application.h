@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "tcpch.h"
+#include "shrpch.h"
 #include "input.h"
 #include "window.h"
 #include "layer.h"
@@ -16,46 +16,46 @@ typedef enum {
 	APP_STATE_QUIT_REQUESTED,
 	APP_STATE_QUIT,
 	
-} AppState;
+} shrapp_state;
 
 typedef struct {
 
 	sg_pass_action pass_action;
-} RenderState;
+} render_state;
 
 typedef struct {
 
-	RenderState render_state;
+	render_state render_state;
 	DBUIState dbui_state;
 
-	InputState input_state;
-	TcWindow window;
-	LayerStack *layer_stack;
-	AppState state;
+	shrinput_state input_state;
+	shrwindow window;
+	shrlayer_stack *layer_stack;
+	shrapp_state state;
 
-	SceneList scene_list;
-	Scene *current_scene;
+	shrscene_list scene_list;
+	shrscene *current_scene;
 
 	uint32_t fps;
-} App;
+} shrapp;
 
-App* app_new();
-void app_run(void *data);
-App* app_create(); // Defined in client.
-void app_destroy(App *app);
-void app_on_event(Event *e, void *data);
-bool app_check_state(App *app, AppState state);
-void app_set_scene(App *app, const char *name);
-void app_quit(App *app);
+shrapp* shrapp_new();
+void shrapp_run(void *data);
+shrapp* shrapp_create(); // Defined in client.
+void shrapp_destroy(shrapp *app);
+void shrapp_on_event(shrevent *event, void *data);
+bool shrapp_check_state(shrapp *app, shrapp_state state);
+void shrapp_set_scene(shrapp *app, const char *name);
+void shrapp_quit(shrapp *app);
 
 // Event callbacks.
-bool app_on_quit(const Event *e, void *data);
-bool app_on_key(const Event *e, void *data);
+bool shrapp_on_quit(const shrevent *event, void *data);
+bool shrapp_on_key(const shrevent *event, void *data);
 
 // Defined in user implementation.
-extern void app_init(App *app);
-extern void app_frame(App *app);
-extern void app_cleanup(App *app);
+extern void shrapp_init(shrapp *app);
+extern void shrapp_frame(shrapp *app);
+extern void shrapp_cleanup(shrapp *app);
 
 // Sokol callback functions.
 void sokol_init(void);
