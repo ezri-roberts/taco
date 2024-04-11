@@ -2,6 +2,7 @@
 #define APPLICATION_H
 
 #include "shrpch.h"
+#include "renderer/renderer.h"
 #include "input.h"
 #include "window.h"
 #include "layer.h"
@@ -20,12 +21,7 @@ typedef enum {
 
 typedef struct {
 
-	sg_pass_action pass_action;
-} render_state;
-
-typedef struct {
-
-	render_state render_state;
+	shrrenderer renderer;
 	DBUIState dbui_state;
 
 	shrinput_state input_state;

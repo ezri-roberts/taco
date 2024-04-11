@@ -5,6 +5,10 @@
 	#define SHR_PLATFORM_LINUX
 #endif
 
+#ifdef SHR_PLATFORM_LINUX
+	#define SOKOL_FORCE_EGL
+#endif
+
 #define BIT(x) (1 << x)
 #define MAX(a, b) ((a)>(b)? (a) : (b))
 #define MIN(a, b) ((a)<(b)? (a) : (b))

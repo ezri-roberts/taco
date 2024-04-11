@@ -87,6 +87,7 @@ GENERATED += $(OBJDIR)/event.o
 GENERATED += $(OBJDIR)/input.o
 GENERATED += $(OBJDIR)/layer.o
 GENERATED += $(OBJDIR)/log.o
+GENERATED += $(OBJDIR)/renderer.o
 GENERATED += $(OBJDIR)/scene.o
 GENERATED += $(OBJDIR)/sprite.o
 GENERATED += $(OBJDIR)/window.o
@@ -98,6 +99,7 @@ OBJECTS += $(OBJDIR)/event.o
 OBJECTS += $(OBJDIR)/input.o
 OBJECTS += $(OBJDIR)/layer.o
 OBJECTS += $(OBJDIR)/log.o
+OBJECTS += $(OBJDIR)/renderer.o
 OBJECTS += $(OBJDIR)/scene.o
 OBJECTS += $(OBJDIR)/sprite.o
 OBJECTS += $(OBJDIR)/window.o
@@ -192,6 +194,9 @@ $(OBJDIR)/camera.o: src/renderer/camera.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/canvas.o: src/renderer/canvas.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/renderer.o: src/renderer/renderer.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) -include $(PCH_PLACEHOLDER) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/sprite.o: src/renderer/sprite.c
