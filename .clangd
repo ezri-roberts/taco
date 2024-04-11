@@ -4,3 +4,4 @@ CompileFlags:
   - -I/home/user/proj/c/shraybn/engine/src
   - -I/home/user/proj/c/shraybn/engine/lib/sokol
   - -I/home/user/proj/c/shraybn/engine/lib/microui/src
+  - -I/home/user/proj/c/shraybn/engine/lib/cglm/include

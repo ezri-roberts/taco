@@ -15,6 +15,7 @@ include_dir = {}
 include_dir["packer"] = "packer/src"
 include_dir["sokol"] = "engine/lib/sokol"
 include_dir["microui"] = "engine/lib/microui/src"
+include_dir["cglm"] = "engine/lib/cglm/include"
 
 include "packer"
 include "engine/lib/microui"
@@ -39,6 +40,7 @@ project "engine"
 		"%{include_dir.packer}",
 		"%{include_dir.sokol}",
 		"%{include_dir.microui}",
+		"%{include_dir.cglm}",
 	}
 
 	links
@@ -105,6 +107,7 @@ project "runtime"
 		"%{include_dir.packer}",
 		"%{include_dir.sokol}",
 		"%{include_dir.microui}",
+		"%{include_dir.cglm}",
 		"engine/src",
 	}
 
@@ -151,6 +154,7 @@ project "editor"
 		"%{include_dir.include}",
 		"%{include_dir.sokol}",
 		"%{include_dir.microui}",
+		"%{include_dir.cglm}",
 		"engine/src",
 	}
 

@@ -25,5 +25,6 @@
 #include "sokol_gl.h"
 
 #include "engine/log.h"
+#include "cglm/cglm.h"
 
 #endif // !SHRPCH_H
