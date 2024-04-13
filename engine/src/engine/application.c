@@ -1,17 +1,8 @@
 #include "application.h"
-#include "engine/events/event.h"
-// #include "packer.h"
 
 shrapp* shrapp_new() {
 
-	const char *backend;
-	#if defined(SOKOL_GLES3)
-		backend = "GLES3";
-	#elif defined(SOKOL_D3D11)
-		backend = "D3D11";
-	#endif
-
-	TC_INFO("Initializing Engine. (%s Backend.)", backend);
+	TC_INFO("Initializing Engine.");
 	TC_INFO("Creating App.");
 
 	shrapp *app = malloc(sizeof(shrapp));
@@ -19,10 +10,9 @@ shrapp* shrapp_new() {
 	app->window = shrwindow_new("Game Window", 1280, 720);
 	app->scene_list = shrscene_list_new();
 	app->layer_stack = NULL;
+	app->overlay_stack = shrlayer_stack_new();
 	app->state = APP_STATE_RUNNING;
 	app->input_state = shrinput_state_new();
-
-	// pack("assets/");
 
 	return app;
 }
@@ -62,6 +52,8 @@ void shrapp_on_event(shrevent *event, void *data) {
 	shrapp *app = (shrapp*)data;
 	shrevent_callback callback = NULL;
 	void *pass_data = data;
+
+	dbui_event(&app->dbui_state, event);
 
 	switch (event->type) {
 		case WINDOW_CLOSE:
@@ -147,9 +139,18 @@ void shrapp_set_scene(shrapp *app, const char *name) {
 	}
 }
 
+void shrapp_layer_push(shrapp *app, shrlayer *layer) {
+	shrlayer_stack_push(app->layer_stack, layer);
+}
+
+void shrapp_overlay_push(shrapp *app, shrlayer *layer) {
+	shrlayer_stack_push_front(app->layer_stack, layer);
+}
+
 void shrapp_destroy(shrapp *app) {
 
 	shrscene_list_destroy(&app->scene_list);
+	shrlayer_stack_destory(&app->overlay_stack);
 	free(app);
 	app = NULL;
 
@@ -165,8 +166,8 @@ void sokol_init(void) {
 
 	shrrenderer_init(&app->renderer);
 
-	// app->dbui_state.bg = (DBUIColor){ 90.0f, 95.0f, 100.0f };
-	// dbui_init(&app->dbui_state);
+	app->dbui_state.bg = (DBUIColor){ 90.0f, 95.0f, 100.0f };
+	dbui_init(&app->dbui_state);
 }
 
 void sokol_frame(void) {
@@ -178,6 +179,7 @@ void sokol_frame(void) {
 	shrapp_frame((shrapp*)sapp_userdata());
 
 	shrrenderer_frame(&app->renderer);
+	dbui_update(&app->dbui_state);
 	// mu_begin(&dbui_state->mu_ctx);
  //    dbui_test_window(dbui_state);
  //    mu_end(&dbui_state->mu_ctx);
@@ -216,7 +218,7 @@ void sokol_event_callback(const sapp_event *e) {
 
 	shrevent event;
 
-	dbui_event(&app->dbui_state, e);
+	// dbui_event(&app->dbui_state, e);
 
 	switch (e->type) {
 		default:

@@ -59,32 +59,53 @@ void dbui_init(DBUIState *state) {
     state->mu_ctx.text_height = microui_text_height_cb;
 }
 
-void dbui_event(DBUIState *state, const sapp_event *e) {
+void dbui_update(DBUIState *state) {
 
-    switch (e->type) {
+	mu_begin(&state->mu_ctx);
+    dbui_test_window(state);
+    mu_end(&state->mu_ctx);
+
+	dbui_begin(sapp_width(), sapp_height());
+	mu_Command* cmd = 0;
+	while(mu_next_command(&state->mu_ctx, &cmd)) {
+		switch (cmd->type) {
+			case MU_COMMAND_TEXT: dbui_draw_text(cmd->text.str, cmd->text.pos, cmd->text.color); break;
+			case MU_COMMAND_RECT: dbui_draw_rect(cmd->rect.rect, cmd->rect.color); break;
+			case MU_COMMAND_ICON: dbui_draw_icon(cmd->icon.id, cmd->icon.rect, cmd->icon.color); break;
+			case MU_COMMAND_CLIP: dbui_set_clip_rect(cmd->clip.rect); break;
+		}
+	}
+	dbui_end();
+}
+
+void dbui_event(DBUIState *state, const shrevent *event) {
+
+    sapp_event data = event->data;
+
+    switch (data.type) {
         case SAPP_EVENTTYPE_MOUSE_DOWN:
-            mu_input_mousedown(&state->mu_ctx, (int)e->mouse_x, (int)e->mouse_y, (1<<e->mouse_button));
+            mu_input_mousedown(&state->mu_ctx, (int)data.mouse_x, (int)data.mouse_y, (1<<data.mouse_button));
             break;
         case SAPP_EVENTTYPE_MOUSE_UP:
-            mu_input_mouseup(&state->mu_ctx, (int)e->mouse_x, (int)e->mouse_y, (1<<e->mouse_button));
+            mu_input_mouseup(&state->mu_ctx, (int)data.mouse_x, (int)data.mouse_y, (1<<data.mouse_button));
             break;
         case SAPP_EVENTTYPE_MOUSE_MOVE:
-            mu_input_mousemove(&state->mu_ctx, (int)e->mouse_x, (int)e->mouse_y);
+            mu_input_mousemove(&state->mu_ctx, (int)data.mouse_x, (int)data.mouse_y);
             break;
         case SAPP_EVENTTYPE_MOUSE_SCROLL:
-            mu_input_scroll(&state->mu_ctx, 0, (int)e->scroll_y);
+            mu_input_scroll(&state->mu_ctx, 0, (int)data.scroll_y);
             break;
         case SAPP_EVENTTYPE_KEY_DOWN:
-            mu_input_keydown(&state->mu_ctx, key_map[e->key_code & 511]);
+            mu_input_keydown(&state->mu_ctx, key_map[data.key_code & 511]);
             break;
         case SAPP_EVENTTYPE_KEY_UP:
-            mu_input_keyup(&state->mu_ctx, key_map[e->key_code & 511]);
+            mu_input_keyup(&state->mu_ctx, key_map[data.key_code & 511]);
             break;
         case SAPP_EVENTTYPE_CHAR:
             {
                 // don't input Backspace as character (required to make Backspace work in text input fields)
-                if (e->char_code == 127) { break; }
-                char txt[2] = { (char)(e->char_code & 255), 0 };
+                if (data.char_code == 127) { break; }
+                char txt[2] = { (char)(data.char_code & 255), 0 };
                 mu_input_text(&state->mu_ctx, txt);
             }
             break;

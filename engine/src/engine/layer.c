@@ -22,6 +22,8 @@ shrlayer_stack shrlayer_stack_new() {
 	stack.used = 0;
 	stack.size = LAYER_STACK_SIZE;
 
+	TC_INFO("Created Layer Stack.");
+
 	return stack;
 }
 
@@ -33,8 +35,23 @@ void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer) {
 		stack->size *= 2;
 		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
 	}
-	stack->layers[stack->used++] = layer;
 
+	stack->layers[stack->used++] = layer;
+	TC_INFO("Pushed Layer '%x'", layer);
+}
+
+void shrlayer_stack_push_front(shrlayer_stack *stack, shrlayer *layer) {
+
+	if (layer->on_attach) layer->on_attach();
+
+	if (stack->used == stack->size) {
+		stack->size *= 2;
+		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
+	}
+
+	stack->layers[stack->size - stack->used] = layer;
+	stack->used++;
+	TC_INFO("Pushed Layer '%x'", layer);
 }
 
 void shrlayer_stack_pop(shrlayer_stack *stack, shrlayer *layer) {

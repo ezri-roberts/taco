@@ -32,6 +32,7 @@ shrlayer* shrlayer_new(const char *name);
 shrlayer_stack shrlayer_stack_new();
 void shrlayer_stack_destory(shrlayer_stack *stack);
 void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer);
+void shrlayer_stack_push_front(shrlayer_stack *stack, shrlayer *layer);
 void shrlayer_stack_pop(shrlayer_stack *stack, shrlayer *layer);
 shrlayer* shrlayer_stack_get(shrlayer_stack *stack, int index);
 int shrlayer_stack_size(shrlayer_stack *stack);

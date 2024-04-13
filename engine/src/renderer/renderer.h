@@ -8,6 +8,7 @@ typedef struct {
 	sg_pipeline	   pip;
 	sg_bindings    bind;
 	sg_pass_action pass_action;
+
 } shrrenderer;
 
 void shrrenderer_init(shrrenderer *renderer);

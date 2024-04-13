@@ -24,10 +24,12 @@ typedef struct {
 	shrrenderer renderer;
 	DBUIState dbui_state;
 
-	shrinput_state input_state;
 	shrwindow window;
-	shrlayer_stack *layer_stack;
 	shrapp_state state;
+	shrinput_state input_state;
+
+	shrlayer_stack *layer_stack;
+	shrlayer_stack overlay_stack;
 
 	shrscene_list scene_list;
 	shrscene *current_scene;
@@ -43,6 +45,9 @@ void shrapp_on_event(shrevent *event, void *data);
 bool shrapp_check_state(shrapp *app, shrapp_state state);
 void shrapp_set_scene(shrapp *app, const char *name);
 void shrapp_quit(shrapp *app);
+
+void shrapp_layer_push(shrapp *app, shrlayer *layer);
+void shrapp_overlay_push(shrapp *app, shrlayer *layer);
 
 // Event callbacks.
 bool shrapp_on_quit(const shrevent *event, void *data);

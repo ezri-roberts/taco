@@ -10,7 +10,7 @@
 #include "engine/core.h"
 
 #ifdef SHR_PLATFORM_LINUX
-	#define SOKOL_GLES3
+	#define SOKOL_GLCORE33
 #endif // DEBUG
 
 #ifdef SHR_PATFORM_WINDOWS

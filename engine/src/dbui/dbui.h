@@ -1,6 +1,7 @@
 #ifndef DBUI_H
 #define DBUI_H
 
+#include "engine/layer.h"
 #include "shrpch.h"
 #include "microui.h"
 #include "atlas.inl"
@@ -16,12 +17,15 @@ typedef struct {
     int logbuf_updated;
     DBUIColor bg;
 
+	shrlayer *layer;
+
 } DBUIState;
 
 void dbui_init(DBUIState *state);
+void dbui_update(DBUIState *state);
 void dbui_begin(int disp_width, int disp_height);
 void dbui_end(void);
-void dbui_event(DBUIState *state, const sapp_event *e);
+void dbui_event(DBUIState *state, const shrevent *event);
 void dbui_draw(void);
 void dbui_push_quad(mu_Rect dst, mu_Rect src, mu_Color color);
 void dbui_draw_rect(mu_Rect rect, mu_Color color);
