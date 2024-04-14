@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="assets/logo.png" style="width: 100%" />
+    <img src="assets/logo.png" style="width: 60%" />
     </br>
     </br>
     A cross-platform game engine for creating narrative and story focused games.
