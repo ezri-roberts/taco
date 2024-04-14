@@ -1,8 +1,12 @@
-# Shraybn
 
-![logo](https://github.com/ezri-roberts/shraybn/blob/main/assets/logo.png)
-
-A cross platform game engine for creating narrative and story focused games.
+<p align="center">
+    <img src="assets/logo.png" style="width: 100%" />
+    </br>
+    </br>
+    A cross-platform game engine for creating narrative and story focused games.
+    </br>
+    </br>
+</p>
 
 ## About
 
