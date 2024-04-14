@@ -9,7 +9,7 @@ shrapp* shrapp_new() {
 
 	app->window = shrwindow_new("Game Window", 1280, 720);
 	app->scene_list = shrscene_list_new();
-	app->layer_stack = NULL;
+	app->layer_stack = shrlayer_stack_new();
 	app->overlay_stack = shrlayer_stack_new();
 	app->state = APP_STATE_RUNNING;
 	app->input_state = shrinput_state_new();
@@ -33,15 +33,12 @@ void shrapp_run(void *data) {
 		sapp_quit();
 	}
 
-	if (app->layer_stack) { // Stack is null if no scene is currently active.
+	size_t layer_amount = shrlayer_stack_size(&app->layer_stack);
 
-		int layer_amount = shrlayer_stack_size(app->layer_stack);
+	for (int i = 0; i <= layer_amount-1; i++) {
 
-		for (int i = 0; i <= layer_amount-1; i++) {
-
-			shrlayer *layer = shrlayer_stack_get(app->layer_stack, i);
-			if (layer->on_update) layer->on_update();
-		}
+		shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
+		if (layer->on_update) layer->on_update();
 	}
 
 	shrinput_state_update(&app->input_state);
@@ -53,7 +50,7 @@ void shrapp_on_event(shrevent *event, void *data) {
 	shrevent_callback callback = NULL;
 	void *pass_data = data;
 
-	dbui_event(&app->dbui_state, event);
+	// dbui_event(&app->dbui_state, event);
 
 	switch (event->type) {
 		case WINDOW_CLOSE:
@@ -91,17 +88,17 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 	bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
 
-	// If dispatched event returns false, propagate it through the layers.
-	if (!dispatched && app->layer_stack) {
+	if (!event->handled) {
 
-		int layer_amount = shrlayer_stack_size(app->layer_stack);
+		size_t layer_amount = app->layer_stack.used;
 
-		for (int i = layer_amount; i > 0; i--) {
+		for (int i = layer_amount-1; i >= 0; i--) {
 
-			shrlayer *layer = shrlayer_stack_get(app->layer_stack, i);
-			if (layer->on_event) layer->on_event(event, data);
+			shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
+
+			if (layer->on_event) layer->on_event(event, pass_data);
 			// If the event has been handled we don't want to propagate it further.
-			if (event->handled) break;
+			// if (event->handled) break;
 		}
 	}
 }
@@ -133,18 +130,17 @@ void shrapp_set_scene(shrapp *app, const char *name) {
 			TC_INFO("Set scene to: %s", name);
 
 			app->current_scene = app->scene_list.scenes[i];
-			app->layer_stack = &app->current_scene->layer_stack;
 			break;
 		}
 	}
 }
 
 void shrapp_layer_push(shrapp *app, shrlayer *layer) {
-	shrlayer_stack_push(app->layer_stack, layer);
+	shrlayer_stack_push(&app->layer_stack, layer);
 }
 
 void shrapp_overlay_push(shrapp *app, shrlayer *layer) {
-	shrlayer_stack_push_front(app->layer_stack, layer);
+	shrlayer_stack_push_front(&app->layer_stack, layer);
 }
 
 void shrapp_destroy(shrapp *app) {
@@ -206,7 +202,7 @@ void sokol_cleanup(void) {
 
 	shrapp_cleanup((shrapp*)sapp_userdata());
 	sgl_shutdown();
-    sg_shutdown();
+	sg_shutdown();
 
 	TC_INFO("Terminating Engine.");
 }

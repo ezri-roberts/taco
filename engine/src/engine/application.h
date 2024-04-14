@@ -28,7 +28,7 @@ typedef struct {
 	shrapp_state state;
 	shrinput_state input_state;
 
-	shrlayer_stack *layer_stack;
+	shrlayer_stack layer_stack;
 	shrlayer_stack overlay_stack;
 
 	shrscene_list scene_list;

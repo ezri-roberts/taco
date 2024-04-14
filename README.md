@@ -10,7 +10,8 @@
 
 ## About
 
-Shraybn uses **Lua** for scripting game code, as well as **Shrift**, a custom scripting language for interactive dialogue.
+Shraybn uses **Lua** for scripting game code, as well as **Shrift**, a custom scripting language for interactive dialogue.</br>
+Targets OpenGL, DirectX, and Metal.</br>
 
 ### Shrift
 

@@ -62,8 +62,8 @@ void dbui_init(DBUIState *state) {
 void dbui_update(DBUIState *state) {
 
 	mu_begin(&state->mu_ctx);
-    dbui_test_window(state);
-    mu_end(&state->mu_ctx);
+	dbui_test_window(state);
+	mu_end(&state->mu_ctx);
 
 	dbui_begin(sapp_width(), sapp_height());
 	mu_Command* cmd = 0;
