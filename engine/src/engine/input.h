@@ -25,8 +25,8 @@ shrinput_state shrinput_state_new();
 bool shrinput_state_handle_event(shrinput_state *state, const shrevent *event);
 void shrinput_state_update(shrinput_state *state);
 void shrinput_state_reset(shrinput_state *state);
-bool _handle_key(shrinput_state *state, const shrevent *event);
-bool _handle_mouse(shrinput_state *state, const shrevent *event);
+void _handle_key(shrinput_state *state, const shrevent *event);
+void _handle_mouse(shrinput_state *state, const shrevent *event);
 
 bool input_down(uint16_t input_code);
 bool input_pressed(uint16_t input_code);

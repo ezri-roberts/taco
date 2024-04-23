@@ -5,6 +5,7 @@ shrevent shrevent_new(const shrevent_type type, const sapp_event *data) {
 	shrevent event;
 	event.type = type;
 	event.data = *data;
+	event.handled = false;
 
 	int cat_key_input = EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT;
 	int cat_mouse_input = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_INPUT;
@@ -71,7 +72,7 @@ bool shrevent_dispatch(shrevent *event, const shrevent_type type, const shrevent
 
 		event->handled = callback(event, data);
 
-		return true;
+		return event->handled;
 	}
 
 	return false;

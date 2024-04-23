@@ -29,7 +29,7 @@ shrlayer_stack shrlayer_stack_new() {
 
 void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer) {
 
-	if (layer->on_attach) layer->on_attach();
+	if (layer->on_attach) layer->on_attach(sapp_userdata());
 
 	if (stack->used == stack->size) {
 		stack->size *= 2;
@@ -42,7 +42,7 @@ void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer) {
 
 void shrlayer_stack_push_front(shrlayer_stack *stack, shrlayer *layer) {
 
-	if (layer->on_attach) layer->on_attach();
+	if (layer->on_attach) layer->on_attach(sapp_userdata());
 
 	if (stack->used == stack->size) {
 		stack->size *= 2;
@@ -73,7 +73,7 @@ void shrlayer_stack_destory(shrlayer_stack *stack) {
 	for (int i = 0; i < stack->used; i++) {
 
 		shrlayer *layer = stack->layers[i];
-		if (layer->on_detach) layer->on_detach();
+		if (layer->on_detach) layer->on_detach(sapp_userdata());
 
 		TC_INFO("Destroying Layer: 0x%x", layer);
 		free(layer);

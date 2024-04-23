@@ -38,7 +38,7 @@ void shrapp_run(void *data) {
 	for (int i = 0; i <= layer_amount-1; i++) {
 
 		shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
-		if (layer->on_update) layer->on_update();
+		if (layer->on_update) layer->on_update(app);
 	}
 
 	shrinput_state_update(&app->input_state);
@@ -49,8 +49,6 @@ void shrapp_on_event(shrevent *event, void *data) {
 	shrapp *app = (shrapp*)data;
 	shrevent_callback callback = NULL;
 	void *pass_data = data;
-
-	// dbui_event(&app->dbui_state, event);
 
 	switch (event->type) {
 		case WINDOW_CLOSE:
@@ -88,7 +86,7 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 	bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
 
-	if (!event->handled) {
+	if (!dispatched) {
 
 		size_t layer_amount = app->layer_stack.used;
 
@@ -98,7 +96,7 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 			if (layer->on_event) layer->on_event(event, pass_data);
 			// If the event has been handled we don't want to propagate it further.
-			// if (event->handled) break;
+			if (event->handled) break;
 		}
 	}
 }
@@ -118,7 +116,7 @@ bool shrapp_on_key(const shrevent *event, void *data) {
 	shrinput_state *state = (shrinput_state*)data;
 	shrinput_state_handle_event(state, event);
 
-	return true;
+	return false;
 }
 
 void shrapp_set_scene(shrapp *app, const char *name) {
@@ -162,8 +160,8 @@ void sokol_init(void) {
 
 	shrrenderer_init(&app->renderer);
 
-	app->dbui_state.bg = (DBUIColor){ 90.0f, 95.0f, 100.0f };
-	dbui_init(&app->dbui_state);
+	app->dbui.bg = (dbui_color){ 90.0f, 95.0f, 100.0f };
+	dbui_init(&app->dbui);
 }
 
 void sokol_frame(void) {
@@ -175,7 +173,7 @@ void sokol_frame(void) {
 	shrapp_frame((shrapp*)sapp_userdata());
 
 	shrrenderer_frame(&app->renderer);
-	dbui_update(&app->dbui_state);
+	// dbui_update(&app->dbui_state);
 	// mu_begin(&dbui_state->mu_ctx);
  //    dbui_test_window(dbui_state);
  //    mu_end(&dbui_state->mu_ctx);

@@ -22,7 +22,7 @@ typedef enum {
 typedef struct {
 
 	shrrenderer renderer;
-	DBUIState dbui_state;
+	dbui_state dbui;
 
 	shrwindow window;
 	shrapp_state state;

@@ -17,9 +17,9 @@ void shrinput_state_reset(shrinput_state *state) {
 bool shrinput_state_handle_event(shrinput_state *state, const shrevent *event) {
 
 	if (shrevent_in_category(event, EVENT_CATEGORY_KEYBOARD)) {
-		return _handle_key(state, event);
+		_handle_key(state, event);
 	} else if (shrevent_in_category(event, EVENT_CATEGORY_MOUSE_BUTTON)) {
-		return _handle_mouse(state, event);
+		_handle_mouse(state, event);
 	}
 
 	return false;
@@ -71,34 +71,28 @@ bool input_released(uint16_t input_code) {
 	return app->input_state.inputs[input_code].released;
 }
 
-bool _handle_key(shrinput_state *state, const shrevent *event) {
+void _handle_key(shrinput_state *state, const shrevent *event) {
 
 	uint16_t input_code = event->data.key_code;
 	shrinput *input = &state->inputs[input_code];
 
 	if (event->type == KEY_PRESS) {
 		input->value = 1;
-		return true;
 	} else if (event->type == KEY_RELEASE) {
 		input->value = 0;
-		return true;
 	}
 
-	return false;
 }
 
-bool _handle_mouse(shrinput_state *state, const shrevent *event) {
+void _handle_mouse(shrinput_state *state, const shrevent *event) {
 
 	uint16_t input_code = event->data.mouse_button;
 	shrinput *input = &state->inputs[input_code];
 
 	if (event->type == MOUSE_PRESS) {
 		input->value = 1;
-		return true;
 	} else if (event->type == MOUSE_RELEASE) {
 		input->value = 0;
-		return true;
 	}
 
-	return false;
 }

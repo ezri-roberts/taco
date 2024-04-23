@@ -11,9 +11,9 @@ typedef struct {
 	const char *name;
 	bool enabled;
 
-	void (*on_attach)();
-	void (*on_detach)();
-	void (*on_update)();
+	void (*on_attach)(void*);
+	void (*on_detach)(void*);
+	void (*on_update)(void*);
 
 	shrevent_callback on_event;
 
