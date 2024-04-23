@@ -80,38 +80,35 @@ void dbui_update(dbui_state *state) {
 
 bool dbui_event(dbui_state *state, const shrevent *event) {
 
-	sapp_event data = event->data;
-
-	switch (data.type) {
+	switch (event->data.type) {
 		case SAPP_EVENTTYPE_MOUSE_DOWN:
-			mu_input_mousedown(&state->mu_ctx, (int)data.mouse_x, (int)data.mouse_y, (1<<data.mouse_button));
+			mu_input_mousedown(&state->mu_ctx, (int)event->data.mouse_x, (int)event->data.mouse_y, (1<<event->data.mouse_button));
 			return true;
-
 		case SAPP_EVENTTYPE_MOUSE_UP:
-			mu_input_mouseup(&state->mu_ctx, (int)data.mouse_x, (int)data.mouse_y, (1<<data.mouse_button));
+			mu_input_mouseup(&state->mu_ctx, (int)event->data.mouse_x, (int)event->data.mouse_y, (1<<event->data.mouse_button));
 			return true;
 		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			mu_input_mousemove(&state->mu_ctx, (int)data.mouse_x, (int)data.mouse_y);
+			mu_input_mousemove(&state->mu_ctx, (int)event->data.mouse_x, (int)event->data.mouse_y);
 			return true;
 		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			mu_input_scroll(&state->mu_ctx, 0, (int)data.scroll_y);
+			mu_input_scroll(&state->mu_ctx, 0, (int)event->data.scroll_y);
 			return true;
 		case SAPP_EVENTTYPE_KEY_DOWN:
-			mu_input_keydown(&state->mu_ctx, key_map[data.key_code & 511]);
+			mu_input_keydown(&state->mu_ctx, key_map[event->data.key_code & 511]);
 			return true;
 		case SAPP_EVENTTYPE_KEY_UP:
-			mu_input_keyup(&state->mu_ctx, key_map[data.key_code & 511]);
+			mu_input_keyup(&state->mu_ctx, key_map[event->data.key_code & 511]);
 			return true;
 		case SAPP_EVENTTYPE_CHAR:
 			{
 				// don't input Backspace as character (required to make Backspace work in text input fields)
-				if (data.char_code == 127) { break; }
-				char txt[2] = { (char)(data.char_code & 255), 0 };
+				if (event->data.char_code == 127) { break; }
+				char txt[2] = { (char)(event->data.char_code & 255), 0 };
 				mu_input_text(&state->mu_ctx, txt);
 			}
 			return true;
 		default:
-			return false;
+			break;
 	}
 
 	return false;

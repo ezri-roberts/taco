@@ -18,7 +18,7 @@ void dbui_layer_update(void *data) {
 bool dbui_layer_on_event(const shrevent *event, void *data) {
 
 	shrapp *app = (shrapp*)data;
-	// dbui_event(&app->dbui, event);
+	dbui_event(&app->dbui, event);
 
 	return true;
 }

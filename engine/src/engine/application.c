@@ -94,7 +94,7 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 			shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
 
-			if (layer->on_event) layer->on_event(event, pass_data);
+			if (layer->on_event) layer->on_event(event, app);
 			// If the event has been handled we don't want to propagate it further.
 			if (event->handled) break;
 		}
