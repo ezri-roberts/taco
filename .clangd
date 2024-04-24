@@ -5,3 +5,4 @@ CompileFlags:
   - -I/home/user/proj/c/shraybn/engine/lib/sokol
   - -I/home/user/proj/c/shraybn/engine/lib/microui/src
   - -I/home/user/proj/c/shraybn/engine/lib/cglm/include
+  - -I/home/user/proj/c/shraybn/engine/lib/shaderc/libshaderc/include

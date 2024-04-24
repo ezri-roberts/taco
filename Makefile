@@ -11,6 +11,7 @@ endif
 ifeq ($(config),debug)
   packer_config = debug
   microui_config = debug
+  shaderc_config = debug
   engine_config = debug
   runtime_config = debug
   editor_config = debug
@@ -18,6 +19,7 @@ ifeq ($(config),debug)
 else ifeq ($(config),release)
   packer_config = release
   microui_config = release
+  shaderc_config = release
   engine_config = release
   runtime_config = release
   editor_config = release
@@ -25,6 +27,7 @@ else ifeq ($(config),release)
 else ifeq ($(config),dist)
   packer_config = dist
   microui_config = dist
+  shaderc_config = dist
   engine_config = dist
   runtime_config = dist
   editor_config = dist
@@ -33,7 +36,7 @@ else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := packer microui engine runtime editor
+PROJECTS := packer microui shaderc engine runtime editor
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -49,6 +52,12 @@ microui:
 ifneq (,$(microui_config))
 	@echo "==== Building microui ($(microui_config)) ===="
 	@${MAKE} --no-print-directory -C engine/lib/microui -f Makefile config=$(microui_config)
+endif
+
+shaderc:
+ifneq (,$(shaderc_config))
+	@echo "==== Building shaderc ($(shaderc_config)) ===="
+	@${MAKE} --no-print-directory -C engine/lib/shaderc/build -f Makefile config=$(shaderc_config)
 endif
 
 engine: microui packer
@@ -72,6 +81,7 @@ endif
 clean:
 	@${MAKE} --no-print-directory -C packer -f Makefile clean
 	@${MAKE} --no-print-directory -C engine/lib/microui -f Makefile clean
+	@${MAKE} --no-print-directory -C engine/lib/shaderc/build -f Makefile clean
 	@${MAKE} --no-print-directory -C engine -f Makefile clean
 	@${MAKE} --no-print-directory -C runtime -f Makefile clean
 	@${MAKE} --no-print-directory -C editor -f Makefile clean
@@ -89,6 +99,7 @@ help:
 	@echo "   clean"
 	@echo "   packer"
 	@echo "   microui"
+	@echo "   shaderc"
 	@echo "   engine"
 	@echo "   runtime"
 	@echo "   editor"

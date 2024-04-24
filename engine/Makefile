@@ -22,7 +22,7 @@ RESCOMP = windres
 PCH = src/shrpch.h
 PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
 GCH = $(PCH_PLACEHOLDER).gch
-INCLUDES += -Isrc -I../packer/src -Ilib/sokol -Ilib/microui/src -Ilib/cglm/include
+INCLUDES += -Isrc -Ilib/shaderc/libshaderc/include -I../packer/src -Ilib/sokol -Ilib/microui/src -Ilib/cglm/include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -41,9 +41,9 @@ OBJDIR = ../obj/debug-linux-x86_64/engine
 DEFINES += -DLOG_USE_COLOR -DSHR_PLATFORM_LINUX -DSHR_BUILD_DYNAMIC -DSHR_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
-LIBS += lib/microui/bin/debug-linux-x86_64/microui/libmicroui.a ../packer/bin/debug-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LIBS += lib/microui/bin/debug-linux-x86_64/microui/libmicroui.a ../packer/bin/debug-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm -lshaderc_combined
 LDDEPS += lib/microui/bin/debug-linux-x86_64/microui/libmicroui.a ../packer/bin/debug-linux-x86_64/packer/libpacker.a
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so
+ALL_LDFLAGS += $(LDFLAGS) -Llib -Llib/shaderc/build/libshaderc -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so
 
 else ifeq ($(config),release)
 TARGETDIR = ../bin/release-linux-x86_64/engine
@@ -52,9 +52,9 @@ OBJDIR = ../obj/release-linux-x86_64/engine
 DEFINES += -DLOG_USE_COLOR -DSHR_PLATFORM_LINUX -DSHR_BUILD_DYNAMIC -DSHR_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
-LIBS += lib/microui/bin/release-linux-x86_64/microui/libmicroui.a ../packer/bin/release-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LIBS += lib/microui/bin/release-linux-x86_64/microui/libmicroui.a ../packer/bin/release-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm -lshaderc_combined
 LDDEPS += lib/microui/bin/release-linux-x86_64/microui/libmicroui.a ../packer/bin/release-linux-x86_64/packer/libpacker.a
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so -s
+ALL_LDFLAGS += $(LDFLAGS) -Llib -Llib/shaderc/build/libshaderc -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so -s
 
 else ifeq ($(config),dist)
 TARGETDIR = ../bin/dist-linux-x86_64/engine
@@ -63,9 +63,9 @@ OBJDIR = ../obj/dist-linux-x86_64/engine
 DEFINES += -DLOG_USE_COLOR -DSHR_PLATFORM_LINUX -DSHR_BUILD_DYNAMIC -DSHR_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
-LIBS += lib/microui/bin/dist-linux-x86_64/microui/libmicroui.a ../packer/bin/dist-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm
+LIBS += lib/microui/bin/dist-linux-x86_64/microui/libmicroui.a ../packer/bin/dist-linux-x86_64/packer/libpacker.a -lX11 -lXi -lXcursor -lEGL -lGL -ldl -lpthread -lm -lshaderc_combined
 LDDEPS += lib/microui/bin/dist-linux-x86_64/microui/libmicroui.a ../packer/bin/dist-linux-x86_64/packer/libpacker.a
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so -s
+ALL_LDFLAGS += $(LDFLAGS) -Llib -Llib/shaderc/build/libshaderc -L/usr/lib64 -m64 -shared -Wl,-soname=libengine.so -s
 
 endif
 

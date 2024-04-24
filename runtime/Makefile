@@ -19,7 +19,7 @@ endif
 # #############################################
 
 RESCOMP = windres
-INCLUDES += -I../packer/src -I../engine/lib/sokol -I../engine/lib/microui/src -I../engine/lib/cglm/include -I../engine/src
+INCLUDES += -I../engine/lib/shaderc/libshaderc/include -I../packer/src -I../engine/lib/sokol -I../engine/lib/microui/src -I../engine/lib/cglm/include -I../engine/src
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
