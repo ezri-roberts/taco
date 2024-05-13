@@ -3,11 +3,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 
-#include "engine/core.h"
+#include "types.h"
+#include "core.h"
 
 #ifdef SHR_PLATFORM_LINUX
 	#define SOKOL_GLCORE33
@@ -24,7 +24,7 @@
 #include "sokol_glue.h"
 #include "sokol_gl.h"
 
-#include "engine/log.h"
+#include "shrlog.h"
 #include "cglm/cglm.h"
 
 #endif // !SHRPCH_H

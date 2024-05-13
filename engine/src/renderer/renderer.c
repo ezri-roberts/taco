@@ -3,8 +3,6 @@
 
 void shrrenderer_init(shrrenderer *renderer) {
 
-	shaderc_compiler_t shader_comp;
-
 	sg_setup(&(sg_desc){
 		.environment = sglue_environment(),
 		.logger.func = slog_func,

@@ -35,25 +35,25 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug)
-TARGETDIR = bin/debug-linux-x86_64/microui
+TARGETDIR = ../../../bin/debug-linux-x86_64/microui
 TARGET = $(TARGETDIR)/libmicroui.a
-OBJDIR = obj/debug-linux-x86_64/microui
+OBJDIR = ../../../obj/debug-linux-x86_64/microui
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
-TARGETDIR = bin/release-linux-x86_64/microui
+TARGETDIR = ../../../bin/release-linux-x86_64/microui
 TARGET = $(TARGETDIR)/libmicroui.a
-OBJDIR = obj/release-linux-x86_64/microui
+OBJDIR = ../../../obj/release-linux-x86_64/microui
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
 
 else ifeq ($(config),dist)
-TARGETDIR = bin/dist-linux-x86_64/microui
+TARGETDIR = ../../../bin/dist-linux-x86_64/microui
 TARGET = $(TARGETDIR)/libmicroui.a
-OBJDIR = obj/dist-linux-x86_64/microui
+OBJDIR = ../../../obj/dist-linux-x86_64/microui
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -std=c99
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
