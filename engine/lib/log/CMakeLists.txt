@@ -1,4 +1,4 @@
-fips_begin_lib(log)
+fips_begin_lib(log_lib)
 
 fips_files(
 	log.c log.h
@@ -6,4 +6,4 @@ fips_files(
 
 add_definitions(-DLOG_USE_COLOR)
 
-fips_end_app()
+fips_end_lib()

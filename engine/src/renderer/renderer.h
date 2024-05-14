@@ -2,7 +2,6 @@
 #define RENDERER_H
 
 #include "shrpch.h"
-#include "shaderc/shaderc.h"
 
 typedef struct {
 
