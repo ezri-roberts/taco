@@ -5,7 +5,7 @@
 
 typedef struct {
 
-	sg_pipeline	   pip;
+	sg_pipeline    pip;
 	sg_bindings    bind;
 	sg_pass_action pass_action;
 

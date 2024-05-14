@@ -1,6 +1,8 @@
 #include "renderer.h"
 #include "dbui/dbui.h"
 
+#include "tri.glsl.h"
+
 void shrrenderer_init(shrrenderer *renderer) {
 
 	sg_setup(&(sg_desc){

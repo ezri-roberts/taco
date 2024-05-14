@@ -2,8 +2,8 @@ CompileFlags:
   Add: 
   - -I/home/user/proj/c/shraybn/include
   - -I/home/user/proj/c/shraybn/engine/src
-  - -I/home/user/proj/c/shraybn/lib/log
-  - -I/home/user/proj/c/shraybn/lib/sokol
-  - -I/home/user/proj/c/shraybn/lib/microui/src
-  - -I/home/user/proj/c/shraybn/lib/cglm/include
-  - -I/home/user/proj/c/shraybn/lib/shaderc/libshaderc/include
+  - -I/home/user/proj/c/shraybn/engine/lib/log
+  - -I/home/user/proj/c/shraybn/engine/lib/sokol
+  - -I/home/user/proj/c/shraybn/engine/lib/microui/src
+  - -I/home/user/proj/c/shraybn/engine/lib/cglm/include
+  - -I/home/user/proj/c/fips-build/shraybn/linux-make-debug/engine

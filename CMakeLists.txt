@@ -14,7 +14,7 @@ include_directories(
 	engine/lib/sokol
 	engine/lib/microui/src
 	engine/lib/cglm/include
-	engine/lib/shaderc/libshaderc/include
+	../home/user/proj/c/fips-build/shraybn/linux-make-debug/engine
 )
 
 fips_setup()
