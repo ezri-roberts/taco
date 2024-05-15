@@ -24,6 +24,11 @@
 #include "sokol_glue.h"
 #include "sokol_gl.h"
 
+// Quick hack to fix mismatch.
+// sokol_gfx uses SG_BACKEND_GLCORE33
+// sokol-shdc uses SG_BACKEND_GLCORE
+#define SG_BACKEND_GLCORE SG_BACKEND_GLCORE33
+
 #include "shrlog.h"
 #include "cglm/cglm.h"
 

@@ -1,6 +1,0 @@
-[submodule "engine/lib/shaderc"]
-	path = engine/lib/shaderc
-	url = https://github.com/google/shaderc.git
-[submodule "engine/lib/cglm"]
-	path = engine/lib/cglm
-	url = https://github.com/recp/cglm.git
