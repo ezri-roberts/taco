@@ -5,6 +5,16 @@
 #include "input_codes.h"
 #include "event/event.h"
 
+#define BIT_VALUE     0
+#define BIT_DOWN      1
+#define BIT_DOWN_PREV 2
+#define BIT_PRESSED   3
+#define BIT_RELEASED  4
+
+#define INPUT_GET_BIT(input, bit) (((*(input)) >> (bit)) & 1)
+#define INPUT_SET_BIT(input, bit) (*(input) |= (1 << (bit)))
+#define INPUT_UNSET_BIT(input, bit) (*(input) &= ~(1 << (bit)))
+
 typedef struct {
 
 	u16 value;
@@ -16,7 +26,8 @@ typedef struct {
 
 typedef struct {
 
-	shrinput inputs[INPUT_CODE_NUM];
+	// shrinput inputs[INPUT_CODE_NUM];
+	u8 inputs[INPUT_CODE_NUM];
 
 } shrinput_state;
 
