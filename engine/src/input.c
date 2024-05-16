@@ -29,6 +29,7 @@ void shrinput_state_update(shrinput_state *state) {
 
 	for (u8 i = 0; i < INPUT_CODE_NUM; i++) {
 	
+		// shrinput *input = &state->inputs[i];
 		shrinput *input = &state->inputs[i];
 
 		input->down_previous = input->down;
