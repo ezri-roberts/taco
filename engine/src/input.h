@@ -26,7 +26,6 @@ typedef struct {
 
 typedef struct {
 
-	// shrinput inputs[INPUT_CODE_NUM];
 	u8 inputs[INPUT_CODE_NUM];
 
 } shrinput_state;
