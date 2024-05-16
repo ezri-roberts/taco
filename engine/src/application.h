@@ -34,7 +34,7 @@ typedef struct {
 	shrscene_list scene_list;
 	shrscene *current_scene;
 
-	uint32_t fps;
+	u32 fps;
 } shrapp;
 
 shrapp* shrapp_new();
@@ -65,10 +65,10 @@ void sokol_cleanup(void);
 void sokol_event_callback(const sapp_event *e);
 void sokol_log_callback(
         const char* tag,                // always "sapp"
-        uint32_t log_level,             // 0=panic, 1=error, 2=warning, 3=info
-        uint32_t log_item_id,           // SAPP_LOGITEM_*
+        u32 log_level,             // 0=panic, 1=error, 2=warning, 3=info
+        u32 log_item_id,           // SAPP_LOGITEM_*
         const char* message_or_null,    // a message string, may be nullptr in release mode
-        uint32_t line_nr,               // line number in sokol_app.h
+        u32 line_nr,               // line number in sokol_app.h
         const char* filename_or_null,   // source filename, may be nullptr in release mode
         void* user_data);
 

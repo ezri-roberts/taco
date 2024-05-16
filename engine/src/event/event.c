@@ -7,9 +7,9 @@ shrevent shrevent_new(const shrevent_type type, const sapp_event *data) {
 	event.data = *data;
 	event.handled = false;
 
-	int cat_key_input = EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT;
-	int cat_mouse_input = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_INPUT;
-	int cat_mouse_btn = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON
+	u16 cat_key_input = EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT;
+	u16 cat_mouse_input = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_INPUT;
+	u16 cat_mouse_btn = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON
 		| EVENT_CATEGORY_INPUT;
 
 	switch (event.type) {

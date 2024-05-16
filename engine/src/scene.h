@@ -19,8 +19,8 @@ typedef struct {
 
 	shrscene **scenes;
 
-	size_t used;
-	size_t size;
+	usize used;
+	usize size;
 
 } shrscene_list;
 

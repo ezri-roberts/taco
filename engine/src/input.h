@@ -7,7 +7,7 @@
 
 typedef struct {
 
-	uint16_t value;
+	u16 value;
 	bool down;
 	bool down_previous;
 	bool pressed;
@@ -16,7 +16,6 @@ typedef struct {
 
 typedef struct {
 
-	// uint8_t key_down[KEYCODE_MAX / 8];
 	shrinput inputs[INPUT_CODE_NUM];
 
 } shrinput_state;
@@ -28,8 +27,8 @@ void shrinput_state_reset(shrinput_state *state);
 void _handle_key(shrinput_state *state, const shrevent *event);
 void _handle_mouse(shrinput_state *state, const shrevent *event);
 
-bool input_down(uint16_t input_code);
-bool input_pressed(uint16_t input_code);
-bool input_released(uint16_t input_code);
+bool input_down(u16 input_code);
+bool input_pressed(u16 input_code);
+bool input_released(u16 input_code);
 
 #endif // !INPUT_H

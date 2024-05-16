@@ -27,7 +27,7 @@ bool shrinput_state_handle_event(shrinput_state *state, const shrevent *event) {
 
 void shrinput_state_update(shrinput_state *state) {
 
-	for (int i = 0; i < INPUT_CODE_NUM; i++) {
+	for (u8 i = 0; i < INPUT_CODE_NUM; i++) {
 	
 		shrinput *input = &state->inputs[i];
 
@@ -38,7 +38,7 @@ void shrinput_state_update(shrinput_state *state) {
 	}
 }
 
-bool input_down(uint16_t input_code) {
+bool input_down(u16 input_code) {
 
 	if (input_code > INPUT_CODE_NUM) {
 		TC_ERROR("No Keycode '%d'");
@@ -49,7 +49,7 @@ bool input_down(uint16_t input_code) {
 	return app->input_state.inputs[input_code].down;
 }
 
-bool input_pressed(uint16_t input_code) {
+bool input_pressed(u16 input_code) {
 
 	if (input_code > INPUT_CODE_NUM) {
 		TC_ERROR("No Keycode '%d'");
@@ -60,7 +60,7 @@ bool input_pressed(uint16_t input_code) {
 	return app->input_state.inputs[input_code].pressed;
 }
 
-bool input_released(uint16_t input_code) {
+bool input_released(u16 input_code) {
 
 	if (input_code > INPUT_CODE_NUM) {
 		TC_ERROR("No Keycode '%d'");
@@ -73,7 +73,7 @@ bool input_released(uint16_t input_code) {
 
 void _handle_key(shrinput_state *state, const shrevent *event) {
 
-	uint16_t input_code = event->data.key_code;
+	u16 input_code = event->data.key_code;
 	shrinput *input = &state->inputs[input_code];
 
 	if (event->type == KEY_PRESS) {
@@ -86,7 +86,7 @@ void _handle_key(shrinput_state *state, const shrevent *event) {
 
 void _handle_mouse(shrinput_state *state, const shrevent *event) {
 
-	uint16_t input_code = event->data.mouse_button;
+	u16 input_code = event->data.mouse_button;
 	shrinput *input = &state->inputs[input_code];
 
 	if (event->type == MOUSE_PRESS) {

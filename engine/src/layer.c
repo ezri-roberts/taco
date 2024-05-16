@@ -62,7 +62,7 @@ int shrlayer_stack_size(shrlayer_stack *stack) {
 	return stack->used;
 }
 
-shrlayer* shrlayer_stack_get(shrlayer_stack *stack, int index) {
+shrlayer* shrlayer_stack_get(shrlayer_stack *stack, usize index) {
 	return stack->layers[index];
 }
 
@@ -70,7 +70,7 @@ void shrlayer_stack_destory(shrlayer_stack *stack) {
 
 	TC_INFO("Destroying Layer Stack: '0x%x'", stack);
 
-	for (int i = 0; i < stack->used; i++) {
+	for (usize i = 0; i < stack->used; i++) {
 
 		shrlayer *layer = stack->layers[i];
 		if (layer->on_detach) layer->on_detach(sapp_userdata());

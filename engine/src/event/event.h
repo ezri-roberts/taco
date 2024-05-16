@@ -27,7 +27,7 @@ typedef struct event {
 
 	const char *name;
 	shrevent_type type;
-	int category;
+	u16 category;
 	bool handled;
 	sapp_event data;
 

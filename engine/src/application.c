@@ -33,9 +33,9 @@ void shrapp_run(void *data) {
 		sapp_quit();
 	}
 
-	size_t layer_amount = shrlayer_stack_size(&app->layer_stack);
+	usize layer_amount = shrlayer_stack_size(&app->layer_stack);
 
-	for (int i = 0; i <= layer_amount-1; i++) {
+	for (usize i = 0; i <= layer_amount-1; i++) {
 
 		shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
 		if (layer->on_update) layer->on_update(app);
@@ -88,11 +88,11 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 	if (!dispatched) {
 
-		size_t layer_amount = app->layer_stack.used;
+		usize layer_amount = shrlayer_stack_size(&app->layer_stack);
 
-		for (int i = layer_amount-1; i >= 0; i--) {
+		for (usize i = layer_amount; i > 0; i--) {
 
-			shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
+			shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i-1);
 
 			if (layer->on_event) layer->on_event(event, app);
 			// If the event has been handled we don't want to propagate it further.
@@ -121,7 +121,7 @@ bool shrapp_on_key(const shrevent *event, void *data) {
 
 void shrapp_set_scene(shrapp *app, const char *name) {
 
-	for (int i = 0; i <= app->scene_list.used; i++) {
+	for (usize i = 0; i <= app->scene_list.used; i++) {
 
 		if (app->scene_list.scenes[i]->name == name) {
 
@@ -167,33 +167,11 @@ void sokol_init(void) {
 void sokol_frame(void) {
 
 	shrapp *app = (shrapp*)sapp_userdata();
-	// DBUIState *dbui_state = &app->dbui_state;
 
 	shrapp_run(app);
 	shrapp_frame((shrapp*)sapp_userdata());
 
 	shrrenderer_frame(&app->renderer);
-	// dbui_update(&app->dbui_state);
-	// mu_begin(&dbui_state->mu_ctx);
- //    dbui_test_window(dbui_state);
- //    mu_end(&dbui_state->mu_ctx);
-	//
-	// dbui_begin(sapp_width(), sapp_height());
-	// mu_Command* cmd = 0;
-	// while(mu_next_command(&dbui_state->mu_ctx, &cmd)) {
-	// 	switch (cmd->type) {
-	// 		case MU_COMMAND_TEXT: dbui_draw_text(cmd->text.str, cmd->text.pos, cmd->text.color); break;
-	// 		case MU_COMMAND_RECT: dbui_draw_rect(cmd->rect.rect, cmd->rect.color); break;
-	// 		case MU_COMMAND_ICON: dbui_draw_icon(cmd->icon.id, cmd->icon.rect, cmd->icon.color); break;
-	// 		case MU_COMMAND_CLIP: dbui_set_clip_rect(cmd->clip.rect); break;
-	// 	}
-	// }
-	// dbui_end();
-
-    // sg_begin_pass(&(sg_pass){.action = state->pass_action, .swapchain = sglue_swapchain()});
-	// dbui_draw();
-    // sg_end_pass();
-    // sg_commit();
 }
 
 void sokol_cleanup(void) {
@@ -209,10 +187,7 @@ void sokol_cleanup(void) {
 void sokol_event_callback(const sapp_event *e) {
 
 	shrapp *app = (shrapp*)sapp_userdata();
-
 	shrevent event;
-
-	// dbui_event(&app->dbui_state, e);
 
 	switch (e->type) {
 		default:
@@ -244,10 +219,10 @@ void sokol_event_callback(const sapp_event *e) {
 
 void sokol_log_callback(
         const char* tag,                // always "sapp"
-        uint32_t log_level,             // 0=panic, 1=error, 2=warning, 3=info
-        uint32_t log_item_id,           // SAPP_LOGITEM_*
+        u32 log_level,             // 0=panic, 1=error, 2=warning, 3=info
+        u32 log_item_id,           // SAPP_LOGITEM_*
         const char* message_or_null,    // a message string, may be nullptr in release mode
-        uint32_t line_nr,               // line number in sokol_app.h
+        u32 line_nr,               // line number in sokol_app.h
         const char* filename_or_null,   // source filename, may be nullptr in release mode
         void* user_data) {
 

@@ -1,6 +1,6 @@
 #include "window.h"
 
-shrwindow shrwindow_new(const char *title, int width, int height) {
+shrwindow shrwindow_new(const char *title, u32 width, u32 height) {
 
 	TC_INFO("Creating Window.");
 

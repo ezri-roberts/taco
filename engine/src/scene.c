@@ -39,7 +39,7 @@ void shrscene_list_destroy(shrscene_list *list) {
 
 	TC_INFO("Destroying Scene List: '0x%x'", list);
 
-	for (int i = 0; i < list->used; i++) {
+	for (usize i = 0; i < list->used; i++) {
 
 		shrscene *scene = list->scenes[i];
 

@@ -8,9 +8,9 @@
 typedef struct {
 
 	const char *title;
-	int width;
-	int height;
-	int target_fps;
+	u32 width;
+	u32 height;
+	u32 target_fps;
 	bool vsync;
 
 } shrwindow_data;
@@ -22,7 +22,7 @@ typedef struct {
 
 } shrwindow;
 
-shrwindow shrwindow_new(const char *title, int width, int height);
+shrwindow shrwindow_new(const char *title, u32 width, u32 height);
 void shrwindow_destroy(shrwindow *window);
 void shrwindow_on_update(shrwindow *window);
 bool shrwindow_should_close(shrwindow *window);
