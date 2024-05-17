@@ -6,7 +6,6 @@
 #include "window.h"
 #include "layer.h"
 #include "scene.h"
-#include "dbui/dbui.h"
 #include "renderer/renderer.h"
 
 typedef enum {
@@ -22,7 +21,6 @@ typedef enum {
 typedef struct {
 
 	shrrenderer renderer;
-	dbui_state dbui;
 
 	shrwindow window;
 	shrapp_state state;

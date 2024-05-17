@@ -2,6 +2,7 @@
 #define SHRAYBN_H
 
 #define SOKOL_IMPL
+#define NK_IMPLEMENTATION
 
 // Used by engine applications.
 #include "application.h"

@@ -1,15 +1,5 @@
 #include "application.h"
-
-// #define NK_INCLUDE_FIXED_TYPES
-// #define NK_INCLUDE_STANDARD_IO
-// #define NK_INCLUDE_DEFAULT_ALLOCATOR
-// #define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
-// #define NK_INCLUDE_FONT_BAKING
-// #define NK_INCLUDE_DEFAULT_FONT
-// #define NK_INCLUDE_STANDARD_VARARGS
-// #include "nuklear.h"
-// #define SOKOL_NUKLEAR_IMPL
-// #include "sokol_nuklear.h"
+#include "dbui/dbui.h"
 
 shrapp* shrapp_new() {
 
@@ -95,7 +85,8 @@ void shrapp_on_event(shrevent *event, void *data) {
 			break;
 	}
 
-	bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
+	bool dispatched = dbui_event(event);
+	dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
 
 	if (!dispatched) {
 
@@ -170,14 +161,6 @@ void sokol_init(void) {
 	shrapp_init((shrapp*)sapp_userdata());
 
 	shrrenderer_init(&app->renderer);
-
-	// snk_setup(&(snk_desc_t){
- //        .dpi_scale = sapp_dpi_scale(),
- //        .logger.func = slog_func,
- //    });
-
-	app->dbui.bg = (dbui_color){ 90.0f, 95.0f, 100.0f };
-	dbui_init(&app->dbui);
 }
 
 void sokol_frame(void) {
@@ -193,8 +176,7 @@ void sokol_frame(void) {
 void sokol_cleanup(void) {
 
 	shrapp_cleanup((shrapp*)sapp_userdata());
-	// snk_shutdown();
-	sgl_shutdown();
+	shrrenderer_cleanup();
 	sg_shutdown();
 
 	TC_INFO("Terminating Engine.");

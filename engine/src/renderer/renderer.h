@@ -13,6 +13,7 @@ typedef struct {
 
 void shrrenderer_init(shrrenderer *renderer);
 void shrrenderer_frame(shrrenderer *renderer);
+void shrrenderer_cleanup();
 
 void _shrrenderer_sokol_init(shrrenderer *renderer);
 

@@ -13,6 +13,9 @@ fips_files(
 	application.c application.h
 )
 
+fips_dir(src/dbui)
+fips_files(dbui.c dbui.h)
+
 fips_dir(src/renderer)
 fips_files(
 	camera.c camera.h
@@ -23,9 +26,6 @@ fips_files(
 
 fips_dir(src/event)
 fips_files(event.c event.h)
-
-fips_dir(src/dbui)
-fips_files(dbui.c dbui.h)
 
 fips_deps(log_lib)
 fips_deps(microui)
