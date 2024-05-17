@@ -12,6 +12,7 @@ include_directories(
 	engine/src
 	engine/lib/log
 	engine/lib/sokol
+	engine/lib/nuklear
 	engine/lib/microui/src
 	engine/lib/cglm/include
 	../home/user/proj/c/fips-build/shraybn/linux-make-debug/engine

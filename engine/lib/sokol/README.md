@@ -1,13 +1,14 @@
+<p align="center">
+    <img src="assets/logo_full_large.png" style="width: 60%" /><br/><br/>Simple
+    <a href="https://github.com/nothings/stb/blob/master/docs/stb_howto.txt">STB-style</a>
+    cross-platform libraries for C and C++, written in C.<br/><br/>
+</p>
+
 # Sokol
 
-Simple
-[STB-style](https://github.com/nothings/stb/blob/master/docs/stb_howto.txt)
-cross-platform libraries for C and C++, written in C.
+[**See what's new**](https://github.com/floooh/sokol/blob/master/CHANGELOG.md) (**09-May-2024**: **BREAKING CHANGES** 'storage buffer support' in sokol_gfx.h
 
-[**See what's new**](https://github.com/floooh/sokol/blob/master/CHANGELOG.md) (**29-Feb-2024**: **BREAKING CHANGES** 'unified render pass'
-cleanup in sokol_gfx.h)
-
-[![Build](/../../actions/workflows/main.yml/badge.svg)](/../../actions/workflows/main.yml) [![Bindings](/../../actions/workflows/gen_bindings.yml/badge.svg)](/../../actions/workflows/gen_bindings.yml) [![build](https://github.com/floooh/sokol-zig/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-zig/actions/workflows/main.yml) [![build](https://github.com/floooh/sokol-nim/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-nim/actions/workflows/main.yml) [![Odin](https://github.com/floooh/sokol-odin/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-odin/actions/workflows/main.yml)[![Rust](https://github.com/floooh/sokol-rust/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-rust/actions/workflows/main.yml)
+[![Build](/../../actions/workflows/main.yml/badge.svg)](/../../actions/workflows/main.yml) [![Bindings](/../../actions/workflows/gen_bindings.yml/badge.svg)](/../../actions/workflows/gen_bindings.yml) [![build](https://github.com/floooh/sokol-zig/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-zig/actions/workflows/main.yml) [![build](https://github.com/floooh/sokol-nim/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-nim/actions/workflows/main.yml) [![Odin](https://github.com/floooh/sokol-odin/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-odin/actions/workflows/main.yml)[![Rust](https://github.com/floooh/sokol-rust/actions/workflows/main.yml/badge.svg)](https://github.com/floooh/sokol-rust/actions/workflows/main.yml)[![Dlang](https://github.com/kassane/sokol-d/actions/workflows/build.yml/badge.svg)](https://github.com/kassane/sokol-d/actions/workflows/build.yml)
 
 ## Examples and Related Projects
 
@@ -26,6 +27,8 @@ cleanup in sokol_gfx.h)
 - [Tiny 8-bit emulators](https://floooh.github.io/tiny8bit/)
 
 - A 'single-file' [Pacman clone in C99](https://github.com/floooh/pacman.c/), also available in [Zig](https://github.com/floooh/pacman.zig/)
+
+- [Solar Storm](https://store.steampowered.com/app/2754920/Solar_Storm/), a turn-based scifi artillery game built with Odin and Sokol, released on Steam.
 
 - [MEG-4](https://bztsrc.gitlab.io/meg4) a virtual fantasy console emulator in C89, ported to sokol
 
@@ -74,6 +77,7 @@ These are automatically updated on changes to the C headers:
 - [sokol-odin](https://github.com/floooh/sokol-odin)
 - [sokol-nim](https://github.com/floooh/sokol-nim)
 - [sokol-rust](https://github.com/floooh/sokol-rust)
+- [sokol-d](https://github.com/kassane/sokol-d)
 
 ## Notes
 

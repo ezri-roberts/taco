@@ -52,8 +52,8 @@ void shrrenderer_init(shrrenderer *renderer) {
 	const char *backend;
 	#if defined(SOKOL_GLES3)
 		backend = "GLES3";
-	#elif defined(SOKOL_GLCORE33)
-		backend = "GLCORE33";
+	#elif defined(SOKOL_GLCORE)
+		backend = "GLCORE";
 	#elif defined(SOKOL_D3D11)
 		backend = "D3D11";
 	#endif
