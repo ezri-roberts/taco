@@ -13,6 +13,9 @@ fips_files(
 	application.c application.h
 )
 
+fips_dir(src/containers)
+fips_files(darray.c darray.h)
+
 fips_dir(src/dbui)
 fips_files(dbui.c dbui.h)
 

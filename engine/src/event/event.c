@@ -1,6 +1,6 @@
 #include "event.h"
 
-shrevent shrevent_new(const shrevent_type type, const sapp_event *data) {
+shrevent shrevent_new(const shrevent_code type, const sapp_event *data) {
 
 	shrevent event;
 	event.type = type;
@@ -63,7 +63,7 @@ bool shrevent_in_category(const shrevent *event, const shrevent_category categor
 	return event->category & category;
 }
 
-bool shrevent_dispatch(shrevent *event, const shrevent_type type, const shrevent_callback callback, void *data) {
+bool shrevent_dispatch(shrevent *event, const shrevent_code type, const shrevent_callback callback, void *data) {
 
 	if (type == event->type && callback != NULL) {
 
