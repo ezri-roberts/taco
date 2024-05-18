@@ -28,7 +28,6 @@ fips_dir(src/event)
 fips_files(event.c event.h)
 
 fips_deps(log_lib)
-fips_deps(microui)
 fips_deps(rres)
 
 fips_libs(X11 Xi Xcursor EGL GL pthread m)

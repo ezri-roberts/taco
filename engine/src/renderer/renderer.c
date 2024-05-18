@@ -1,17 +1,15 @@
 #include "renderer.h"
-
-#include "dbui/dbui.h"
-#include "shrpch.h"
 #include "tri.glsl.h"
 
 void shrrenderer_init(shrrenderer *renderer) {
+
+	memset(&renderer->pip, 0, sizeof(sg_pipeline));
+	memset(&renderer->bind, 0, sizeof(sg_bindings));
 
 	sg_setup(&(sg_desc){
 		.environment = sglue_environment(),
 		.logger.func = slog_func,
 	});
-
-	dbui_init();
 
 	float vertices[] = {
 		// positions            // colors
@@ -19,26 +17,25 @@ void shrrenderer_init(shrrenderer *renderer) {
 		0.5f, -0.5f, 0.5f,     0.0f, 1.0f, 0.0f, 1.0f,
 		-0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f, 1.0f
 	};
+	renderer->bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
+		.data = SG_RANGE(vertices),
+		.label = "triangle-vertices"
+	});
 
-	// renderer->bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-	// 	.data = SG_RANGE(vertices),
-	// 	.label = "triangle-vertices"
-	// });
-	//
-	// sg_shader shd = sg_make_shader(triangle_shader_desc(sg_query_backend()));
+	sg_shader shd = sg_make_shader(triangle_shader_desc(sg_query_backend()));
 
 	// create a pipeline object (default render states are fine for triangle)
-	// renderer->pip = sg_make_pipeline(&(sg_pipeline_desc){
-	// 	.shader = shd,
-	// 	// if the vertex layout doesn't have gaps, don't need to provide strides and offsets
-	// 	.layout = {
-	// 		.attrs = {
-	// 			[ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3,
-	// 			[ATTR_vs_color0].format = SG_VERTEXFORMAT_FLOAT4
-	// 		}
-	// 	},
-	// 	.label = "triangle-pipeline"
-	// });
+	renderer->pip = sg_make_pipeline(&(sg_pipeline_desc){
+		.shader = shd,
+		// if the vertex layout doesn't have gaps, don't need to provide strides and offsets
+		.layout = {
+			.attrs = {
+				[ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3,
+				[ATTR_vs_color0].format = SG_VERTEXFORMAT_FLOAT4
+			}
+		},
+		.label = "triangle-pipeline"
+	});
 
 	renderer->pass_action = (sg_pass_action) {
 		.colors[0] = {
@@ -59,20 +56,18 @@ void shrrenderer_init(shrrenderer *renderer) {
 	TC_INFO("[%s] Renderer Initialized.", backend);
 }
 
-void shrrenderer_frame(shrrenderer *renderer) {
-
-	dbui_update();
+void shrrenderer_begin(shrrenderer *renderer) {
 
 	sg_begin_pass(&(sg_pass){.action = renderer->pass_action, .swapchain = sglue_swapchain()});
-	// sg_apply_pipeline(renderer->pip);
-	// sg_apply_bindings(&renderer->bind);
-	// sg_draw(0, 3, 1);
-	dbui_render();
+	sg_apply_pipeline(renderer->pip);
+	sg_apply_bindings(&renderer->bind);
+	sg_draw(0, 3, 1);
+}
 
+void shrrenderer_end() {
 	sg_end_pass();
 	sg_commit();
 }
 
 void shrrenderer_cleanup() {
-	dbui_cleanup();
 }

@@ -14,6 +14,7 @@
 #define INPUT_GET_BIT(input, bit) (((*(input)) >> (bit)) & 1)
 #define INPUT_SET_BIT(input, bit) (*(input) |= (1 << (bit)))
 #define INPUT_UNSET_BIT(input, bit) (*(input) &= ~(1 << (bit)))
+#define INPUT_RESET(input) (*(input) = (0x00))
 
 typedef struct {
 

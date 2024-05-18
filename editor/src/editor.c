@@ -4,7 +4,11 @@ void shrapp_init(shrapp *app) {
 
 }
 
-void shrapp_frame(shrapp *app) {
+void shrapp_update(shrapp *app) {
+
+}
+
+void shrapp_draw(shrapp *app) {
 
 }
 

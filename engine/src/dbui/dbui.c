@@ -25,8 +25,6 @@ void dbui_update() {
 
 		/* fixed widget window ratio width */
 		nk_layout_row_dynamic(ctx, 30, 2);
-		// if (nk_option_label(&ctx, "easy", op == EASY)) op = EASY;
-		// if (nk_option_label(&ctx, "hard", op == HARD)) op = HARD;
 
 		/* custom widget pixel width */
 		nk_layout_row_begin(ctx, NK_STATIC, 30, 2);
@@ -40,9 +38,8 @@ void dbui_update() {
 	nk_end(ctx);
 }
 
-bool dbui_event(shrevent *event) {
-	bool handled = snk_handle_event(&event->data);
-	return handled;
+bool dbui_event(const shrevent *event) {
+	return snk_handle_event(&event->data);
 }
 
 void dbui_render() {

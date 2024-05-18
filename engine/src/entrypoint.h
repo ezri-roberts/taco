@@ -10,7 +10,6 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
     (void)argc; (void)argv;
 
 	shrapp *app = shrapp_new();
-	// App *app = app_init();
 	shrwindow_data *win_data = &app->window.data;
 
     return (sapp_desc){

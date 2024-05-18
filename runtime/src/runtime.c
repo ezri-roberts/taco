@@ -4,21 +4,21 @@ shrlayer *dbui_layer;
 
 void dbui_layer_attach() {
 
-	TC_TRACE("[dbui] Layer Attached.");
-
+	dbui_init();
+	TC_TRACE("[DBUI] Layer Attached.");
 }
 
 void dbui_layer_update(void *data) {
 
 	shrapp *app = (shrapp*)data;
+	dbui_update();
 
 }
 
 bool dbui_layer_on_event(const shrevent *event, void *data) {
 
 	shrapp *app = (shrapp*)data;
-
-	return true;
+	return dbui_event(event);
 }
 
 void shrapp_init(shrapp *app) {
@@ -32,7 +32,7 @@ void shrapp_init(shrapp *app) {
 
 }
 
-void shrapp_frame(shrapp *app) {
+void shrapp_update(shrapp *app) {
 
 	if (input_pressed(MOUSE_LEFT)) {
 		TC_TRACE("Left Mouse!");
@@ -44,7 +44,13 @@ void shrapp_frame(shrapp *app) {
 
 }
 
+void shrapp_draw(shrapp *app) {
+
+	dbui_render();
+}
+
 void shrapp_cleanup(shrapp *app) {
 
+	dbui_cleanup();
 	shrapp_destroy(app);
 }

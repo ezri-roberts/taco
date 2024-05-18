@@ -18,8 +18,10 @@ bool shrinput_state_handle_event(shrinput_state *state, const shrevent *event) {
 
 	if (shrevent_in_category(event, EVENT_CATEGORY_KEYBOARD)) {
 		_handle_key(state, event);
+		return true;
 	} else if (shrevent_in_category(event, EVENT_CATEGORY_MOUSE_BUTTON)) {
 		_handle_mouse(state, event);
+		return true;
 	}
 
 	return false;

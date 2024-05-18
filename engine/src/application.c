@@ -1,5 +1,4 @@
 #include "application.h"
-#include "dbui/dbui.h"
 
 shrapp* shrapp_new() {
 
@@ -42,6 +41,8 @@ void shrapp_run(void *data) {
 		if (layer->on_update) layer->on_update(app);
 	}
 
+	shrapp_update(app);
+
 	shrinput_state_update(&app->input_state);
 }
 
@@ -83,10 +84,10 @@ void shrapp_on_event(shrevent *event, void *data) {
 			callback = shrwindow_on_focus;
 			pass_data = &app->input_state;
 			break;
+		default: break;
 	}
 
-	bool dispatched = dbui_event(event);
-	dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
+	bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
 
 	if (!dispatched) {
 
@@ -96,9 +97,12 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 			shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i-1);
 
-			if (layer->on_event) layer->on_event(event, app);
+			if (layer->on_event) {
+
+				dispatched = shrevent_dispatch(event, event->type, layer->on_event, app);
+			}
 			// If the event has been handled we don't want to propagate it further.
-			if (event->handled) break;
+			if (dispatched) break;
 		}
 	}
 }
@@ -158,9 +162,9 @@ void shrapp_destroy(shrapp *app) {
 void sokol_init(void) {
 
 	shrapp *app = (shrapp*)sapp_userdata();
-	shrapp_init((shrapp*)sapp_userdata());
 
 	shrrenderer_init(&app->renderer);
+	shrapp_init((shrapp*)sapp_userdata());
 }
 
 void sokol_frame(void) {
@@ -168,9 +172,9 @@ void sokol_frame(void) {
 	shrapp *app = (shrapp*)sapp_userdata();
 
 	shrapp_run(app);
-	shrapp_frame((shrapp*)sapp_userdata());
-
-	shrrenderer_frame(&app->renderer);
+	shrrenderer_begin(&app->renderer);
+	shrapp_draw(app);
+	shrrenderer_end();
 }
 
 void sokol_cleanup(void) {

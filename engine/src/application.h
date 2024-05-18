@@ -53,7 +53,8 @@ bool shrapp_on_key(const shrevent *event, void *data);
 
 // Defined in user implementation.
 extern void shrapp_init(shrapp *app);
-extern void shrapp_frame(shrapp *app);
+extern void shrapp_update(shrapp *app);
+extern void shrapp_draw(shrapp *app);
 extern void shrapp_cleanup(shrapp *app);
 
 // Sokol callback functions.

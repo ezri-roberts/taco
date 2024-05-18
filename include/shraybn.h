@@ -6,6 +6,7 @@
 
 // Used by engine applications.
 #include "application.h"
+#include "dbui/dbui.h"
 #include "layer.h"
 #include "log.h"
 
