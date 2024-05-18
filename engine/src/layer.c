@@ -54,10 +54,6 @@ void shrlayer_stack_push_front(shrlayer_stack *stack, shrlayer *layer) {
 	TC_INFO("Pushed Layer '%x'", layer);
 }
 
-void shrlayer_stack_pop(shrlayer_stack *stack, shrlayer *layer) {
-
-}
-
 int shrlayer_stack_size(shrlayer_stack *stack) {
 	return stack->used;
 }

@@ -40,7 +40,6 @@ endif()
 
 if (FIPS_LINUX)
 	add_definitions(-DSHR_PLATFORM_LINUX)
-        add_definitions(-DSOKOL_GLCORE)
 elseif (FIPS_WINDOWS)
 	add_definitions(-DSHR_PLATFORM_WINDOWS)
 endif()

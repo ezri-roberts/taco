@@ -10,14 +10,15 @@ void dbui_layer_attach() {
 
 void dbui_layer_update(void *data) {
 
-	shrapp *app = (shrapp*)data;
-	dbui_update();
+	(void)data;
 
+	dbui_update();
 }
 
 bool dbui_layer_on_event(const shrevent *event, void *data) {
 
-	shrapp *app = (shrapp*)data;
+	(void)data;
+
 	return dbui_event(event);
 }
 
@@ -34,6 +35,8 @@ void shrapp_init(shrapp *app) {
 
 void shrapp_update(shrapp *app) {
 
+	(void)app;
+
 	if (input_pressed(MOUSE_LEFT)) {
 		TC_TRACE("Left Mouse!");
 	}
@@ -46,6 +49,7 @@ void shrapp_update(shrapp *app) {
 
 void shrapp_draw(shrapp *app) {
 
+	(void)app;
 	dbui_render();
 }
 

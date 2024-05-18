@@ -14,10 +14,6 @@ shrwindow shrwindow_new(const char *title, u32 width, u32 height) {
 	return window;
 }
 
-void shrwindow_on_update(shrwindow *window) {
-
-}
-
 bool shrwindow_on_resize(const shrevent *event, void *data) {
 
 	shrwindow_data *win_data = (shrwindow_data*)data;
@@ -30,19 +26,20 @@ bool shrwindow_on_resize(const shrevent *event, void *data) {
 
 bool shrwindow_on_focus(const shrevent *event, void *data) {
 
-	shrinput_state *state = (shrinput_state*)data;
+	(void)event; (void)data;
 
 	return true;
 }
 
 bool shrwindow_on_unfocus(const shrevent *event, void *data) {
 
-	shrinput_state *state = (shrinput_state*)data;
+	(void)event; (void)data;
 
 	return true;
 }
 
 void shrwindow_destroy(shrwindow *window) {
 
+	(void)window;
 	TC_INFO("Destroyed Window.");
 }

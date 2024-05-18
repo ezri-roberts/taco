@@ -1,9 +1,11 @@
 #include "canvas.h"
 
-shrcanvas shrcanvas_new(int width, int height) {
+shrcanvas shrcanvas_new(u32 width, u32 height) {
 
 	shrcanvas canvas;
 
+	canvas.width = width;
+	canvas.height = height;
 	canvas.on_update = NULL;
 
 	TC_TRACE("Created Canvas.");
@@ -14,8 +16,4 @@ shrcanvas shrcanvas_new(int width, int height) {
 void shrcanvas_update(shrcanvas *canvas) {
 
 	if (canvas->on_update) canvas->on_update();
-}
-
-void shrcanvas_draw(shrcanvas *canvas, shrwindow_data *win_data) {
-
 }

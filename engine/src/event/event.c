@@ -28,6 +28,7 @@ shrevent shrevent_new(const shrevent_type type, const sapp_event *data) {
 		case APP_TICK:				event.category = EVENT_CATEGORY_APPLICATION; break;
 		case APP_UPDATE:			event.category = EVENT_CATEGORY_APPLICATION; break;
 		case APP_RENDER:			event.category = EVENT_CATEGORY_APPLICATION; break;
+		default: break;
 	}
 
 	return event;
@@ -52,6 +53,7 @@ void shrevent_tostring(char *str, const shrevent *event) {
 		case APP_TICK:		 sprintf(type, "App Tick"); 	  break;
 		case APP_UPDATE:	 sprintf(type, "App Update"); 	  break;
 		case APP_RENDER:	 sprintf(type, "App Render"); 	  break;
+		default: break;
 	}
 
 	sprintf(str, "%s", type);

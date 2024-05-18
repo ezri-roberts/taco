@@ -109,6 +109,8 @@ void shrapp_on_event(shrevent *event, void *data) {
 
 bool shrapp_on_quit(const shrevent *event, void *data) {
 
+	(void)event;
+
 	shrapp *app = (shrapp*)data;
 
 	sapp_cancel_quit();
@@ -189,7 +191,6 @@ void sokol_cleanup(void) {
 // Handle the event data sokol gives out.
 void sokol_event_callback(const sapp_event *e) {
 
-	shrapp *app = (shrapp*)sapp_userdata();
 	shrevent event;
 
 	switch (e->type) {
@@ -228,6 +229,8 @@ void sokol_log_callback(
         u32 line_nr,               // line number in sokol_app.h
         const char* filename_or_null,   // source filename, may be nullptr in release mode
         void* user_data) {
+
+	(void)log_level; (void)log_item_id; (void)filename_or_null; (void)user_data;
 
 	switch (log_level) {
 		case 0: TC_FATAL("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
