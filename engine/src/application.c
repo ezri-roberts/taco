@@ -1,4 +1,6 @@
 #include "application.h"
+#include "event/event.h"
+#include "shrpch.h"
 
 shrapp* shrapp_new() {
 
@@ -11,6 +13,8 @@ shrapp* shrapp_new() {
 	if (!app->event_state.initialized) {
 		TC_ERROR("Event system initialization failed.");
 	}
+
+	shrevent_register(&app->event_state, WINDOW_CLOSE, 0, shrapp_on_event);
 
 	app->window = shrwindow_new("Game Window", 1280, 720);
 	app->scene_list = shrscene_list_new();
@@ -51,65 +55,77 @@ void shrapp_run(void *data) {
 	shrinput_state_update(&app->input_state);
 }
 
-void shrapp_on_event(shrevent *event, void *data) {
+// void shrapp_on_event(shrevent *event, void *data) {
+bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
 
-	shrapp *app = (shrapp*)data;
-	shrevent_callback callback = NULL;
-	void *pass_data = data;
+	shrapp *app = (shrapp*)sapp_userdata();
 
-	switch (event->type) {
-		case WINDOW_CLOSE:
-			callback = shrapp_on_quit;
-			break;
-		case WINDOW_RESIZE:
-			callback = shrwindow_on_resize;
-			pass_data = &app->window.data;
-			break;
-		case KEY_PRESS:
-			callback = shrapp_on_key;
-			pass_data = &app->input_state;
-			break;
-		case KEY_RELEASE:
-			callback = shrapp_on_key;
-			pass_data = &app->input_state;
-			break;
-		case MOUSE_PRESS:
-			callback = shrapp_on_key;
-			pass_data = &app->input_state;
-			break;
-		case MOUSE_RELEASE:
-			callback = shrapp_on_key;
-			pass_data = &app->input_state;
-			break;
-		case WINDOW_UNFOCUS:
-			callback = shrwindow_on_unfocus;
-			pass_data = &app->input_state;
-			break;
-		case WINDOW_FOCUS:
-			callback = shrwindow_on_focus;
-			pass_data = &app->input_state;
-			break;
-		default: break;
-	}
-
-	bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
-
-	if (!dispatched) {
-
-		usize layer_amount = shrlayer_stack_size(&app->layer_stack);
-
-		for (usize i = layer_amount; i > 0; i--) {
-
-			shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i-1);
-
-			if (layer->on_event) {
-
-				dispatched = shrevent_dispatch(event, event->type, layer->on_event, app);
-			}
-			// If the event has been handled we don't want to propagate it further.
-			if (dispatched) break;
+	switch (code) {
+		case WINDOW_CLOSE: {
+			TC_INFO("WINDOW_CLOSE recieved, shutting down.");
+			app->state = APP_STATE_QUIT_REQUESTED;
+			return true;
 		}
 	}
+
+	// Was not handled.
+	return false;
+	// shrevent_callback callback = NULL;
+	// void *pass_data = data;
+
+	// switch (event->type) {
+	// 	case WINDOW_CLOSE:
+	// 		callback = shrapp_on_quit;
+	// 		break;
+	// 	case WINDOW_RESIZE:
+	// 		callback = shrwindow_on_resize;
+	// 		pass_data = &app->window.data;
+	// 		break;
+	// 	case KEY_PRESS:
+	// 		callback = shrapp_on_key;
+	// 		pass_data = &app->input_state;
+	// 		break;
+	// 	case KEY_RELEASE:
+	// 		callback = shrapp_on_key;
+	// 		pass_data = &app->input_state;
+	// 		break;
+	// 	case MOUSE_PRESS:
+	// 		callback = shrapp_on_key;
+	// 		pass_data = &app->input_state;
+	// 		break;
+	// 	case MOUSE_RELEASE:
+	// 		callback = shrapp_on_key;
+	// 		pass_data = &app->input_state;
+	// 		break;
+	// 	case WINDOW_UNFOCUS:
+	// 		callback = shrwindow_on_unfocus;
+	// 		pass_data = &app->input_state;
+	// 		break;
+	// 	case WINDOW_FOCUS:
+	// 		callback = shrwindow_on_focus;
+	// 		pass_data = &app->input_state;
+	// 		break;
+	// 	default: break;
+	// }
+	//
+	// bool dispatched = shrevent_dispatch(event, event->type, callback, pass_data);
+	//
+	// if (!dispatched) {
+	//
+	// 	usize layer_amount = shrlayer_stack_size(&app->layer_stack);
+	//
+	// 	for (usize i = layer_amount; i > 0; i--) {
+	//
+	// 		shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i-1);
+	//
+	// 		if (layer->on_event) {
+	//
+	// 			dispatched = shrevent_dispatch(event, event->type, layer->on_event, app);
+	// 		}
+	// 		// If the event has been handled we don't want to propagate it further.
+	// 		if (dispatched) break;
+	// 	}
+	// }
 }
 
 bool shrapp_on_quit(const shrevent *event, void *data) {
@@ -156,6 +172,8 @@ void shrapp_overlay_push(shrapp *app, shrlayer *layer) {
 
 void shrapp_destroy(shrapp *app) {
 
+	shrevent_unregister(&app->event_state, WINDOW_CLOSE, 0, shrapp_on_event);
+
 	shrscene_list_destroy(&app->scene_list);
 	shrlayer_stack_destory(&app->overlay_stack);
 	shrevent_system_shutdown(&app->event_state);
@@ -197,34 +215,38 @@ void sokol_cleanup(void) {
 // Handle the event data sokol gives out.
 void sokol_event_callback(const sapp_event *e) {
 
-	shrevent event;
+	// shrevent event;
+	shrapp* app = (shrapp*)sapp_userdata();
 
 	switch (e->type) {
 		default:
-			event = shrevent_new(EVENT_NONE, e); break;
+			// event = shrevent_new(EVENT_NONE, e); break;
 		case SAPP_EVENTTYPE_KEY_DOWN:
-			event = shrevent_new(KEY_PRESS, e); break;
+			shrevent_fire(&app->event_state, KEY_PRESS, 0, e); break;
+			// event = shrevent_new(KEY_PRESS, e); break;
 		case SAPP_EVENTTYPE_KEY_UP:
-			event = shrevent_new(KEY_RELEASE, e); break;
-		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			event = shrevent_new(MOUSE_MOVE, e); break;
-		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			event = shrevent_new(MOUSE_SCROLL, e); break;
-		case SAPP_EVENTTYPE_MOUSE_DOWN:
-			event = shrevent_new(MOUSE_PRESS, e); break;
-		case SAPP_EVENTTYPE_MOUSE_UP:
-			event = shrevent_new(MOUSE_RELEASE, e); break;
-		case SAPP_EVENTTYPE_RESIZED:
-			event = shrevent_new(WINDOW_RESIZE, e); break;
+			shrevent_fire(&app->event_state, KEY_RELEASE, 0, e); break;
+			// event = shrevent_new(KEY_RELEASE, e); break;
+		// case SAPP_EVENTTYPE_MOUSE_MOVE:
+			// event = shrevent_new(MOUSE_MOVE, e); break;
+		// case SAPP_EVENTTYPE_MOUSE_SCROLL:
+			// event = shrevent_new(MOUSE_SCROLL, e); break;
+		// case SAPP_EVENTTYPE_MOUSE_DOWN:
+			// event = shrevent_new(MOUSE_PRESS, e); break;
+		// case SAPP_EVENTTYPE_MOUSE_UP:
+			// event = shrevent_new(MOUSE_RELEASE, e); break;
+		// case SAPP_EVENTTYPE_RESIZED:
+			// event = shrevent_new(WINDOW_RESIZE, e); break;
 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
-			event = shrevent_new(WINDOW_CLOSE, e); break;
-		case SAPP_EVENTTYPE_FOCUSED:
-			event = shrevent_new(WINDOW_FOCUS, e); break;
-		case SAPP_EVENTTYPE_UNFOCUSED:
-			event = shrevent_new(WINDOW_UNFOCUS, e); break;
+			shrevent_fire(&app->event_state, WINDOW_CLOSE, 0, e); break;
+			// event = shrevent_new(WINDOW_CLOSE, e); break;
+		// case SAPP_EVENTTYPE_FOCUSED:
+			// event = shrevent_new(WINDOW_FOCUS, e); break;
+		// case SAPP_EVENTTYPE_UNFOCUSED:
+			// event = shrevent_new(WINDOW_UNFOCUS, e); break;
 	}
 
-	shrapp_on_event(&event, sapp_userdata());
+	// shrapp_on_event(&event, sapp_userdata());
 }
 
 void sokol_log_callback(

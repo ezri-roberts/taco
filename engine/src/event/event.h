@@ -39,7 +39,7 @@ typedef struct shrevent {
 
 typedef bool (*shrevent_callback)(const shrevent*, void*);
 // Should return true if handled.
-typedef bool (*shrevent_on)(u16 code, void *sender, void *listener, sapp_event data);
+typedef bool (*shrevent_on)(u16 code, void *sender, void *listener, const sapp_event *data);
 
 typedef struct shrevent_registered {
 
@@ -70,6 +70,6 @@ bool shrevent_system_initialize(shrevent_state *state);
 void shrevent_system_shutdown(shrevent_state *state);
 bool shrevent_register(shrevent_state *state, u16 code, void *listener, shrevent_on on_event);
 bool shrevent_unregister(shrevent_state *state, u16 code, void *listener, shrevent_on on_event);
-bool shrevent_fire(shrevent_state *state, u16 code, void *sender, sapp_event data);
+bool shrevent_fire(shrevent_state *state, u16 code, void *sender, const sapp_event *data);
 
 #endif // !EVENT_H

@@ -40,7 +40,8 @@ shrapp* shrapp_new();
 void shrapp_run(void *data);
 shrapp* shrapp_create(); // Defined in client.
 void shrapp_destroy(shrapp *app);
-void shrapp_on_event(shrevent *event, void *data);
+// void shrapp_on_event(shrevent *event, void *data);
+bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data);
 bool shrapp_check_state(shrapp *app, shrapp_state state);
 void shrapp_set_scene(shrapp *app, const char *name);
 void shrapp_quit(shrapp *app);

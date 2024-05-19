@@ -75,7 +75,7 @@ bool shrevent_unregister(shrevent_state *state, u16 code, void *listener, shreve
 	return false;
 }
 
-bool shrevent_fire(shrevent_state *state, u16 code, void *sender, sapp_event data) {
+bool shrevent_fire(shrevent_state *state, u16 code, void *sender, const sapp_event *data) {
 
 	if (!state->initialized) return false;
 
