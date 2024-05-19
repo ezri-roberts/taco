@@ -2,6 +2,7 @@
 #define EVENT_H
 
 #include "shrpch.h"
+#include "containers/darray.h"
 
 #define MAX_MESSAGE_CODES 16304
 
@@ -37,6 +38,7 @@ typedef struct shrevent {
 } shrevent;
 
 typedef bool (*shrevent_callback)(const shrevent*, void*);
+// Should return true if handled.
 typedef bool (*shrevent_on)(u16 code, void *sender, void *listener, sapp_event data);
 
 typedef struct shrevent_registered {
@@ -51,9 +53,10 @@ typedef struct shrevent_entry {
 } shrevent_code_entry;
 
 typedef struct shrevent_system_state {
+	bool initialized;
 	// Lookup table for event codes.
 	shrevent_code_entry registered[MAX_MESSAGE_CODES];
-} shrevent_system_state;
+} shrevent_state;
 
 // Event callback function pointer.
 
@@ -63,8 +66,10 @@ bool shrevent_in_category(const shrevent *event, const shrevent_category categor
 bool shrevent_dispatch(shrevent *event, const shrevent_code type, const shrevent_callback callback, void *data);
 void shrevent_tostring(char *str, const shrevent *event);
 
-bool shrevent_register(u16 code, void *listener, shrevent_on on_event);
-bool shrevent_unregister(u16 code, void *listener, shrevent_on on_event);
-bool shrevent_fire(u16 code, void *sender, sapp_event data);
+bool shrevent_system_initialize(shrevent_state *state);
+void shrevent_system_shutdown(shrevent_state *state);
+bool shrevent_register(shrevent_state *state, u16 code, void *listener, shrevent_on on_event);
+bool shrevent_unregister(shrevent_state *state, u16 code, void *listener, shrevent_on on_event);
+bool shrevent_fire(shrevent_state *state, u16 code, void *sender, sapp_event data);
 
 #endif // !EVENT_H

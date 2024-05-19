@@ -13,6 +13,20 @@ enum {
 	DARRAY_FIELD_LENGTH
 };
 
+void* _darray_create(u64 lenght, u64 stride);
+void _darray_destroy(void *array);
+
+u64 _darray_field_get(void *array, u64 field);
+void _darray_field_set(void *array, u64 field, u64 value);
+
+void* _darray_resize(void *array);
+
+void* _darray_push(void *array, const void *value);
+void _darray_pop(void *array, void *dest);
+
+void* _darray_pop_at(void *array, u64 index, void *dest);
+void* _darray_insert_at(void *array, u64 index, const void *value);
+
 #define darray_create(type) \
 	_darray_create(DARRAY_DEFAULT_CAPACITY, sizeof(type))
 
@@ -53,19 +67,5 @@ enum {
 
 #define darray_length_set(array, value) \
 	_darray_field_set(array, DARRAY_LENGTH, value)
-
-void* _darray_create(u64 lenght, u64 stride);
-void _darray_destory(void *array);
-
-u64 _darray_field_get(void *array, u64 field);
-void _darray_field_set(void *array, u64 field, u64 value);
-
-void* _darray_resize(void *array);
-
-void* _darray_push(void *array, const void *value);
-void _darray_pop(void *array, void *dest);
-
-void* _darray_pop_at(void *array, u64 index, void *dest);
-void* _darray_insert_at(void *array, u64 index, const void *value);
 
 #endif // !DARRAY_H

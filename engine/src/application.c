@@ -7,6 +7,11 @@ shrapp* shrapp_new() {
 
 	shrapp *app = malloc(sizeof(shrapp));
 
+	shrevent_system_initialize(&app->event_state);
+	if (!app->event_state.initialized) {
+		TC_ERROR("Event system initialization failed.");
+	}
+
 	app->window = shrwindow_new("Game Window", 1280, 720);
 	app->scene_list = shrscene_list_new();
 	app->layer_stack = shrlayer_stack_new();
@@ -153,6 +158,7 @@ void shrapp_destroy(shrapp *app) {
 
 	shrscene_list_destroy(&app->scene_list);
 	shrlayer_stack_destory(&app->overlay_stack);
+	shrevent_system_shutdown(&app->event_state);
 	free(app);
 	app = NULL;
 

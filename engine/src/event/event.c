@@ -1,4 +1,101 @@
 #include "event.h"
+#include "containers/darray.h"
+
+bool shrevent_system_initialize(shrevent_state *state) {
+	if (state->initialized) {
+		return false;
+	}
+	state->initialized = false;
+	memset(state, 0, sizeof(shrevent_state));
+
+	state->initialized = true;
+
+	TC_INFO("Event System Initialized.");
+	return true;
+}
+
+void shrevent_system_shutdown(shrevent_state *state) {
+
+	for (u16 i = 0; i < MAX_MESSAGE_CODES; i++) {
+	
+		if (state->registered[i].events != 0) {
+			darray_destroy(state->registered[i].events);
+			state->registered[i].events = 0;
+		}
+	}
+	TC_INFO("Event System Shutdown.");
+}
+
+bool shrevent_register(shrevent_state *state, u16 code, void *listener, shrevent_on on_event) {
+
+	if (!state->initialized) return false;
+
+	if (state->registered[code].events == 0) {
+		state->registered[code].events = darray_create(shrevent_registered);
+	}
+
+	u64 registered_count = darray_length(state->registered[code].events);
+	for (u64 i = 0; i < registered_count; ++i) {
+		if (state->registered[code].events[i].listener == listener) {
+			// TODO: Warn.
+			return false;
+		}
+	}
+
+	shrevent_registered event;
+	event.listener = listener;
+	event.callback = on_event;
+	darray_push(state->registered[code].events, event);
+
+	return true;
+}
+
+bool shrevent_unregister(shrevent_state *state, u16 code, void *listener, shrevent_on on_event) {
+
+	if (!state->initialized) return false;
+
+	if (state->registered[code].events == 0) {
+		// TODO: Warn.
+		return false;
+	}
+
+	u64 registered_count = darray_length(state->registered[code].events);
+	for (u64 i = 0; i < registered_count; ++i) {
+
+		shrevent_registered e = state->registered[code].events[i];
+		if (e.listener == listener && e.callback == on_event) {
+			
+			shrevent_registered popped_event;
+			darray_pop_at(state->registered[code].events, i, &popped_event);
+			return true;
+		}
+	}
+
+	// Not found.
+	return false;
+}
+
+bool shrevent_fire(shrevent_state *state, u16 code, void *sender, sapp_event data) {
+
+	if (!state->initialized) return false;
+
+	if (state->registered[code].events == 0) {
+		return false;
+	}
+
+	u64 registered_count = darray_length(state->registered[code].events);
+	for (u64 i = 0; i < registered_count; ++i) {
+
+		shrevent_registered e = state->registered[code].events[i];
+		if (e.callback(code, sender, e.listener, data)) {
+			// Has been handled. Do not send to other listeners.
+			return true;
+		}
+	}
+
+	// Not found.
+	return false;
+}
 
 shrevent shrevent_new(const shrevent_code type, const sapp_event *data) {
 

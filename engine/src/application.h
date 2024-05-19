@@ -23,6 +23,7 @@ typedef struct {
 	shrrenderer renderer;
 
 	shrwindow window;
+	shrevent_state event_state;
 	shrapp_state state;
 	shrinput_state input_state;
 
