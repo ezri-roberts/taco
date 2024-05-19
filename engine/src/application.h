@@ -50,8 +50,8 @@ void shrapp_layer_push(shrapp *app, shrlayer *layer);
 void shrapp_overlay_push(shrapp *app, shrlayer *layer);
 
 // Event callbacks.
-bool shrapp_on_quit(const shrevent *event, void *data);
-bool shrapp_on_key(const shrevent *event, void *data);
+// bool shrapp_on_quit(const shrevent *event, void *data);
+// bool shrapp_on_key(const shrevent *event, void *data);
 
 // Defined in user implementation.
 extern void shrapp_init(shrapp *app);

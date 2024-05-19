@@ -27,8 +27,8 @@ void shrwindow_destroy(shrwindow *window);
 bool shrwindow_should_close(shrwindow *window);
 
 // Event callbacks.
-bool shrwindow_on_resize(const shrevent *event, void *data);
-bool shrwindow_on_focus(const shrevent *event, void *data);
-bool shrwindow_on_unfocus(const shrevent *event, void *data);
+// bool shrwindow_on_resize(const shrevent *event, void *data);
+// bool shrwindow_on_focus(const shrevent *event, void *data);
+// bool shrwindow_on_unfocus(const shrevent *event, void *data);
 
 #endif // !WINDOW_H

@@ -1,6 +1,4 @@
 #include "application.h"
-#include "event/event.h"
-#include "shrpch.h"
 
 shrapp* shrapp_new() {
 
@@ -9,19 +7,20 @@ shrapp* shrapp_new() {
 
 	shrapp *app = malloc(sizeof(shrapp));
 
-	shrevent_system_initialize(&app->event_state);
-	if (!app->event_state.initialized) {
+	if (!shrevent_initialize()) {
 		TC_ERROR("Event system initialization failed.");
 	}
 
-	shrevent_register(&app->event_state, WINDOW_CLOSE, 0, shrapp_on_event);
+	shrinput_initialize();
+
+	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
 
 	app->window = shrwindow_new("Game Window", 1280, 720);
 	app->scene_list = shrscene_list_new();
 	app->layer_stack = shrlayer_stack_new();
 	app->overlay_stack = shrlayer_stack_new();
 	app->state = APP_STATE_RUNNING;
-	app->input_state = shrinput_state_new();
+	// app->input_state = shrinput_state_new();
 
 	return app;
 }
@@ -42,17 +41,18 @@ void shrapp_run(void *data) {
 		sapp_quit();
 	}
 
-	usize layer_amount = shrlayer_stack_size(&app->layer_stack);
-
-	for (usize i = 0; i <= layer_amount-1; i++) {
-
-		shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
-		if (layer->on_update) layer->on_update(app);
-	}
+	// usize layer_amount = shrlayer_stack_size(&app->layer_stack);
+	//
+	// for (usize i = 0; i <= layer_amount-1; i++) {
+	//
+	// 	shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
+	// 	if (layer->on_update) layer->on_update(app);
+	// }
 
 	shrapp_update(app);
 
-	shrinput_state_update(&app->input_state);
+	shrinput_update();
+	// shrinput_state_update(&app->input_state);
 }
 
 // void shrapp_on_event(shrevent *event, void *data) {
@@ -61,7 +61,7 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *d
 	shrapp *app = (shrapp*)sapp_userdata();
 
 	switch (code) {
-		case WINDOW_CLOSE: {
+		case EVENT_APP_QUIT: {
 			TC_INFO("WINDOW_CLOSE recieved, shutting down.");
 			app->state = APP_STATE_QUIT_REQUESTED;
 			return true;
@@ -128,25 +128,25 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *d
 	// }
 }
 
-bool shrapp_on_quit(const shrevent *event, void *data) {
-
-	(void)event;
-
-	shrapp *app = (shrapp*)data;
-
-	sapp_cancel_quit();
-	shrapp_quit(app);
-
-	return true;
-}
-
-bool shrapp_on_key(const shrevent *event, void *data) {
-
-	shrinput_state *state = (shrinput_state*)data;
-	shrinput_state_handle_event(state, event);
-
-	return false;
-}
+// bool shrapp_on_quit(const shrevent *event, void *data) {
+//
+// 	(void)event;
+//
+// 	shrapp *app = (shrapp*)data;
+//
+// 	sapp_cancel_quit();
+// 	shrapp_quit(app);
+//
+// 	return true;
+// }
+//
+// bool shrapp_on_key(const shrevent *event, void *data) {
+//
+// 	shrinput_state *state = (shrinput_state*)data;
+// 	shrinput_state_handle_event(state, event);
+//
+// 	return false;
+// }
 
 void shrapp_set_scene(shrapp *app, const char *name) {
 
@@ -172,11 +172,13 @@ void shrapp_overlay_push(shrapp *app, shrlayer *layer) {
 
 void shrapp_destroy(shrapp *app) {
 
-	shrevent_unregister(&app->event_state, WINDOW_CLOSE, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
 
 	shrscene_list_destroy(&app->scene_list);
 	shrlayer_stack_destory(&app->overlay_stack);
-	shrevent_system_shutdown(&app->event_state);
+
+	shrevent_shutdown();
+	shrinput_shutdown();
 	free(app);
 	app = NULL;
 
@@ -219,26 +221,31 @@ void sokol_event_callback(const sapp_event *e) {
 	shrapp* app = (shrapp*)sapp_userdata();
 
 	switch (e->type) {
-		default:
+		// default:
 			// event = shrevent_new(EVENT_NONE, e); break;
 		case SAPP_EVENTTYPE_KEY_DOWN:
-			shrevent_fire(&app->event_state, KEY_PRESS, 0, e); break;
-			// event = shrevent_new(KEY_PRESS, e); break;
-		case SAPP_EVENTTYPE_KEY_UP:
-			shrevent_fire(&app->event_state, KEY_RELEASE, 0, e); break;
+		case SAPP_EVENTTYPE_KEY_UP: {
+			bool pressed = (e->type == SAPP_EVENTTYPE_KEY_DOWN);
+			shrinput_process_key(e, pressed);
+			break;
+		}
+			// shrevent_fire(&app->event_state, EVENT_KEY_RELEASE, 0, e); break;
 			// event = shrevent_new(KEY_RELEASE, e); break;
 		// case SAPP_EVENTTYPE_MOUSE_MOVE:
 			// event = shrevent_new(MOUSE_MOVE, e); break;
 		// case SAPP_EVENTTYPE_MOUSE_SCROLL:
 			// event = shrevent_new(MOUSE_SCROLL, e); break;
-		// case SAPP_EVENTTYPE_MOUSE_DOWN:
-			// event = shrevent_new(MOUSE_PRESS, e); break;
-		// case SAPP_EVENTTYPE_MOUSE_UP:
+		case SAPP_EVENTTYPE_MOUSE_DOWN:
+		case SAPP_EVENTTYPE_MOUSE_UP: {
+			bool pressed = (e->type == SAPP_EVENTTYPE_MOUSE_DOWN);
+			shrinput_process_button(e, pressed);
+			break;
+		}
 			// event = shrevent_new(MOUSE_RELEASE, e); break;
 		// case SAPP_EVENTTYPE_RESIZED:
 			// event = shrevent_new(WINDOW_RESIZE, e); break;
 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
-			shrevent_fire(&app->event_state, WINDOW_CLOSE, 0, e); break;
+			shrevent_fire(EVENT_APP_QUIT, 0, e); break;
 			// event = shrevent_new(WINDOW_CLOSE, e); break;
 		// case SAPP_EVENTTYPE_FOCUSED:
 			// event = shrevent_new(WINDOW_FOCUS, e); break;

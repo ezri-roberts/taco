@@ -9,11 +9,12 @@
 typedef enum {
 
 	EVENT_NONE = 0,
-	WINDOW_CLOSE, WINDOW_RESIZE, WINDOW_FOCUS, WINDOW_UNFOCUS, WINDOW_ICONIFIED, WINDOW_MOVE,
-	APP_TICK, APP_UPDATE, APP_RENDER,
-	KEY_PRESS, KEY_RELEASE,
-	MOUSE_PRESS, MOUSE_RELEASE, MOUSE_MOVE, MOUSE_SCROLL,
-	MAX_EVENT_CODE = 0xFF
+	EVENT_WINDOW_RESIZE, EVENT_WINDOW_FOCUS, EVENT_WINDOW_UNFOCUS,
+	EVENT_WINDOW_ICONIFIED, EVENT_WINDOW_MOVE,
+	EVENT_APP_QUIT,
+	EVENT_KEY_PRESS, EVENT_KEY_RELEASE,
+	EVENT_MOUSE_PRESS, EVENT_MOUSE_RELEASE, EVENT_MOUSE_MOVE, EVENT_MOUSE_SCROLL,
+	EVENT_MAX_CODE = 0xFF
 
 } shrevent_code;
 
@@ -27,24 +28,13 @@ typedef enum {
 
 } shrevent_category;
 
-typedef struct shrevent {
-
-	const char *name;
-	shrevent_code type;
-	u16 category;
-	bool handled;
-	sapp_event data;
-
-} shrevent;
-
-typedef bool (*shrevent_callback)(const shrevent*, void*);
 // Should return true if handled.
-typedef bool (*shrevent_on)(u16 code, void *sender, void *listener, const sapp_event *data);
+typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, const sapp_event *data);
 
 typedef struct shrevent_registered {
 
 	void *listener;
-	shrevent_on callback;
+	shrevent_callback callback;
 
 } shrevent_registered;
 
@@ -52,24 +42,16 @@ typedef struct shrevent_entry {
 	shrevent_registered *events;
 } shrevent_code_entry;
 
-typedef struct shrevent_system_state {
+typedef struct shrevent_system {
 	bool initialized;
 	// Lookup table for event codes.
 	shrevent_code_entry registered[MAX_MESSAGE_CODES];
 } shrevent_state;
 
-// Event callback function pointer.
-
-shrevent shrevent_new(const shrevent_code type, const sapp_event *data);
-void shrevent_copy_data(shrevent *event, sapp_event *e);
-bool shrevent_in_category(const shrevent *event, const shrevent_category category);
-bool shrevent_dispatch(shrevent *event, const shrevent_code type, const shrevent_callback callback, void *data);
-void shrevent_tostring(char *str, const shrevent *event);
-
-bool shrevent_system_initialize(shrevent_state *state);
-void shrevent_system_shutdown(shrevent_state *state);
-bool shrevent_register(shrevent_state *state, u16 code, void *listener, shrevent_on on_event);
-bool shrevent_unregister(shrevent_state *state, u16 code, void *listener, shrevent_on on_event);
-bool shrevent_fire(shrevent_state *state, u16 code, void *sender, const sapp_event *data);
+bool shrevent_initialize();
+void shrevent_shutdown();
+bool shrevent_register(u16 code, void *listener, shrevent_callback on_event);
+bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event);
+bool shrevent_fire(u16 code, void *sender, const sapp_event *data);
 
 #endif // !EVENT_H

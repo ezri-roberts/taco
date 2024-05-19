@@ -5,11 +5,7 @@
 
 #define INPUT_CODE_NUM 123
 
-typedef enum {
-
-	MOUSE_LEFT = 0x0,
-	MOUSE_RIGHT = 0x1,
-	MOUSE_MIDDLE = 0x2,
+typedef enum shrinput_key {
 
 	KEY_SPACE               = 32,
 	KEY_APOSTROPHE          = 39, /* ' */
@@ -134,6 +130,7 @@ typedef enum {
 	KEY_RIGHTSUPER          = 347,
 	KEY_MENU                = 348,
 
-} shrinput_code;
+	HEYS_MAX
+} shrinput_key;
 
 #endif // !KEYCODES_H
