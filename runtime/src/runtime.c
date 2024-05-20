@@ -1,19 +1,18 @@
 #include "shraybn.h"
 
-// shrlayer *dbui_layer;
 //
-// void dbui_layer_attach() {
-//
-// 	dbui_init();
-// 	TC_TRACE("[DBUI] Layer Attached.");
-// }
+void dbui_layer_attach(void *data) {
 
-// void dbui_layer_update(void *data) {
-//
-// 	(void)data;
-//
-// 	dbui_update();
-// }
+	// dbui_init();
+	TC_TRACE("[DBUI] Layer Attached.");
+}
+
+void dbui_layer_update(void *data) {
+
+	(void)data;
+
+	// dbui_update();
+}
 
 // bool dbui_layer_on_event(const shrevent *event, void *data) {
 //
@@ -30,6 +29,12 @@ void shrapp_init(shrapp *app) {
 	// dbui_layer->on_event = dbui_layer_on_event;
 
 	// shrlayer_stack_push(&app->layer_stack, dbui_layer);
+	shrapp_layer_new(
+		app,
+		dbui_layer_attach,
+		NULL,
+		dbui_layer_update
+	);
 
 }
 

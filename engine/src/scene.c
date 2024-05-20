@@ -8,7 +8,7 @@ shrscene* shrscene_new(const char *name) {
 	scene->on_attach = NULL;
 	scene->on_detach = NULL;
 	scene->on_update = NULL;
-	scene->layer_stack = shrlayer_stack_new();
+	// scene->layer_stack = shrlayer_stack_new();
 
 	return scene;
 }
@@ -44,7 +44,7 @@ void shrscene_list_destroy(shrscene_list *list) {
 		shrscene *scene = list->scenes[i];
 
 		TC_INFO("Destroying Scene: '0x%x'", scene);
-		shrlayer_stack_destory(&scene->layer_stack);
+		// shrlayer_stack_destory(&scene->layer_stack);
 		free(scene);
 		scene = NULL;
 	}

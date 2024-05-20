@@ -23,12 +23,10 @@ typedef struct {
 	shrrenderer renderer;
 
 	shrwindow window;
-	shrevent_state event_state;
 	shrapp_state state;
-	shrinput_state input_state;
 
-	shrlayer_stack layer_stack;
-	shrlayer_stack overlay_stack;
+	shrlayer *layers;
+	shrlayer *overlays;
 
 	shrscene_list scene_list;
 	shrscene *current_scene;
@@ -42,11 +40,13 @@ shrapp* shrapp_create(); // Defined in client.
 void shrapp_destroy(shrapp *app);
 // void shrapp_on_event(shrevent *event, void *data);
 bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data);
+bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data);
 bool shrapp_check_state(shrapp *app, shrapp_state state);
 void shrapp_set_scene(shrapp *app, const char *name);
 void shrapp_quit(shrapp *app);
 
-void shrapp_layer_push(shrapp *app, shrlayer *layer);
+// void shrapp_layer_push(shrapp *app, shrlayer *layer);
+void shrapp_layer_new(shrapp *app, void *on_attach, void *on_detach, void *on_update);
 void shrapp_overlay_push(shrapp *app, shrlayer *layer);
 
 // Event callbacks.

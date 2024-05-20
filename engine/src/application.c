@@ -7,6 +7,8 @@ shrapp* shrapp_new() {
 
 	shrapp *app = malloc(sizeof(shrapp));
 
+	app->window = shrwindow_new("Game Window", 1280, 720);
+
 	if (!shrevent_initialize()) {
 		TC_ERROR("Event system initialization failed.");
 	}
@@ -14,13 +16,15 @@ shrapp* shrapp_new() {
 	shrinput_initialize();
 
 	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
+	shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
+	shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
-	app->window = shrwindow_new("Game Window", 1280, 720);
+	app->layers = darray_create(shrlayer);
+
 	app->scene_list = shrscene_list_new();
-	app->layer_stack = shrlayer_stack_new();
-	app->overlay_stack = shrlayer_stack_new();
+	// app->layer_stack = shrlayer_stack_new();
+	// app->overlay_stack = shrlayer_stack_new();
 	app->state = APP_STATE_RUNNING;
-	// app->input_state = shrinput_state_new();
 
 	return app;
 }
@@ -50,9 +54,7 @@ void shrapp_run(void *data) {
 	// }
 
 	shrapp_update(app);
-
 	shrinput_update();
-	// shrinput_state_update(&app->input_state);
 }
 
 // void shrapp_on_event(shrevent *event, void *data) {
@@ -128,6 +130,19 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *d
 	// }
 }
 
+bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data) {
+
+	if (code == EVENT_KEY_PRESS) {
+		
+		u16 key_code = data->key_code;
+		if (key_code == KEY_A) {
+			TC_TRACE("A PRESSED!");
+		}
+	}
+
+	return false;
+}
+
 // bool shrapp_on_quit(const shrevent *event, void *data) {
 //
 // 	(void)event;
@@ -162,20 +177,35 @@ void shrapp_set_scene(shrapp *app, const char *name) {
 	}
 }
 
-void shrapp_layer_push(shrapp *app, shrlayer *layer) {
-	shrlayer_stack_push(&app->layer_stack, layer);
+// void shrapp_layer_push(shrapp *app, shrlayer *layer) {
+	// shrlayer_stack_push(&app->layer_stack, layer);
+	// darray_push(app->layers, layer);
+// }
+
+void shrapp_layer_new(shrapp *app, void *on_attach, void *on_detach, void *on_update) {
+
+	shrlayer layer;
+	layer.on_attach = on_attach;
+	layer.on_update = on_update;
+	layer.on_detach = on_detach;
+
+	if (layer.on_attach) layer.on_attach(app);
+	darray_push(app->layers, layer);
 }
 
-void shrapp_overlay_push(shrapp *app, shrlayer *layer) {
-	shrlayer_stack_push_front(&app->layer_stack, layer);
-}
+// void shrapp_overlay_push(shrapp *app, shrlayer *layer) {
+// 	shrlayer_stack_push_front(&app->layer_stack, layer);
+// }
 
 void shrapp_destroy(shrapp *app) {
 
 	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
+	shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	shrscene_list_destroy(&app->scene_list);
-	shrlayer_stack_destory(&app->overlay_stack);
+	darray_destroy(app->layers);
+	// shrlayer_stack_destory(&app->overlay_stack);
 
 	shrevent_shutdown();
 	shrinput_shutdown();
@@ -251,6 +281,7 @@ void sokol_event_callback(const sapp_event *e) {
 			// event = shrevent_new(WINDOW_FOCUS, e); break;
 		// case SAPP_EVENTTYPE_UNFOCUSED:
 			// event = shrevent_new(WINDOW_UNFOCUS, e); break;
+		default: break;
 	}
 
 	// shrapp_on_event(&event, sapp_userdata());

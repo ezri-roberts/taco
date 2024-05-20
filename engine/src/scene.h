@@ -7,7 +7,7 @@
 typedef struct {
 
 	const char *name;
-	shrlayer_stack layer_stack;
+	shrlayer *layers;
 
 	void (*on_attach)();
 	void (*on_detach)();

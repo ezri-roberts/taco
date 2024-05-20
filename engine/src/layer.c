@@ -14,71 +14,71 @@ shrlayer* shrlayer_new(const char *name) {
 	return layer;
 }
 
-shrlayer_stack shrlayer_stack_new() {
-
-	shrlayer_stack stack;
-
-	stack.layers = malloc(LAYER_STACK_SIZE * sizeof(shrlayer));
-	stack.used = 0;
-	stack.size = LAYER_STACK_SIZE;
-
-	TC_INFO("Created Layer Stack.");
-
-	return stack;
-}
-
-void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer) {
-
-	if (layer->on_attach) layer->on_attach(sapp_userdata());
-
-	if (stack->used == stack->size) {
-		stack->size *= 2;
-		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
-	}
-
-	stack->layers[stack->used++] = layer;
-	TC_INFO("Pushed Layer '%x'", layer);
-}
-
-void shrlayer_stack_push_front(shrlayer_stack *stack, shrlayer *layer) {
-
-	if (layer->on_attach) layer->on_attach(sapp_userdata());
-
-	if (stack->used == stack->size) {
-		stack->size *= 2;
-		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
-	}
-
-	stack->layers[stack->size - stack->used] = layer;
-	stack->used++;
-	TC_INFO("Pushed Layer '%x'", layer);
-}
-
-int shrlayer_stack_size(shrlayer_stack *stack) {
-	return stack->used;
-}
-
-shrlayer* shrlayer_stack_get(shrlayer_stack *stack, usize index) {
-	return stack->layers[index];
-}
-
-void shrlayer_stack_destory(shrlayer_stack *stack) {
-
-	TC_INFO("Destroying Layer Stack: '0x%x'", stack);
-
-	for (usize i = 0; i < stack->used; i++) {
-
-		shrlayer *layer = stack->layers[i];
-		if (layer->on_detach) layer->on_detach(sapp_userdata());
-
-		TC_INFO("Destroying Layer: 0x%x", layer);
-		free(layer);
-		layer = NULL;
-	}
-
-	free(stack->layers);
-	stack->layers = NULL;
-	stack->used = 0;
-	stack->size = 0;
-}
+// shrlayer_stack shrlayer_stack_new() {
+//
+// 	shrlayer_stack stack;
+//
+// 	stack.layers = malloc(LAYER_STACK_SIZE * sizeof(shrlayer));
+// 	stack.used = 0;
+// 	stack.size = LAYER_STACK_SIZE;
+//
+// 	TC_INFO("Created Layer Stack.");
+//
+// 	return stack;
+// }
+//
+// void shrlayer_stack_push(shrlayer_stack *stack, shrlayer *layer) {
+//
+// 	if (layer->on_attach) layer->on_attach(sapp_userdata());
+//
+// 	if (stack->used == stack->size) {
+// 		stack->size *= 2;
+// 		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
+// 	}
+//
+// 	stack->layers[stack->used++] = layer;
+// 	TC_INFO("Pushed Layer '%x'", layer);
+// }
+//
+// void shrlayer_stack_push_front(shrlayer_stack *stack, shrlayer *layer) {
+//
+// 	if (layer->on_attach) layer->on_attach(sapp_userdata());
+//
+// 	if (stack->used == stack->size) {
+// 		stack->size *= 2;
+// 		stack->layers = realloc(stack->layers, stack->size * sizeof(shrlayer));
+// 	}
+//
+// 	stack->layers[stack->size - stack->used] = layer;
+// 	stack->used++;
+// 	TC_INFO("Pushed Layer '%x'", layer);
+// }
+//
+// int shrlayer_stack_size(shrlayer_stack *stack) {
+// 	return stack->used;
+// }
+//
+// shrlayer* shrlayer_stack_get(shrlayer_stack *stack, usize index) {
+// 	return stack->layers[index];
+// }
+//
+// void shrlayer_stack_destory(shrlayer_stack *stack) {
+//
+// 	TC_INFO("Destroying Layer Stack: '0x%x'", stack);
+//
+// 	for (usize i = 0; i < stack->used; i++) {
+//
+// 		shrlayer *layer = stack->layers[i];
+// 		if (layer->on_detach) layer->on_detach(sapp_userdata());
+//
+// 		TC_INFO("Destroying Layer: 0x%x", layer);
+// 		free(layer);
+// 		layer = NULL;
+// 	}
+//
+// 	free(stack->layers);
+// 	stack->layers = NULL;
+// 	stack->used = 0;
+// 	stack->size = 0;
+// }
 
