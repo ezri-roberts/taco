@@ -6,7 +6,7 @@ static bool initialized = false;
 void shrinput_initialize() {
 	memset(&state, 0, sizeof(shrinput_state));
 	initialized = true;
-	TC_INFO("Input system initialized.");
+	SHR_INFO("Input system initialized.");
 }
 
 void shrinput_shutdown() {

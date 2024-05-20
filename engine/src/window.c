@@ -2,7 +2,7 @@
 
 shrwindow shrwindow_new(const char *title, u32 width, u32 height) {
 
-	TC_INFO("Creating Window.");
+	SHR_INFO("Creating Window.");
 
 	shrwindow window;
 
@@ -41,5 +41,5 @@ shrwindow shrwindow_new(const char *title, u32 width, u32 height) {
 void shrwindow_destroy(shrwindow *window) {
 
 	(void)window;
-	TC_INFO("Destroyed Window.");
+	SHR_INFO("Destroyed Window.");
 }

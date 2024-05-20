@@ -21,10 +21,11 @@ typedef enum {
 typedef enum {
 
 	EVENT_CATEGORY_APPLICATION = BIT(0),
-	EVENT_CATEGORY_INPUT = BIT(1),
-	EVENT_CATEGORY_KEYBOARD = BIT(2),
-	EVENT_CATEGORY_MOUSE = BIT(3),
-	EVENT_CATEGORY_MOUSE_BUTTON = BIT(4)
+	EVENT_CATEGORY_WINDOW = BIT(1),
+	EVENT_CATEGORY_INPUT = BIT(2),
+	EVENT_CATEGORY_KEYBOARD = BIT(3),
+	EVENT_CATEGORY_MOUSE = BIT(4),
+	EVENT_CATEGORY_MOUSE_BUTTON = BIT(5)
 
 } shrevent_category;
 
@@ -53,5 +54,8 @@ void shrevent_shutdown();
 bool shrevent_register(u16 code, void *listener, shrevent_callback on_event);
 bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event);
 bool shrevent_fire(u16 code, void *sender, const sapp_event *data);
+bool shrevent_in_category(shrevent_code code, shrevent_category category);
+bool shrevent_register_category(u16 category, void *listener, shrevent_callback on_event);
+bool shrevent_unregister_category(u16 category, void *listener, shrevent_callback on_event);
 
 #endif // !EVENT_H

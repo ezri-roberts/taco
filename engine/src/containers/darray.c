@@ -79,7 +79,7 @@ void* _darray_pop_at(void *array, u64 index, void *dest) {
 	u64 length = darray_length(array);
 	u64 stride = darray_stride(array);
 	if (index >= length) {
-		TC_ERROR("Index outside bounds of array. length: %i, index: %i", length, index);
+		SHR_ERROR("Index outside bounds of array. length: %i, index: %i", length, index);
 		return array;
 	}
 
@@ -103,7 +103,7 @@ void* _darray_insert_at(void *array, u64 index, const void *value) {
 	u64 length = darray_length(array);
 	u64 stride = darray_stride(array);
 	if (index >= length) {
-		TC_ERROR("Index outside bounds of array. length: %i, index: %i", length, index);
+		SHR_ERROR("Index outside bounds of array. length: %i, index: %i", length, index);
 		return array;
 	}
 	if (length >= darray_capacity(array)) {

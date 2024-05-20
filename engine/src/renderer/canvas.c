@@ -8,7 +8,7 @@ shrcanvas shrcanvas_new(u32 width, u32 height) {
 	canvas.height = height;
 	canvas.on_update = NULL;
 
-	TC_TRACE("Created Canvas.");
+	SHR_TRACE("Created Canvas.");
 
 	return canvas;
 }

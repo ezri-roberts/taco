@@ -53,7 +53,7 @@ void shrrenderer_init(shrrenderer *renderer) {
 		backend = "D3D11";
 	#endif
 
-	TC_INFO("[%s] Renderer Initialized.", backend);
+	SHR_INFO("[%s] Renderer Initialized.", backend);
 }
 
 void shrrenderer_begin(shrrenderer *renderer) {

@@ -1,16 +1,17 @@
 #include "application.h"
+#include "containers/darray.h"
 
 shrapp* shrapp_new() {
 
-	TC_INFO("Initializing Engine.");
-	TC_INFO("Creating App.");
+	SHR_INFO("Initializing Engine.");
+	SHR_INFO("Creating App.");
 
 	shrapp *app = malloc(sizeof(shrapp));
 
 	app->window = shrwindow_new("Game Window", 1280, 720);
 
 	if (!shrevent_initialize()) {
-		TC_ERROR("Event system initialization failed.");
+		SHR_ERROR("Event system initialization failed.");
 	}
 
 	shrinput_initialize();
@@ -34,8 +35,7 @@ bool shrapp_check_state(shrapp *app, shrapp_state state) {
 }
 
 void shrapp_quit(shrapp *app) {
-	app->state = APP_STATE_QUIT_REQUESTED;
-}
+	app->state = APP_STATE_QUIT_REQUESTED; }
 
 void shrapp_run(void *data) {
 
@@ -45,13 +45,15 @@ void shrapp_run(void *data) {
 		sapp_quit();
 	}
 
+	usize layer_amount = darray_length(app->layers);
 	// usize layer_amount = shrlayer_stack_size(&app->layer_stack);
 	//
-	// for (usize i = 0; i <= layer_amount-1; i++) {
-	//
-	// 	shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
-	// 	if (layer->on_update) layer->on_update(app);
-	// }
+	for (usize i = 0; i < layer_amount; i++) {
+
+		// shrlayer *layer = shrlayer_stack_get(&app->layer_stack, i);
+		shrlayer *layer = &app->layers[i];
+		if (layer->on_update) layer->on_update(app);
+	}
 
 	shrapp_update(app);
 	shrinput_update();
@@ -64,7 +66,7 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *d
 
 	switch (code) {
 		case EVENT_APP_QUIT: {
-			TC_INFO("WINDOW_CLOSE recieved, shutting down.");
+			SHR_INFO("WINDOW_CLOSE recieved, shutting down.");
 			app->state = APP_STATE_QUIT_REQUESTED;
 			return true;
 		}
@@ -136,7 +138,7 @@ bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *dat
 		
 		u16 key_code = data->key_code;
 		if (key_code == KEY_A) {
-			TC_TRACE("A PRESSED!");
+			SHR_TRACE("A PRESSED!");
 		}
 	}
 
@@ -169,7 +171,7 @@ void shrapp_set_scene(shrapp *app, const char *name) {
 
 		if (app->scene_list.scenes[i]->name == name) {
 
-			TC_INFO("Set scene to: %s", name);
+			SHR_INFO("Set scene to: %s", name);
 
 			app->current_scene = app->scene_list.scenes[i];
 			break;
@@ -212,7 +214,7 @@ void shrapp_destroy(shrapp *app) {
 	free(app);
 	app = NULL;
 
-	TC_INFO("Destroyed App.");
+	SHR_INFO("Destroyed App.");
 }
 
 // Sokol callback functions.
@@ -241,7 +243,7 @@ void sokol_cleanup(void) {
 	shrrenderer_cleanup();
 	sg_shutdown();
 
-	TC_INFO("Terminating Engine.");
+	SHR_INFO("Terminating Engine.");
 }
 
 // Handle the event data sokol gives out.
@@ -299,9 +301,9 @@ void sokol_log_callback(
 	(void)log_level; (void)log_item_id; (void)filename_or_null; (void)user_data;
 
 	switch (log_level) {
-		case 0: TC_FATAL("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-		case 1: TC_ERROR("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-		case 2: TC_WARN("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-		case 3: TC_INFO("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
+		case 0: SHR_FATAL("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
+		case 1: SHR_ERROR("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
+		case 2: SHR_WARN("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
+		case 3: SHR_INFO("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
 	}
 }

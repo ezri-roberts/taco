@@ -3,15 +3,15 @@
 //
 void dbui_layer_attach(void *data) {
 
-	// dbui_init();
-	TC_TRACE("[DBUI] Layer Attached.");
+	dbui_init();
+	SHR_TRACE("[DBUI] Layer Attached.");
 }
 
 void dbui_layer_update(void *data) {
 
 	(void)data;
 
-	// dbui_update();
+	dbui_update();
 }
 
 // bool dbui_layer_on_event(const shrevent *event, void *data) {
@@ -55,11 +55,11 @@ void shrapp_update(shrapp *app) {
 void shrapp_draw(shrapp *app) {
 
 	(void)app;
-	// dbui_render();
+	dbui_render();
 }
 
 void shrapp_cleanup(shrapp *app) {
 
-	// dbui_cleanup();
+	dbui_cleanup();
 	shrapp_destroy(app);
 }

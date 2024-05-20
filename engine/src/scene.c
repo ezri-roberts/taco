@@ -26,7 +26,7 @@ shrscene_list shrscene_list_new() {
 
 void shrscene_list_add(shrscene_list *list, shrscene *scene) {
 
-	TC_INFO("Added Scene: '0x%x'", scene);
+	SHR_INFO("Added Scene: '0x%x'", scene);
 
 	if (list->used == list->size) {
 		list->size *= 2;
@@ -37,13 +37,13 @@ void shrscene_list_add(shrscene_list *list, shrscene *scene) {
 
 void shrscene_list_destroy(shrscene_list *list) {
 
-	TC_INFO("Destroying Scene List: '0x%x'", list);
+	SHR_INFO("Destroying Scene List: '0x%x'", list);
 
 	for (usize i = 0; i < list->used; i++) {
 
 		shrscene *scene = list->scenes[i];
 
-		TC_INFO("Destroying Scene: '0x%x'", scene);
+		SHR_INFO("Destroying Scene: '0x%x'", scene);
 		// shrlayer_stack_destory(&scene->layer_stack);
 		free(scene);
 		scene = NULL;
