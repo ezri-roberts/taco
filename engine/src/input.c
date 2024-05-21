@@ -37,11 +37,11 @@ void shrinput_process_button(const sapp_event *data, bool pressed) {
 
 	shrinput_button button = (shrinput_button)data->mouse_button;
 
-	if (state.mouse_current.buttons[button] != pressed) {
+	// if (state.mouse_current.buttons[button] != pressed) {
 
 		state.keyboard_current.keys[button] = pressed;
 		shrevent_fire(pressed ? EVENT_MOUSE_PRESS : EVENT_MOUSE_RELEASE, 0, data);
-	}
+	// }
 }
 
 // Keyboard Input.

@@ -38,7 +38,7 @@ void dbui_update() {
 	nk_end(ctx);
 }
 
-bool dbui_event(u16 code, void *sender, void *listener, const sapp_event *data) {
+bool dbui_event(const sapp_event *data) {
 	// TODO: Get events to layers and nuklear.
 	return snk_handle_event(data);
 }

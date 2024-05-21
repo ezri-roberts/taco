@@ -1,5 +1,6 @@
 #include "application.h"
 #include "containers/darray.h"
+#include "shrpch.h"
 
 shrapp* shrapp_new() {
 
@@ -263,7 +264,8 @@ void sokol_event_callback(const sapp_event *e) {
 		}
 			// shrevent_fire(&app->event_state, EVENT_KEY_RELEASE, 0, e); break;
 			// event = shrevent_new(KEY_RELEASE, e); break;
-		// case SAPP_EVENTTYPE_MOUSE_MOVE:
+		case SAPP_EVENTTYPE_MOUSE_MOVE:
+			shrevent_fire(EVENT_MOUSE_MOVE, 0, e); break;
 			// event = shrevent_new(MOUSE_MOVE, e); break;
 		// case SAPP_EVENTTYPE_MOUSE_SCROLL:
 			// event = shrevent_new(MOUSE_SCROLL, e); break;
@@ -273,11 +275,20 @@ void sokol_event_callback(const sapp_event *e) {
 			shrinput_process_button(e, pressed);
 			break;
 		}
+		case SAPP_EVENTTYPE_MOUSE_ENTER:
+			shrevent_fire(EVENT_MOUSE_ENTER, 0, e); break;
+		case SAPP_EVENTTYPE_MOUSE_LEAVE:
+			shrevent_fire(EVENT_MOUSE_LEAVE, 0, e); break;
+		case SAPP_EVENTTYPE_MOUSE_SCROLL:
+			shrevent_fire(EVENT_MOUSE_SCROLL, 0, e); break;
 			// event = shrevent_new(MOUSE_RELEASE, e); break;
 		// case SAPP_EVENTTYPE_RESIZED:
 			// event = shrevent_new(WINDOW_RESIZE, e); break;
 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
 			shrevent_fire(EVENT_APP_QUIT, 0, e); break;
+
+		case SAPP_EVENTTYPE_CHAR:
+			shrevent_fire(EVENT_CHAR, 0, e); break;
 			// event = shrevent_new(WINDOW_CLOSE, e); break;
 		// case SAPP_EVENTTYPE_FOCUSED:
 			// event = shrevent_new(WINDOW_FOCUS, e); break;

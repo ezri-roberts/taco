@@ -11,10 +11,13 @@ typedef enum {
 	EVENT_NONE = 0,
 	EVENT_WINDOW_RESIZE, EVENT_WINDOW_FOCUS, EVENT_WINDOW_UNFOCUS,
 	EVENT_WINDOW_ICONIFIED, EVENT_WINDOW_MOVE,
-	EVENT_APP_QUIT,
 	EVENT_KEY_PRESS, EVENT_KEY_RELEASE,
-	EVENT_MOUSE_PRESS, EVENT_MOUSE_RELEASE, EVENT_MOUSE_MOVE, EVENT_MOUSE_SCROLL,
-	EVENT_MAX_CODE = 0xFF
+	EVENT_MOUSE_PRESS, EVENT_MOUSE_RELEASE,
+	EVENT_MOUSE_MOVE, EVENT_MOUSE_SCROLL,
+	EVENT_MOUSE_LEAVE, EVENT_MOUSE_ENTER,
+	EVENT_CHAR,
+	EVENT_APP_QUIT,
+	EVENT_MAX_CODE
 
 } shrevent_code;
 
@@ -57,5 +60,7 @@ bool shrevent_fire(u16 code, void *sender, const sapp_event *data);
 bool shrevent_in_category(shrevent_code code, shrevent_category category);
 bool shrevent_register_category(u16 category, void *listener, shrevent_callback on_event);
 bool shrevent_unregister_category(u16 category, void *listener, shrevent_callback on_event);
+bool shrevent_register_multi(u16 events[EVENT_MAX_CODE], void *listener, shrevent_callback on_event);
+bool shrevent_unregister_multi(u16 events[EVENT_MAX_CODE], void *listener, shrevent_callback on_event);
 
 #endif // !EVENT_H
