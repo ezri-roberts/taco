@@ -34,19 +34,21 @@ typedef struct {
 	u32 fps;
 } shrapp;
 
-shrapp* shrapp_new();
-void shrapp_run(void *data);
+void shrapp_initialize();
+void shrapp_run();
 shrapp* shrapp_create(); // Defined in client.
-void shrapp_destroy(shrapp *app);
+void shrapp_shutdown();
+
+shrapp* shrapp_get();
 // void shrapp_on_event(shrevent *event, void *data);
 bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data);
 bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data);
-bool shrapp_check_state(shrapp *app, shrapp_state state);
-void shrapp_set_scene(shrapp *app, const char *name);
-void shrapp_quit(shrapp *app);
+bool shrapp_check_state(shrapp_state state);
+void shrapp_set_scene(const char *name);
+void shrapp_quit();
 
 // void shrapp_layer_push(shrapp *app, shrlayer *layer);
-void shrapp_layer_new(shrapp *app, void *on_attach, void *on_detach, void *on_update);
+void shrapp_layer_new(void *on_attach, void *on_detach, void *on_update);
 void shrapp_overlay_push(shrapp *app, shrlayer *layer);
 
 // Event callbacks.
@@ -54,10 +56,10 @@ void shrapp_overlay_push(shrapp *app, shrlayer *layer);
 // bool shrapp_on_key(const shrevent *event, void *data);
 
 // Defined in user implementation.
-extern void shrapp_init(shrapp *app);
-extern void shrapp_update(shrapp *app);
-extern void shrapp_draw(shrapp *app);
-extern void shrapp_cleanup(shrapp *app);
+extern void shrapp_start();
+extern void shrapp_update();
+extern void shrapp_draw();
+extern void shrapp_cleanup();
 
 // Sokol callback functions.
 void sokol_init(void);

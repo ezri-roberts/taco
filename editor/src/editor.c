@@ -1,20 +1,18 @@
 #include "shraybn.h"
 
-void shrapp_init(shrapp *app) {
-	(void)app;
+void shrapp_start() {
+
 }
 
-void shrapp_update(shrapp *app) {
-	(void)app;
+void shrapp_update() {
+
 }
 
-void shrapp_draw(shrapp *app) {
-	(void)app;
+void shrapp_draw() {
+
 }
 
-void shrapp_cleanup(shrapp *app) {
+void shrapp_cleanup() {
 
-	(void)app;
-
-	shrapp_destroy(app);
+	shrapp_shutdown();
 }
