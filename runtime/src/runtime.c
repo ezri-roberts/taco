@@ -34,7 +34,9 @@ void shrapp_init(shrapp *app) {
 		dbui_layer_update
 	);
 
-	shrevent_register_multi(events, 0, dbui_layer_on_event);
+	// shrevent_register_multi(events, 0, dbui_layer_on_event);
+	shrevent_register_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_on_event);
+	shrevent_register_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_on_event);
 }
 
 void shrapp_update(shrapp *app) {
@@ -59,7 +61,9 @@ void shrapp_draw(shrapp *app) {
 
 void shrapp_cleanup(shrapp *app) {
 
-	shrevent_unregister_multi(events, 0, dbui_layer_on_event);
+	// shrevent_unregister_multi(events, 0, dbui_layer_on_event);
+	shrevent_unregister_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_on_event);
+	shrevent_unregister_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_on_event);
 	dbui_cleanup();
 	shrapp_destroy(app);
 }

@@ -118,6 +118,63 @@ bool shrevent_unregister_multi(u16 *events, void *listener, shrevent_callback on
 	return false;
 }
 
+bool shrevent_register_category(u16 category, void *listener, shrevent_callback on_event) {
+
+	for (u8 i = 0; i <= EVENT_MAX_CODE; i++) {
+		if (shrevent_in_category(i, category)) {
+			if (!shrevent_register(i, listener, on_event)) return false;
+		}
+	}
+
+	return true;
+}
+
+bool shrevent_unregister_category(u16 category, void *listener, shrevent_callback on_event) {
+
+	for (u8 i = 0; i <= EVENT_MAX_CODE; i++) {
+		if (shrevent_in_category(i, category)) {
+			if (!shrevent_unregister(i, listener, on_event)) return false;
+		}
+	}
+
+	return true;
+}
+
+bool shrevent_in_category(shrevent_code code, shrevent_category category) {
+
+	u16 cat;
+
+	u16 cat_key_input = EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT;
+	u16 cat_mouse_input = EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_INPUT;
+
+	switch (code) {
+		case EVENT_WINDOW_RESIZE:
+		case EVENT_WINDOW_FOCUS:
+		case EVENT_WINDOW_UNFOCUS:
+		case EVENT_WINDOW_ICONIFIED:
+		case EVENT_WINDOW_MOVE:
+			cat = EVENT_CATEGORY_WINDOW; break;
+		case EVENT_KEY_PRESS:
+		case EVENT_KEY_RELEASE:
+			cat = cat_key_input; break;
+		case EVENT_MOUSE_PRESS:
+		case EVENT_MOUSE_RELEASE:
+		case EVENT_MOUSE_SCROLL:
+			cat = cat_mouse_input; break;
+		case EVENT_MOUSE_MOVE:
+		case EVENT_MOUSE_LEAVE:
+		case EVENT_MOUSE_ENTER:
+			cat = EVENT_CATEGORY_MOUSE; break;
+		case EVENT_CHAR:
+			cat = cat_key_input; break;
+		case EVENT_APP_QUIT:
+			cat = EVENT_CATEGORY_APPLICATION; break;
+		default: break;
+	}
+
+	return (cat & category);
+}
+
 // shrevent shrevent_new(const shrevent_code type, const sapp_event *data) {
 //
 // 	shrevent event;
