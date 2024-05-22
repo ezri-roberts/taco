@@ -22,11 +22,10 @@ bool dbui_layer_on_event(u16 code, void *sender, void *listener, const sapp_even
 
 void shrapp_start() {
 
-	shrapp_layer_new(
-		dbui_layer_attach,
-		NULL,
-		dbui_layer_update
-	);
+	shrapp_layer_new((shrlayer_desc) {
+		.on_attach = dbui_layer_attach,
+		.on_update = dbui_layer_update
+	});
 
 	shrevent_register_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_on_event);
 	shrevent_register_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_on_event);

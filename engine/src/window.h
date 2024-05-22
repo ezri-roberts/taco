@@ -23,9 +23,6 @@ void shrwindow_shutdown();
 
 shrwindow_data* shrwindow_get_data();
 
-// Event callbacks.
-// bool shrwindow_on_resize(const shrevent *event, void *data);
-// bool shrwindow_on_focus(const shrevent *event, void *data);
-// bool shrwindow_on_unfocus(const shrevent *event, void *data);
+bool shrwindow_on_event(u16 code, void *sender, void *listener, const sapp_event *data);
 
 #endif // !WINDOW_H

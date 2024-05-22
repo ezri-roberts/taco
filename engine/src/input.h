@@ -2,7 +2,7 @@
 #define INPUT_H
 
 #include "shrpch.h"
-#include "input_codes.h"
+#include "keycodes.h"
 #include "event/event.h"
 
 #define BIT_VALUE     0
@@ -23,18 +23,13 @@ typedef enum shrinput_button {
 	BUTTON_MAX
 } shrinput_button;
 
-// typedef struct {
-//
-// 	u8 inputs[INPUT_CODE_NUM];
-//
-// } shrinput_state;
-
 typedef struct shrkeyboard_state {
 	bool keys[256];
 } shrkeyboard_state;
 
 typedef struct shrmouse_state {
-	i16 x; i16 y;
+	// i16 x; i16 y;
+	vec2 position;
 	u8 buttons[BUTTON_MAX];
 } shrmouse_state;
 
@@ -50,6 +45,8 @@ void shrinput_shutdown();
 void shrinput_update();
 void shrinput_process_key(const sapp_event *data, bool pressed);
 void shrinput_process_button(const sapp_event *data, bool pressed);
+void shrinput_process_mouse_move(const sapp_event *data);
+void shrinput_process_mouse_wheel(const sapp_event *data);
 
 // Keyboard Input.
 bool input_key_down(shrinput_key key);
@@ -62,15 +59,7 @@ bool input_button_down(shrinput_button button);
 bool input_button_up(shrinput_button button);
 bool input_was_button_down(shrinput_button button);
 bool input_was_button_up(shrinput_button button);
-// shrinput_state shrinput_state_new();
-// bool shrinput_state_handle_event(shrinput_state *state, u16 code);
-// void shrinput_state_update(shrinput_state *state);
-// void shrinput_state_reset(shrinput_state *state);
-// void _handle_key(shrinput_state *state, u16 code);
-// void _handle_mouse(shrinput_state *state, u16 code);
-//
-// bool input_down(u16 input_code);
-// bool input_pressed(u16 input_code);
-// bool input_released(u16 input_code);
+void shrinput_get_mouse_positon(vec2 *position);
+void shrinput_get_previous_mouse_positon(vec2 *position);
 
 #endif // !INPUT_H

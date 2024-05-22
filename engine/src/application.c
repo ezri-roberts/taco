@@ -45,7 +45,7 @@ void shrapp_shutdown() {
 	shrevent_shutdown();
 	shrinput_shutdown();
 
-	SHR_INFO("Shutdown app.");
+	SHR_INFO("App shutdown.");
 	initialized = false;
 }
 
@@ -86,7 +86,6 @@ void shrapp_quit() {
 	app.state = APP_STATE_QUIT_REQUESTED;
 }
 
-// void shrapp_on_event(shrevent *event, void *data) {
 bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
 
 	shrapp *app = (shrapp*)sapp_userdata();
@@ -113,15 +112,16 @@ bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *dat
 		}
 	}
 
+	// Was not handled.
 	return false;
 }
 
-void shrapp_layer_new(void *on_attach, void *on_detach, void *on_update) {
+void shrapp_layer_new(shrlayer_desc desc) {
 
 	shrlayer layer;
-	layer.on_attach = on_attach;
-	layer.on_update = on_update;
-	layer.on_detach = on_detach;
+	if (desc.on_attach) layer.on_attach = desc.on_attach;
+	if (desc.on_update) layer.on_update = desc.on_update;
+	if (desc.on_detach) layer.on_detach= desc.on_detach;
 
 	if (layer.on_attach) layer.on_attach(0);
 	darray_push(app.layers, layer);
@@ -168,9 +168,6 @@ void sokol_cleanup(void) {
 // Handle the event data sokol gives out.
 void sokol_event_callback(const sapp_event *e) {
 
-	// shrevent event;
-	shrapp* app = (shrapp*)sapp_userdata();
-
 	switch (e->type) {
 		case SAPP_EVENTTYPE_KEY_DOWN:
 		case SAPP_EVENTTYPE_KEY_UP: {
@@ -178,20 +175,21 @@ void sokol_event_callback(const sapp_event *e) {
 			shrinput_process_key(e, pressed);
 			break;
 		}
-		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			shrevent_fire(EVENT_MOUSE_MOVE, 0, e); break;
 		case SAPP_EVENTTYPE_MOUSE_DOWN:
 		case SAPP_EVENTTYPE_MOUSE_UP: {
 			bool pressed = (e->type == SAPP_EVENTTYPE_MOUSE_DOWN);
 			shrinput_process_button(e, pressed);
 			break;
 		}
+		case SAPP_EVENTTYPE_MOUSE_MOVE:
+			// shrevent_fire(EVENT_MOUSE_MOVE, 0, e); break;
+			shrinput_process_mouse_move(e);
+		case SAPP_EVENTTYPE_MOUSE_SCROLL:
+			shrinput_process_mouse_wheel(e);
 		case SAPP_EVENTTYPE_MOUSE_ENTER:
 			shrevent_fire(EVENT_MOUSE_ENTER, 0, e); break;
 		case SAPP_EVENTTYPE_MOUSE_LEAVE:
 			shrevent_fire(EVENT_MOUSE_LEAVE, 0, e); break;
-		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			shrevent_fire(EVENT_MOUSE_SCROLL, 0, e); break;
 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
 			shrevent_fire(EVENT_APP_QUIT, 0, e); break;
 		case SAPP_EVENTTYPE_CHAR:
