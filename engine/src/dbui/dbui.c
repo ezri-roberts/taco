@@ -44,10 +44,6 @@ bool dbui_event(const sapp_event *data) {
 	return snk_handle_event(data);
 }
 
-// bool dbui_event(const shrevent *event) {
-// 	return snk_handle_event(&event->data);
-// }
-
 void dbui_render() {
 	snk_render(sapp_width(), sapp_height());
 }

@@ -11,6 +11,7 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
 
 	shrapp_initialize();
 	shrapp *app = shrapp_get();
+	shrwindow_data *win_data = shrwindow_get_data();
 
     return (sapp_desc){
         .init_cb = sokol_init,
@@ -18,10 +19,10 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
         .cleanup_cb = sokol_cleanup,
 		.event_cb = sokol_event_callback,
 		.user_data = app,
-        .width = (int)app->window.data.width,
-        .height = (int)app->window.data.height,
+        .width = (int)win_data->width,
+        .height = (int)win_data->height,
 		.swap_interval = 1,					// 1 for vsync.
-        .window_title = app->window.data.title,
+        .window_title = win_data->title,
         .icon.sokol_default = true,
         .logger.func = sokol_log_callback,
     };

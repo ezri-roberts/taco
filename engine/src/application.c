@@ -8,16 +8,19 @@ void shrapp_initialize() {
 	memset(&app, 0, sizeof(shrapp));
 	initialized = true;
 
-	SHR_INFO("Initializing Engine.");
-	SHR_INFO("Creating App.");
+	SHR_INFO("Initializing engine.");
 
-	app.window = shrwindow_new("Shraybn", 1280, 720);
+	if (!shrwindow_initialize("Shraybn", 1280, 720)) {
+		SHR_ERROR("Window initialization failed.");
+	}
 
 	if (!shrevent_initialize()) {
 		SHR_ERROR("Event system initialization failed.");
 	}
 
-	shrinput_initialize();
+	if (!shrinput_initialize()) {
+		SHR_ERROR("Input system initialization failed.");
+	}
 
 	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
 	shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
@@ -27,6 +30,7 @@ void shrapp_initialize() {
 	app.scene_list = shrscene_list_new();
 	
 	app.state = APP_STATE_RUNNING;
+	SHR_INFO("App initialized.");
 }
 
 void shrapp_shutdown() {

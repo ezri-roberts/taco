@@ -45,7 +45,7 @@ typedef struct shrinput_state {
 	shrmouse_state mouse_previous;
 } shrinput_state;
 
-void shrinput_initialize();
+bool shrinput_initialize();
 void shrinput_shutdown();
 void shrinput_update();
 void shrinput_process_key(const sapp_event *data, bool pressed);

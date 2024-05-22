@@ -1,17 +1,27 @@
 #include "window.h"
 
-shrwindow shrwindow_new(const char *title, u32 width, u32 height) {
+static shrwindow window = {};
+static bool initialized = false;
 
-	SHR_INFO("Creating Window.");
+bool shrwindow_initialize(const char *title, u32 width, u32 height) {
+	if (initialized) return false;
 
-	shrwindow window;
+	initialized = false;
+	memset(&window, 0, sizeof(shrwindow));
 
 	window.data.title = title;
 	window.data.width = width;
 	window.data.height = height;
 	window.data.target_fps = 60;
 
-	return window;
+	initialized = true;
+
+	SHR_INFO("Window initialized.");
+	return true;
+}
+
+shrwindow_data* shrwindow_get_data() {
+	return &window.data;
 }
 
 // bool shrwindow_on_resize(const shrevent *event, void *data) {
@@ -38,8 +48,9 @@ shrwindow shrwindow_new(const char *title, u32 width, u32 height) {
 // 	return true;
 // }
 
-void shrwindow_destroy(shrwindow *window) {
+void shrwindow_shutdown() {
 
-	(void)window;
-	SHR_INFO("Destroyed Window.");
+	// TODO: Potential shutdown routines.
+	initialized = false;
+	SHR_INFO("Window shutdown.");
 }

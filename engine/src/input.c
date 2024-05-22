@@ -3,15 +3,22 @@
 static shrinput_state state = {};
 static bool initialized = false;
 
-void shrinput_initialize() {
+bool shrinput_initialize() {
+	if (initialized) return false;
+
+	initialized = false;
 	memset(&state, 0, sizeof(shrinput_state));
+
 	initialized = true;
+
 	SHR_INFO("Input system initialized.");
+	return true;
 }
 
 void shrinput_shutdown() {
 	// TODO: Potential shutdown routines.
 	initialized = false;
+	SHR_INFO("Input system shutdown.");
 }
 
 void shrinput_update() {

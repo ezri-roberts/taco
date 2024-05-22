@@ -4,9 +4,8 @@ static shrevent_state state;
 static bool initialized;
 
 bool shrevent_initialize() {
-	if (initialized) {
-		return false;
-	}
+	if (initialized) return false;
+
 	initialized = false;
 	memset(&state, 0, sizeof(shrevent_state));
 
@@ -17,6 +16,7 @@ bool shrevent_initialize() {
 }
 
 void shrevent_shutdown() {
+	if (!initialized) return;
 
 	for (u16 i = 0; i < MAX_MESSAGE_CODES; i++) {
 	
@@ -25,7 +25,7 @@ void shrevent_shutdown() {
 			state.registered[i].events = 0;
 		}
 	}
-	SHR_INFO("Event System Shutdown.");
+	SHR_INFO("Event system shutdown.");
 }
 
 bool shrevent_register(u16 code, void *listener, shrevent_callback on_event) {

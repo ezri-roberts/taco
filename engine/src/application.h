@@ -22,7 +22,6 @@ typedef struct {
 
 	shrrenderer renderer;
 
-	shrwindow window;
 	shrapp_state state;
 
 	shrlayer *layers;

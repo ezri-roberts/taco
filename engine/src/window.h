@@ -5,26 +5,23 @@
 #include "event/event.h"
 #include "input.h"
 
-typedef struct {
+typedef struct shrwindow_data {
 
 	const char *title;
 	u32 width;
 	u32 height;
 	u32 target_fps;
 	bool vsync;
-
 } shrwindow_data;
 
 typedef struct {
-
-	void *handle;
 	shrwindow_data data;
-
 } shrwindow;
 
-shrwindow shrwindow_new(const char *title, u32 width, u32 height);
-void shrwindow_destroy(shrwindow *window);
-bool shrwindow_should_close(shrwindow *window);
+bool shrwindow_initialize(const char *title, u32 width, u32 height);
+void shrwindow_shutdown();
+
+shrwindow_data* shrwindow_get_data();
 
 // Event callbacks.
 // bool shrwindow_on_resize(const shrevent *event, void *data);
