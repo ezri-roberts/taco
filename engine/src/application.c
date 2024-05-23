@@ -3,39 +3,52 @@
 static shrapp app = {};
 static bool initialized = false;
 
-void shrapp_initialize() {
+bool shrapp_initialize() {
 
 	memset(&app, 0, sizeof(shrapp));
 	initialized = true;
 
-	SHR_INFO("Initializing engine.");
-
 	if (!shrwindow_initialize("Shraybn", 1280, 720)) {
 		SHR_ERROR("Window initialization failed.");
+		return false;
 	}
 
 	if (!shrevent_initialize()) {
 		SHR_ERROR("Event system initialization failed.");
+		return false;
 	}
 
 	if (!shrinput_initialize()) {
 		SHR_ERROR("Input system initialization failed.");
+		return false;
+	}
+
+	if (!shrrenderer_initialize()) {
+		SHR_ERROR("Renderer initialization failed.");
+		return false;
 	}
 
 	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
+	shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
+	shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
 	shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	app.layers = darray_create(shrlayer);
 	app.scene_list = shrscene_list_new();
 	
-	app.state = APP_STATE_RUNNING;
+	app.running = true;
+	app.suspended = false;
+
 	SHR_INFO("App initialized.");
+	return true;
 }
 
 void shrapp_shutdown() {
 
 	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
 	shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
@@ -44,16 +57,21 @@ void shrapp_shutdown() {
 
 	shrevent_shutdown();
 	shrinput_shutdown();
+	shrrenderer_shutdown();
 
 	SHR_INFO("App shutdown.");
 	initialized = false;
 }
 
-void shrapp_run() {
-	if (!initialized) return;
+bool shrapp_run() {
 
-	switch (app.state) {
-		case APP_STATE_RUNNING: {
+	if (!initialized) {
+		SHR_ERROR("App not initialized.");
+		return false;
+	}
+
+	if (app.running) {
+		if (!app.suspended) {
 
 			usize layer_amount = darray_length(app.layers);
 			for (usize i = 0; i < layer_amount; i++) {
@@ -65,35 +83,34 @@ void shrapp_run() {
 			shrapp_update();
 			shrinput_update();
 
-		} break;
+			shrrenderer_begin();
+			shrapp_draw();
+			shrrenderer_end();
+		}
 
-		case APP_STATE_QUIT_REQUESTED:
-			sapp_quit(); break;
-
-		default: break;
+		return true;
 	}
-}
 
-shrapp* shrapp_get() {
-	return &app;
-}
-
-bool shrapp_check_state(shrapp_state state) {
-	return (app.state == state);
-}
-
-void shrapp_quit() {
-	app.state = APP_STATE_QUIT_REQUESTED;
+	sapp_quit();
+	return true;
 }
 
 bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
 
-	shrapp *app = (shrapp*)sapp_userdata();
-
 	switch (code) {
 		case EVENT_APP_QUIT: {
-			SHR_INFO("WINDOW_CLOSE recieved, shutting down.");
-			app->state = APP_STATE_QUIT_REQUESTED;
+			SHR_INFO("[EVENT][WINDOW_CLOSE] recieved, shutting down.");
+			app.running = false;
+			return true;
+		}
+		case EVENT_WINDOW_UNFOCUS: {
+			SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
+			app.suspended = true;
+			return true;
+		}
+		case EVENT_WINDOW_FOCUS: {
+			SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
+			app.suspended = false;
 			return true;
 		}
 	}
@@ -103,14 +120,6 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *d
 }
 
 bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data) {
-
-	if (code == EVENT_KEY_PRESS) {
-		
-		u16 key_code = data->key_code;
-		if (key_code == KEY_A) {
-			SHR_TRACE("A PRESSED!");
-		}
-	}
 
 	// Was not handled.
 	return false;
@@ -127,92 +136,10 @@ void shrapp_layer_new(shrlayer_desc desc) {
 	darray_push(app.layers, layer);
 }
 
-void shrapp_set_scene(const char *name) {
-
-	for (usize i = 0; i <= app.scene_list.used; i++) {
-
-		if (app.scene_list.scenes[i]->name == name) {
-
-			SHR_INFO("Set scene to: %s", name);
-
-			app.current_scene = app.scene_list.scenes[i];
-			break;
-		}
-	}
+shrapp* shrapp_get() {
+	return &app;
 }
 
-// Sokol callback functions.
-void sokol_init(void) {
-
-	shrrenderer_init(&app.renderer);
-	shrapp_start();
-}
-
-void sokol_frame(void) {
-
-	shrapp_run();
-	shrrenderer_begin(&app.renderer);
-	shrapp_draw();
-	shrrenderer_end();
-}
-
-void sokol_cleanup(void) {
-
-	shrapp_cleanup();
-	shrrenderer_cleanup();
-	sg_shutdown();
-
-	SHR_INFO("Terminating Engine.");
-}
-
-// Handle the event data sokol gives out.
-void sokol_event_callback(const sapp_event *e) {
-
-	switch (e->type) {
-		case SAPP_EVENTTYPE_KEY_DOWN:
-		case SAPP_EVENTTYPE_KEY_UP: {
-			bool pressed = (e->type == SAPP_EVENTTYPE_KEY_DOWN);
-			shrinput_process_key(e, pressed);
-			break;
-		}
-		case SAPP_EVENTTYPE_MOUSE_DOWN:
-		case SAPP_EVENTTYPE_MOUSE_UP: {
-			bool pressed = (e->type == SAPP_EVENTTYPE_MOUSE_DOWN);
-			shrinput_process_button(e, pressed);
-			break;
-		}
-		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			// shrevent_fire(EVENT_MOUSE_MOVE, 0, e); break;
-			shrinput_process_mouse_move(e);
-		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			shrinput_process_mouse_wheel(e);
-		case SAPP_EVENTTYPE_MOUSE_ENTER:
-			shrevent_fire(EVENT_MOUSE_ENTER, 0, e); break;
-		case SAPP_EVENTTYPE_MOUSE_LEAVE:
-			shrevent_fire(EVENT_MOUSE_LEAVE, 0, e); break;
-		case SAPP_EVENTTYPE_QUIT_REQUESTED:
-			shrevent_fire(EVENT_APP_QUIT, 0, e); break;
-		case SAPP_EVENTTYPE_CHAR:
-			shrevent_fire(EVENT_CHAR, 0, e); break;
-		default: break;
-	}
-}
-
-void sokol_log_callback(
-        const char* tag,                // always "sapp"
-        u32 log_level,             // 0=panic, 1=error, 2=warning, 3=info
-        u32 log_item_id,           // SAPP_LOGITEM_*
-        const char* message_or_null,    // a message string, may be nullptr in release mode
-        u32 line_nr,               // line number in sokol_app.h
-        const char* filename_or_null,   // source filename, may be nullptr in release mode
-        void* user_data) {
-
-	(void)log_level; (void)log_item_id; (void)filename_or_null; (void)user_data;
-
-	switch (log_level) {
-		case 0: SHR_FATAL("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-		case 1: SHR_ERROR("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-		case 2: SHR_WARN("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-		case 3: SHR_INFO("[%s][sokol_app.h:%d] %s", tag, line_nr, message_or_null); break;
-	}
+void shrapp_quit() {
+	app.running = false;
 }

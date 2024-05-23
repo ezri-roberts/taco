@@ -4,8 +4,9 @@ fips_dir(src)
 fips_files(
 	core.h
 	shrlog.h
+	engine.c engine.h
 	entrypoint.h
-	input_codes.h
+	keycodes.h
 	input.c input.h
 	layer.c layer.h
 	scene.c scene.h

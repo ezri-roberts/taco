@@ -1,6 +1,7 @@
 #ifndef ENTRYPOINT_H
 #define ENTRYPOINT_H
 
+#include "engine.h"
 #include "application.h"
 
 #if defined(SHR_PLATFORM_LINUX) || defined(SHR_PLATFORM_WINDOWS)
@@ -9,22 +10,20 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
 
     (void)argc; (void)argv;
 
-	shrapp_initialize();
-	shrapp *app = shrapp_get();
-	shrwindow_data *win_data = shrwindow_get_data();
+	shrwindow_data win_data;
+	shrwindow_get_data(&win_data);
 
     return (sapp_desc){
-        .init_cb = sokol_init,
-        .frame_cb = sokol_frame,
-        .cleanup_cb = sokol_cleanup,
-		.event_cb = sokol_event_callback,
-		.user_data = app,
-        .width = (int)win_data->width,
-        .height = (int)win_data->height,
+        .init_cb = engine_initialize,
+        .frame_cb = engine_update,
+        .cleanup_cb = engine_shutdown,
+		.event_cb = engine_event,
+        .width = (int)win_data.width,
+        .height = (int)win_data.height,
 		.swap_interval = 1,					// 1 for vsync.
-        .window_title = win_data->title,
+        .window_title = win_data.title,
         .icon.sokol_default = true,
-        .logger.func = sokol_log_callback,
+        .logger.func = engine_log_callback,
     };
 
 }

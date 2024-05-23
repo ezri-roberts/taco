@@ -25,7 +25,9 @@ void shrevent_shutdown() {
 			state.registered[i].events = 0;
 		}
 	}
+
 	SHR_INFO("Event system shutdown.");
+	initialized = false;
 }
 
 bool shrevent_register(u16 code, void *listener, shrevent_callback on_event) {

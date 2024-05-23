@@ -1,5 +1,4 @@
 #include "input.h"
-#include "cglm/types.h"
 
 static shrinput_state state = {};
 static bool initialized = false;
@@ -9,6 +8,9 @@ bool shrinput_initialize() {
 
 	initialized = false;
 	memset(&state, 0, sizeof(shrinput_state));
+
+	state.mouse_current.position[0] = 0.0f;
+	state.mouse_current.position[1] = 0.0f;
 
 	initialized = true;
 
@@ -57,14 +59,14 @@ void shrinput_process_mouse_move(const sapp_event *data) {
 	const i16 x = data->mouse_x;
 	const i16 y = data->mouse_y;
 
-	vec2 *pos = &state.mouse_current.position;
 
-	if (*pos[0] != x || *pos[1] != y) {
+	if (state.mouse_current.position[0] != x || state.mouse_current.position[1] != y) {
 
-		// SHR_TRACE("Mouse pos: %i, %i", x, y);
+		glm_vec2_copy(
+			(vec2){data->mouse_x, data->mouse_y},
+			state.mouse_current.position
+		);
 
-		*pos[0] = x;
-		*pos[1] = y;
 		shrevent_fire(EVENT_MOUSE_MOVE, 0, data);
 	}
 }
@@ -115,24 +117,22 @@ bool input_was_button_up(shrinput_button button) {
 	return state.mouse_previous.buttons[button] == false;
 }
 
-void shrinput_get_mouse_positon(vec2 *position) {
+void shrinput_get_mouse_positon(vec2 position) {
 	if (!initialized) {
-		*position[0] = 0;
-		*position[1] = 0;
+		position[0] = 0;
+		position[1] = 0;
 		return;	
 	}
 
-	*position[0] = state.mouse_current.position[0];
-	*position[1] = state.mouse_current.position[1];
+	glm_vec2_copy(state.mouse_current.position, position);
 }
 
-void shrinput_get_previous_mouse_positon(vec2 *position) {
+void shrinput_get_previous_mouse_positon(vec2 position) {
 	if (!initialized) {
-		*position[0] = 0;
-		*position[1] = 0;
+		position[0] = 0;
+		position[1] = 0;
 		return;	
 	}
 
-	*position[0] = state.mouse_current.position[0];
-	*position[1] = state.mouse_current.position[1];
+	glm_vec2_copy(state.mouse_previous.position, position);
 }

@@ -11,11 +11,9 @@ typedef struct {
 
 } shrrenderer;
 
-void shrrenderer_init(shrrenderer *renderer);
-void shrrenderer_begin(shrrenderer *renderer);
+bool shrrenderer_initialize();
+void shrrenderer_begin();
 void shrrenderer_end();
-void shrrenderer_cleanup();
-
-void _shrrenderer_sokol_init(shrrenderer *renderer);
+void shrrenderer_shutdown();
 
 #endif // !RENDERER_H

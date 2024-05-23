@@ -28,7 +28,6 @@ typedef struct shrkeyboard_state {
 } shrkeyboard_state;
 
 typedef struct shrmouse_state {
-	// i16 x; i16 y;
 	vec2 position;
 	u8 buttons[BUTTON_MAX];
 } shrmouse_state;
@@ -59,7 +58,7 @@ bool input_button_down(shrinput_button button);
 bool input_button_up(shrinput_button button);
 bool input_was_button_down(shrinput_button button);
 bool input_was_button_up(shrinput_button button);
-void shrinput_get_mouse_positon(vec2 *position);
-void shrinput_get_previous_mouse_positon(vec2 *position);
+void shrinput_get_mouse_positon(vec2 position);
+void shrinput_get_previous_mouse_positon(vec2 position);
 
 #endif // !INPUT_H
