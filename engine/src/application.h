@@ -7,6 +7,7 @@
 #include "layer.h"
 #include "scene.h"
 #include "renderer/renderer.h"
+#include "renderer/camera.h"
 
 typedef enum {
 
@@ -30,6 +31,8 @@ typedef struct {
 
 	shrscene_list scene_list;
 	shrscene *current_scene;
+
+	shrcamera *camera;
 
 	u32 fps;
 } shrapp;

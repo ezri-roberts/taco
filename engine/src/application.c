@@ -82,9 +82,10 @@ bool shrapp_run() {
 
 			shrapp_update();
 			shrinput_update();
-
 			shrrenderer_begin();
+
 			shrapp_draw();
+
 			shrrenderer_end();
 		}
 

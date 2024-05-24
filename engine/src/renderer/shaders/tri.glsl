@@ -1,11 +1,17 @@
 @vs vs
+
+uniform vs_params {
+	mat4 view_projection;
+};
+
 in vec4 position;
 in vec4 color0;
 
 out vec4 color;
 
 void main() {
-    gl_Position = position;
+    gl_Position = view_projection * position;
+    // gl_Position = position;
     color = color0;
 }
 @end
