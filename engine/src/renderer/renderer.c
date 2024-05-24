@@ -1,4 +1,6 @@
 #include "renderer.h"
+#include "buffer.h"
+#include "shader.h"
 #include "tri.glsl.h"
 
 static shrrenderer renderer = {};
@@ -12,22 +14,26 @@ bool shrrenderer_initialize() {
 	memset(&renderer.pip, 0, sizeof(sg_pipeline));
 	memset(&renderer.bind, 0, sizeof(sg_bindings));
 
+	renderer.used_vbuffers = 0;
+
 	sg_setup(&(sg_desc){
 		.environment = sglue_environment(),
 		.logger.func = slog_func,
 	});
 
-	float vertices[] = {
+	f32 vertices[] = {
 		// positions            // colors
 		0.0f,  0.5f, 0.5f,     1.0f, 0.0f, 0.0f, 1.0f,
 		0.5f, -0.5f, 0.5f,     0.0f, 1.0f, 0.0f, 1.0f,
 		-0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f, 1.0f
 	};
 
-	renderer.bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-		.data = SG_RANGE(vertices),
-		.label = "triangle-vertices"
-	});
+	// renderer.bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
+	// 	.data = SG_RANGE(vertices),
+	// 	.label = "triangle-vertices"
+	// });
+
+	shrvertex_buffer_create(SG_RANGE(vertices), "triangle-vertices");
 
 	sg_shader shd = sg_make_shader(triangle_shader_desc(sg_query_backend()));
 
@@ -86,3 +92,6 @@ void shrrenderer_end() {
 	sg_commit();
 }
 
+shrrenderer* shrenderer_get() {
+	return &renderer;
+}

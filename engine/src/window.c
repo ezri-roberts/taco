@@ -9,10 +9,10 @@ bool shrwindow_initialize(const char *title, u32 width, u32 height) {
 	initialized = false;
 	memset(&window, 0, sizeof(shrwindow));
 
-	window.data.title = title;
 	window.data.width = width;
 	window.data.height = height;
 	window.data.target_fps = 60;
+	window.data.title = title;
 
 	initialized = true;
 

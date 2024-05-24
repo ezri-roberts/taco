@@ -25,6 +25,8 @@ fips_files(
 	camera.c camera.h
 	canvas.c canvas.h
 	renderer.c renderer.h
+	buffer.c buffer.h
+	shader.c shader.h
 	sprite.c sprite.h
 )
 
