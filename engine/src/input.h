@@ -5,17 +5,6 @@
 #include "keycodes.h"
 #include "event/event.h"
 
-#define BIT_VALUE     0
-#define BIT_DOWN      1
-#define BIT_DOWN_PREV 2
-#define BIT_PRESSED   3
-#define BIT_RELEASED  4
-
-#define INPUT_GET_BIT(input, bit) (((*(input)) >> (bit)) & 1)
-#define INPUT_SET_BIT(input, bit) (*(input) |= (1 << (bit)))
-#define INPUT_UNSET_BIT(input, bit) (*(input) &= ~(1 << (bit)))
-#define INPUT_RESET(input) (*(input) = (0x00))
-
 typedef enum shrinput_button {
 	BUTTON_LEFT,
 	BUTTON_RIGHT,
@@ -50,14 +39,18 @@ void shrinput_process_mouse_wheel(const sapp_event *data);
 // Keyboard Input.
 bool input_key_down(shrinput_key key);
 bool input_key_up(shrinput_key key);
-bool input_was_key_down(shrinput_key key);
-bool input_was_key_up(shrinput_key key);
+bool input_key_pressed(shrinput_key key);
+bool input_key_released(shrinput_key key);
+bool input_key_was_down(shrinput_key key);
+bool input_key_was_up(shrinput_key key);
 
 // Mouse Input.
 bool input_button_down(shrinput_button button);
 bool input_button_up(shrinput_button button);
-bool input_was_button_down(shrinput_button button);
-bool input_was_button_up(shrinput_button button);
+bool input_button_pressed(shrinput_button button);
+bool input_button_released(shrinput_button button);
+bool input_button_was_down(shrinput_button button);
+bool input_button_was_up(shrinput_button button);
 void shrinput_get_mouse_positon(vec2 position);
 void shrinput_get_previous_mouse_positon(vec2 position);
 

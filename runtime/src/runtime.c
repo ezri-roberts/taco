@@ -55,8 +55,12 @@ void shrapp_start() {
 
 void shrapp_update() {
 
-	if (input_key_down(KEY_A)) {
-		SHR_TRACE("KEY_A down.");
+	if (input_key_pressed(KEY_A)) {
+		SHR_TRACE("KEY_A pressed.");
+	}
+
+	if (input_key_released(KEY_S)) {
+		SHR_TRACE("KEY_S released.");
 	}
 
 }

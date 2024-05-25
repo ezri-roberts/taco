@@ -47,11 +47,11 @@ void shrinput_process_button(const sapp_event *data, bool pressed) {
 
 	shrinput_button button = (shrinput_button)data->mouse_button;
 
-	// if (state.mouse_current.buttons[button] != pressed) {
+	if (state.mouse_current.buttons[button] != pressed) {
 
-		state.keyboard_current.keys[button] = pressed;
+		state.mouse_current.buttons[button] = pressed;
 		shrevent_fire(pressed ? EVENT_MOUSE_PRESS : EVENT_MOUSE_RELEASE, 0, data);
-	// }
+	}
 }
 
 void shrinput_process_mouse_move(const sapp_event *data) {
@@ -96,6 +96,22 @@ bool input_key_was_up(shrinput_key key) {
 	return state.keyboard_previous.keys[key] == false;
 }
 
+bool input_key_pressed(shrinput_key key) {
+	if(!initialized) return true;
+	if (input_key_down(key) && !input_key_was_down(key)) {
+		return true;
+	}
+	return false;
+}
+
+bool input_key_released(shrinput_key key) {
+	if(!initialized) return true;
+	if (input_key_up(key) && !input_key_was_up(key)) {
+		return true;
+	}
+	return false;
+}
+
 // Mouse Input.
 bool input_button_down(shrinput_button button) {
 	if(!initialized) return false;
@@ -107,14 +123,30 @@ bool input_button_up(shrinput_button button) {
 	return state.mouse_current.buttons[button] == false;
 }
 
-bool input_was_button_down(shrinput_button button) {
+bool input_button_was_down(shrinput_button button) {
 	if(!initialized) return false;
 	return state.mouse_previous.buttons[button] == true;
 }
 
-bool input_was_button_up(shrinput_button button) {
+bool input_button_was_up(shrinput_button button) {
 	if(!initialized) return true;
 	return state.mouse_previous.buttons[button] == false;
+}
+
+bool input_button_pressed(shrinput_button button) {
+	if(!initialized) return true;
+	if (input_button_down(button) && !input_button_was_down(button)) {
+		return true;
+	}
+	return false;
+}
+
+bool input_button_released(shrinput_button button) {
+	if(!initialized) return true;
+	if (input_button_up(button) && !input_button_was_up(button)) {
+		return true;
+	}
+	return false;
 }
 
 void shrinput_get_mouse_positon(vec2 position) {
