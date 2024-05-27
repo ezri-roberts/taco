@@ -55,7 +55,8 @@ $is_tired false                 # Define a variable.
 
 Shraybn makes use of the following open source libraries:
 
-[sokol](https://github.com/floooh/sokol)<br>
-[cglm](https://github.com/recp/cglm)<br>
+[log](https://github.com/rxi/log.c)<br>
 [rres](https://github.com/raysan5/rres)<br>
-[microui](https://github.com/rxi/microui)<br>
+[cglm](https://github.com/recp/cglm)<br>
+[sokol](https://github.com/floooh/sokol)<br>
+[nuklear](https://github.com/Immediate-Mode-UI/Nuklear)<br>
