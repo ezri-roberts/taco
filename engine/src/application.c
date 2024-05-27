@@ -34,8 +34,7 @@ bool shrapp_initialize() {
 	shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
-	app.layers = darray_create(shrlayer);
-	app.scene_list = shrscene_list_new();
+	app.layers = darray_create(shrlayer*);
 	
 	app.running = true;
 	app.suspended = false;
@@ -52,7 +51,10 @@ void shrapp_shutdown() {
 	shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
-	shrscene_list_destroy(&app.scene_list);
+	for (usize i = 0; i < darray_length(app.layers); i++) {
+		shrlayer *layer = app.layers[i];
+		if (layer->on_detach) layer->on_detach(0);
+	}
 	darray_destroy(app.layers);
 
 	shrevent_shutdown();
@@ -74,18 +76,27 @@ bool shrapp_run() {
 		if (!app.suspended) {
 
 			usize layer_amount = darray_length(app.layers);
+
+			// Run layer update callbacks.
 			for (usize i = 0; i < layer_amount; i++) {
 
-				shrlayer *layer = &app.layers[i];
+				shrlayer *layer = app.layers[i];
 				if (layer->on_update) layer->on_update(0);
 			}
 
 			shrapp_update();
 			shrinput_update();
+
 			shrrenderer_begin();
 
-			shrapp_draw();
+			// Run layer draw callbacks.
+			for (usize i = 0; i < layer_amount; i++) {
 
+				shrlayer *layer = app.layers[i];
+				if (layer->on_draw) layer->on_draw(0);
+			}
+
+			shrapp_draw();
 			shrrenderer_end();
 		}
 
@@ -126,14 +137,15 @@ bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *dat
 	return false;
 }
 
-void shrapp_layer_new(shrlayer_desc desc) {
+void shrapp_layer_new(const char *name, shrlayer_desc desc) {
 
-	shrlayer layer;
-	if (desc.on_attach) layer.on_attach = desc.on_attach;
-	if (desc.on_update) layer.on_update = desc.on_update;
-	if (desc.on_detach) layer.on_detach= desc.on_detach;
+	shrlayer *layer = shrlayer_new(name);
+	if (desc.on_attach) {layer->on_attach = desc.on_attach;}
+	if (desc.on_detach) {layer->on_detach= desc.on_detach;}
+	if (desc.on_update) {layer->on_update = desc.on_update;}
+	if (desc.on_draw)   {layer->on_draw = desc.on_draw;}
 
-	if (layer.on_attach) layer.on_attach(0);
+	if (layer->on_attach) {layer->on_attach(0);}
 	darray_push(app.layers, layer);
 }
 

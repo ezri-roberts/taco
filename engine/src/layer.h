@@ -6,23 +6,27 @@
 #include "shrpch.h"
 #include "event/event.h"
 
+typedef void (*shrlayer_callback)(void*);
+
 typedef struct shrlayer {
 
 	const char *name;
 	bool enabled;
 
-	void (*on_attach)(void*);
-	void (*on_detach)(void*);
-	void (*on_update)(void*);
+	shrlayer_callback on_attach;
+	shrlayer_callback on_detach;
+	shrlayer_callback on_update;
+	shrlayer_callback on_draw;
 
 	shrevent_callback on_event;
 
 } shrlayer;
 
 typedef struct shrlayer_desc {
-	void (*on_attach)(void*);
-	void (*on_detach)(void*);
-	void (*on_update)(void*);
+	shrlayer_callback on_attach;
+	shrlayer_callback on_detach;
+	shrlayer_callback on_update;
+	shrlayer_callback on_draw;
 } shrlayer_desc;
 
 shrlayer* shrlayer_new(const char *name);

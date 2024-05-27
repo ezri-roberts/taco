@@ -1,17 +1,13 @@
 #include "renderer.h"
-#include "shrpch.h"
-#include "tri.glsl.h"
 
 static shrrenderer renderer = {};
 static bool initialized = false;
-
-static shrvbuffer vbuffer;
-static shrshader shader;
 
 bool shrrenderer_initialize() {
 	if (initialized) return false;
 
 	initialized = false;
+
 	memset(&renderer, 0, sizeof(shrrenderer));
 	memset(&renderer.pipeline, 0, sizeof(sg_pipeline));
 	memset(&renderer.bind, 0, sizeof(sg_bindings));
@@ -22,25 +18,6 @@ bool shrrenderer_initialize() {
 		.environment = sglue_environment(),
 		.logger.func = slog_func,
 	});
-
-	f32 vertices[] = {
-		// positions            // colors
-		0.0f,  0.5f, 0.5f,     1.0f, 0.0f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.5f,     0.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f, 1.0f
-	};
-
-	vbuffer = shrrenderer_vb_create(
-		sizeof(vertices),
-		SG_RANGE(vertices),
-		"triangle-vertices"
-	);
-
-	i8 attr[] = {
-		[ATTR_vs_position] = SG_VERTEXFORMAT_FLOAT3,
-		[ATTR_vs_color0]   = SG_VERTEXFORMAT_FLOAT4
-	};
-	shader = shrrenderer_make_shader(triangle_shader_desc, attr, 2);
 
 	renderer.pass_action = (sg_pass_action) {
 		.colors[0] = {
@@ -53,8 +30,6 @@ bool shrrenderer_initialize() {
 		SHR_ERROR("Camera initialization failed.");
 		return false;
 	}
-
-	shrcamera_set_rotation(25.0f);
 
 	initialized = true;
 
@@ -80,16 +55,6 @@ void shrrenderer_shutdown() {
 void shrrenderer_begin() {
 
 	sg_begin_pass(&(sg_pass){.action = renderer.pass_action, .swapchain = sglue_swapchain()});
-
-	shrrenderer_submit(&shader, &vbuffer);
-
-	shrrenderer_vs_params params = {};
-	memset(&params, 0, sizeof(shrrenderer_vs_params));
-
-	shrcamera *cam = shrcamera_get();
-	glm_mat4_copy(cam->view_projection_matrix, params.view_projection);
-	sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &SG_RANGE(params));
-
 }
 
 void shrrenderer_end() {

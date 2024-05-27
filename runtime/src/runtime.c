@@ -1,56 +1,67 @@
-#include "shraybn.h"
+#include "shrentry.h"
+#include "runtime.h"
 
-void dbui_layer_attach(void *data) {
+#include "tri.glsl.h"
 
-	(void)data;
+static shrvbuffer vbuffer;
+static shrshader shader;
 
-	shrnk_initialize();
-	SHR_TRACE("[DBUI] Layer Attached.");
+void tri_layer_attach(void *data) {
+
+	f32 vertices[] = {
+		// positions            // colors
+		0.0f,  0.5f, 0.5f,     1.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f,     0.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f, 1.0f
+	};
+
+	vbuffer = shrrenderer_vb_create(
+		sizeof(vertices),
+		SG_RANGE(vertices),
+		"triangle-vertices"
+	);
+
+	i8 attr[] = {
+		[ATTR_vs_position] = SG_VERTEXFORMAT_FLOAT3,
+		[ATTR_vs_color0]   = SG_VERTEXFORMAT_FLOAT4
+	};
+
+	shader = shrrenderer_make_shader(triangle_shader_desc, attr, 2);
 }
 
-void dbui_layer_update(void *data) {
-
-	(void)data;
-
-	shrwindow_data win_data;
-	shrwindow_get_data(&win_data);
-
-	char win_size_tex[128];
-	char mouse_pos_text[128];
-
-	vec2 mouse_pos;
-	shrinput_get_mouse_positon(mouse_pos);
-
-	sprintf(win_size_tex, "Window Size: %ix%i", win_data.width, win_data.height);
-	sprintf(mouse_pos_text, "Mouse Position: %.2f, %.2f", mouse_pos[0], mouse_pos[1]);
-
-	struct nk_context *ctx = shrnk_new_frame();
-
-	if (nk_begin(ctx, "Debug Info", nk_rect(50, 50, 256, 128),
-			  NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_CLOSABLE)) {
-		/* fixed widget pixel width */
-		nk_layout_row_dynamic(ctx, 16, 1);
-
-		nk_label(ctx, win_size_tex, NK_TEXT_LEFT);
-		nk_label(ctx, mouse_pos_text, NK_TEXT_LEFT);
-	}
-
-	nk_end(ctx);
+void tri_layer_draw(void *data) {
+	shrrenderer_submit(&shader, &vbuffer);
 }
 
-bool dbui_layer_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
-	return shrnk_handle_event(data);
+void camera_layer_draw(void *data) {
+
+	shrcamera *cam = shrcamera_get();
+
+	shrrenderer_vs_params params = {};
+	glm_mat4_copy(cam->view_projection_matrix, params.view_projection);
+
+	shrrenderer_apply_vs_uniform(SLOT_vs_params, &SG_RANGE(params));
 }
 
 void shrapp_start() {
 
-	shrapp_layer_new((shrlayer_desc) {
+	shrapp_layer_new("tri_layer", (shrlayer_desc) {
+		.on_attach = tri_layer_attach,
+		.on_draw = tri_layer_draw 
+	});
+	// This layer applies the camera transform to all layers below it.
+	shrapp_layer_new("camera_layer", (shrlayer_desc) {
+		.on_draw = camera_layer_draw 
+	});
+	shrapp_layer_new("dbui_layer", (shrlayer_desc) {
 		.on_attach = dbui_layer_attach,
-		.on_update = dbui_layer_update
+		.on_detach = dbui_layer_detach,
+		.on_update = dbui_layer_update,
+		.on_draw = dbui_layer_draw
 	});
 
-	shrevent_register_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_on_event);
-	shrevent_register_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_on_event);
+	shrevent_register_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_event);
+	shrevent_register_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_event);
 }
 
 void shrapp_update() {
@@ -62,19 +73,16 @@ void shrapp_update() {
 	if (input_key_released(KEY_S)) {
 		SHR_TRACE("KEY_S released.");
 	}
-
 }
 
 void shrapp_draw() {
 
-	shrnk_render();
 }
 
 void shrapp_cleanup() {
 
-	shrevent_unregister_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_on_event);
-	shrevent_unregister_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_on_event);
+	shrevent_unregister_category(EVENT_CATEGORY_MOUSE, 0, dbui_layer_event);
+	shrevent_unregister_category(EVENT_CATEGORY_KEYBOARD, 0, dbui_layer_event);
 
-	shrnk_shutdown();
 	shrapp_shutdown();
 }

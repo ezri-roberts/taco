@@ -26,15 +26,8 @@ typedef struct {
 	bool running;
 	bool suspended;
 
-	shrlayer *layers;
-	shrlayer *overlays;
-
-	shrscene_list scene_list;
-	shrscene *current_scene;
-
+	shrlayer **layers;
 	shrcamera *camera;
-
-	u32 fps;
 } shrapp;
 
 bool shrapp_initialize();
@@ -46,8 +39,7 @@ bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *dat
 shrapp* shrapp_get();
 void shrapp_quit();
 
-void shrapp_layer_new(shrlayer_desc desc);
-void shrapp_overlay_push(shrapp *app, shrlayer *layer);
+void shrapp_layer_new(const char *name, shrlayer_desc desc);
 
 // Defined in user implementation.
 extern void shrapp_start();
