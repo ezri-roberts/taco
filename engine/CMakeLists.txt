@@ -11,6 +11,7 @@ fips_files(
 	layer.c layer.h
 	scene.c scene.h
 	window.c window.h
+	timestep.c timestep.h
 	application.c application.h
 )
 
@@ -34,7 +35,7 @@ fips_files(event.c event.h)
 fips_deps(log_lib)
 fips_deps(rres)
 
-fips_libs(X11 Xi Xcursor EGL GL pthread m)
+fips_libs(X11 Xi Xcursor GL dl pthread m)
 
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
 	add_definitions(-DSHR_DEBUG)

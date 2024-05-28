@@ -35,6 +35,7 @@ bool shrapp_initialize() {
 	shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	app.layers = darray_create(shrlayer*);
+	app.timestep = shrtimestep_new();
 	
 	app.running = true;
 	app.suspended = false;
@@ -57,6 +58,7 @@ void shrapp_shutdown() {
 	}
 	darray_destroy(app.layers);
 
+	shrtimestep_destroy(app.timestep);
 	shrevent_shutdown();
 	shrinput_shutdown();
 	shrrenderer_shutdown();
@@ -75,6 +77,8 @@ bool shrapp_run() {
 	if (app.running) {
 		if (!app.suspended) {
 
+			shrtimestep_start(app.timestep);
+
 			usize layer_amount = darray_length(app.layers);
 
 			// Run layer update callbacks.
@@ -87,17 +91,19 @@ bool shrapp_run() {
 			shrapp_update();
 			shrinput_update();
 
-			shrrenderer_begin();
+			// shrrenderer_begin();
+			//
+			// // Run layer draw callbacks.
+			// for (usize i = 0; i < layer_amount; i++) {
+			//
+			// 	shrlayer *layer = app.layers[i];
+			// 	if (layer->on_draw) layer->on_draw(0);
+			// }
+			//
+			// shrapp_draw();
+			// shrrenderer_end();
 
-			// Run layer draw callbacks.
-			for (usize i = 0; i < layer_amount; i++) {
-
-				shrlayer *layer = app.layers[i];
-				if (layer->on_draw) layer->on_draw(0);
-			}
-
-			shrapp_draw();
-			shrrenderer_end();
+			shrtimestep_end(app.timestep);
 		}
 
 		return true;

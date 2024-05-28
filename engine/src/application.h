@@ -6,6 +6,7 @@
 #include "window.h"
 #include "layer.h"
 #include "scene.h"
+#include "timestep.h"
 #include "renderer/renderer.h"
 #include "renderer/camera.h"
 
@@ -25,6 +26,8 @@ typedef struct {
 
 	bool running;
 	bool suspended;
+
+	shrtimestep *timestep;
 
 	shrlayer **layers;
 	shrcamera *camera;

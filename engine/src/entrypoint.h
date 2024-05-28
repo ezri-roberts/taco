@@ -20,7 +20,7 @@ inline sapp_desc sokol_main(int argc, char* argv[]) {
 		.event_cb = engine_event,
         .width = (int)win_data.width,
         .height = (int)win_data.height,
-		.swap_interval = 1,					// 1 for vsync.
+		.swap_interval = 0,					// 1 for vsync.
         .window_title = "Shraybn",
         .icon.sokol_default = true,
         .logger.func = engine_log_callback,

@@ -6,7 +6,12 @@
 static shrvbuffer vbuffer;
 static shrshader shader;
 
+static shrcamera *cam; 
+static vec3 cam_pos;
+
 void tri_layer_attach(void *data) {
+
+	cam = shrcamera_get();
 
 	f32 vertices[] = {
 		// positions            // colors
@@ -35,12 +40,12 @@ void tri_layer_draw(void *data) {
 
 void camera_layer_draw(void *data) {
 
-	shrcamera *cam = shrcamera_get();
-
-	shrrenderer_vs_params params = {};
-	glm_mat4_copy(cam->view_projection_matrix, params.view_projection);
-
-	shrrenderer_apply_vs_uniform(SLOT_vs_params, &SG_RANGE(params));
+	// shrcamera *cam = shrcamera_get();
+	//
+	// shrrenderer_vs_params params = {};
+	// glm_mat4_copy(cam->view_projection_matrix, params.view_projection);
+	//
+	// shrrenderer_apply_vs_uniform(SLOT_vs_params, &SG_RANGE(params));
 }
 
 void shrapp_start() {
@@ -66,12 +71,23 @@ void shrapp_start() {
 
 void shrapp_update() {
 
-	if (input_key_pressed(KEY_A)) {
-		SHR_TRACE("KEY_A pressed.");
+	if (input_key_down(KEY_W)) {
+		cam_pos[1] += 0.05;
+	}
+	if (input_key_down(KEY_A)) {
+		cam_pos[0] -= 0.05;
+	}
+	if (input_key_down(KEY_S)) {
+		cam_pos[1] -= 0.05;
+	}
+	if (input_key_down(KEY_D)) {
+		cam_pos[0] += 0.05;
 	}
 
-	if (input_key_released(KEY_S)) {
-		SHR_TRACE("KEY_S released.");
+
+	// Only update camera if needed.
+	if (!glm_vec3_eqv(cam_pos, cam->position)) {
+		shrcamera_set_position(cam_pos);
 	}
 }
 
