@@ -7,11 +7,13 @@
 
 #ifdef SHR_PLATFORM_LINUX
 	// #define SOKOL_GLCORE
+	#define SHR_GLCORE
 #endif // DEBUG
 
 #ifdef SHR_PATFORM_WINDOWS
 	#include <Windows.h>
-	#define SOKOL_D3D11
+	// #define SOKOL_D3D11
+	#define SHR_D3D
 #endif // DEBUG
 
 #define BIT(x) (1 << x)

@@ -5,17 +5,19 @@
 #include "event/event.h"
 #include "input.h"
 
+#include <SDL2/SDL.h>
+
 typedef struct shrwindow_data {
 
 	const char *title;
 	u32 width;
 	u32 height;
-	u32 target_fps;
 	bool vsync;
 } shrwindow_data;
 
 typedef struct {
 	shrwindow_data data;
+	SDL_Window *target;
 } shrwindow;
 
 bool shrwindow_initialize(const char *title, u32 width, u32 height);

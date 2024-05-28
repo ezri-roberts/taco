@@ -1,5 +1,8 @@
 #include "renderer.h"
 
+#include "glad/glad.h"
+#include <SDL2/SDL.h>
+
 static shrrenderer renderer = {};
 static bool initialized = false;
 
@@ -12,7 +15,23 @@ bool shrrenderer_initialize() {
 	// memset(&renderer.pipeline, 0, sizeof(sg_pipeline));
 	// memset(&renderer.bind, 0, sizeof(sg_bindings));
 
-	renderer.used_vbuffers = 0;
+	#if defined (SHR_GLCORE)
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+		SHR_ERROR("GL failed to load: %s", SDL_GetError());
+		return false;
+	}
+
+	SHR_INFO("OpenGL loaded.");
+	SHR_INFO("Vendor:   %s", glGetString(GL_VENDOR));
+	SHR_INFO("Renderer: %s", glGetString(GL_RENDERER));
+	SHR_INFO("Version:  %s", glGetString(GL_VERSION));
+
+	#endif
 
 	// sg_setup(&(sg_desc){
 	// 	.environment = sglue_environment(),
@@ -26,23 +45,14 @@ bool shrrenderer_initialize() {
 	// 	}
 	// };
 
-	if (!shrcamera_initialize(-1.6f, 1.6f, -0.9f, 0.9f)) {
-		SHR_ERROR("Camera initialization failed.");
-		return false;
-	}
+	// if (!shrcamera_initialize(-1.6f, 1.6f, -0.9f, 0.9f)) {
+	// 	SHR_ERROR("Camera initialization failed.");
+	// 	return false;
+	// }
 
 	initialized = true;
+	SHR_INFO("Renderer initialized.");
 
-	const char *backend;
-	#if defined(SOKOL_GLES3)
-		backend = "GLES3";
-	#elif defined(SOKOL_GLCORE)
-		backend = "GLCORE";
-	#elif defined(SOKOL_D3D11)
-		backend = "D3D11";
-	#endif
-
-	SHR_INFO("[%s] Renderer initialized.", backend);
 	return true;
 }
 

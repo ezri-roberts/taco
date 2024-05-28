@@ -11,8 +11,26 @@ bool shrwindow_initialize(const char *title, u32 width, u32 height) {
 
 	window.data.width = width;
 	window.data.height = height;
-	window.data.target_fps = 60;
 	window.data.title = title;
+
+	u16 flag;
+
+	#if defined(SHR_GLCORE)
+		flag = SDL_WINDOW_OPENGL;
+	#endif
+
+	window.target = SDL_CreateWindow(
+		title,
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		width, height,
+		flag
+	);
+
+	if (!window.target) {
+		return false;
+	}
+
+	SDL_GL_CreateContext(window.target);
 
 	initialized = true;
 

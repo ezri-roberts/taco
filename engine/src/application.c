@@ -8,21 +8,26 @@ bool shrapp_initialize() {
 	memset(&app, 0, sizeof(shrapp));
 	initialized = true;
 
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		SHR_ERROR("SDL initialization failed: %s", SDL_GetError());
+		return 1;
+	}
+
 	if (!shrwindow_initialize("Shraybn", 1280, 720)) {
 		SHR_ERROR("Window initialization failed.");
 		return false;
 	}
 
-	if (!shrevent_initialize()) {
-		SHR_ERROR("Event system initialization failed.");
-		return false;
-	}
-
-	if (!shrinput_initialize()) {
-		SHR_ERROR("Input system initialization failed.");
-		return false;
-	}
-
+	// if (!shrevent_initialize()) {
+	// 	SHR_ERROR("Event system initialization failed.");
+	// 	return false;
+	// }
+	//
+	// if (!shrinput_initialize()) {
+	// 	SHR_ERROR("Input system initialization failed.");
+	// 	return false;
+	// }
+	//
 	if (!shrrenderer_initialize()) {
 		SHR_ERROR("Renderer initialization failed.");
 		return false;
