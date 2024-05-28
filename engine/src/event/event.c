@@ -1,4 +1,5 @@
 #include "event.h"
+#include <SDL2/SDL_video.h>
 
 static shrevent_state state;
 static bool initialized;
@@ -146,6 +147,15 @@ void shrevent_poll() {
 			break;
 			case SDL_QUIT:
 				shrevent_fire(EVENT_APP_QUIT, 0, &event); break;
+
+			case SDL_WINDOWEVENT: {
+				if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+					shrevent_fire(EVENT_WINDOW_UNFOCUS, 0, &event);
+				} else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+					shrevent_fire(EVENT_WINDOW_FOCUS, 0, &event);
+				}
+			} break;
+
 			default: break;
 		}
 	}

@@ -36,8 +36,8 @@ bool shrapp_initialize() {
 	}
 
 	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
-	// shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
-	// shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
+	shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
+	shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
 	// shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	// shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
@@ -53,8 +53,8 @@ bool shrapp_initialize() {
 void shrapp_shutdown() {
 
 	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
-	// shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
-	// shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
 	// shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	// shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
@@ -81,9 +81,11 @@ bool shrapp_run() {
 	}
 
 	while (app.running) {
+
+		shrevent_poll();
+
 		if (!app.suspended) {
 
-			shrevent_poll();
 		}
 	}
 
@@ -132,16 +134,16 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, shrevent_data *data
 			app.running = false;
 			return true;
 		}
-		// case EVENT_WINDOW_UNFOCUS: {
-		// 	SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
-		// 	app.suspended = true;
-		// 	return true;
-		// }
-		// case EVENT_WINDOW_FOCUS: {
-		// 	SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
-		// 	app.suspended = false;
-		// 	return true;
-		// }
+		case EVENT_WINDOW_UNFOCUS: {
+			SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
+			app.suspended = true;
+			return true;
+		}
+		case EVENT_WINDOW_FOCUS: {
+			SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
+			app.suspended = false;
+			return true;
+		}
 	}
 
 	// Was not handled.
