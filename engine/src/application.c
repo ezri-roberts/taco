@@ -1,4 +1,5 @@
 #include "application.h"
+#include "event/event.h"
 #include "window.h"
 
 static shrapp app = {};
@@ -19,10 +20,10 @@ bool shrapp_initialize() {
 		return false;
 	}
 
-	// if (!shrevent_initialize()) {
-	// 	SHR_ERROR("Event system initialization failed.");
-	// 	return false;
-	// }
+	if (!shrevent_initialize()) {
+		SHR_ERROR("Event system initialization failed.");
+		return false;
+	}
 	//
 	// if (!shrinput_initialize()) {
 	// 	SHR_ERROR("Input system initialization failed.");
@@ -34,7 +35,7 @@ bool shrapp_initialize() {
 		return false;
 	}
 
-	// shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
+	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
 	// shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
 	// shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
 	// shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
@@ -51,7 +52,7 @@ bool shrapp_initialize() {
 
 void shrapp_shutdown() {
 
-	// shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
+	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
 	// shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
 	// shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
 	// shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
@@ -82,16 +83,7 @@ bool shrapp_run() {
 	while (app.running) {
 		if (!app.suspended) {
 
-			SDL_Event event;
-
-			while (SDL_PollEvent(&event)) {
-				switch (event.type) {
-					case SDL_QUIT:
-						app.running = false;
-					break;
-					default: break;
-				}
-			}
+			shrevent_poll();
 		}
 	}
 
@@ -132,29 +124,29 @@ bool shrapp_run() {
 	return true;
 }
 
-// bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
-//
-// 	switch (code) {
-// 		case EVENT_APP_QUIT: {
-// 			SHR_INFO("[EVENT][WINDOW_CLOSE] recieved, shutting down.");
-// 			app.running = false;
-// 			return true;
-// 		}
-// 		case EVENT_WINDOW_UNFOCUS: {
-// 			SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
-// 			app.suspended = true;
-// 			return true;
-// 		}
-// 		case EVENT_WINDOW_FOCUS: {
-// 			SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
-// 			app.suspended = false;
-// 			return true;
-// 		}
-// 	}
-//
-// 	// Was not handled.
-// 	return false;
-// }
+bool shrapp_on_event(u16 code, void *sender, void *listener, shrevent_data *data) {
+
+	switch (code) {
+		case EVENT_APP_QUIT: {
+			SHR_INFO("[EVENT][WINDOW_CLOSE] recieved, shutting down.");
+			app.running = false;
+			return true;
+		}
+		// case EVENT_WINDOW_UNFOCUS: {
+		// 	SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
+		// 	app.suspended = true;
+		// 	return true;
+		// }
+		// case EVENT_WINDOW_FOCUS: {
+		// 	SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
+		// 	app.suspended = false;
+		// 	return true;
+		// }
+	}
+
+	// Was not handled.
+	return false;
+}
 //
 // bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data) {
 //

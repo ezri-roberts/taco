@@ -37,7 +37,7 @@ bool shrapp_initialize();
 bool shrapp_run();
 void shrapp_shutdown();
 
-// bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data);
+bool shrapp_on_event(u16 code, void *sender, void *listener, shrevent_data *data);
 // bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data);
 shrapp* shrapp_get();
 void shrapp_quit();

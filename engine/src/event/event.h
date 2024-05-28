@@ -3,6 +3,7 @@
 
 #include "shrpch.h"
 #include "containers/darray.h"
+#include <SDL2/SDL.h>
 
 #define MAX_MESSAGE_CODES 16304
 
@@ -15,7 +16,6 @@ typedef enum {
 	EVENT_MOUSE_PRESS, EVENT_MOUSE_RELEASE,
 	EVENT_MOUSE_MOVE, EVENT_MOUSE_SCROLL,
 	EVENT_MOUSE_LEAVE, EVENT_MOUSE_ENTER,
-	EVENT_CHAR,
 	EVENT_APP_QUIT,
 	EVENT_MAX_CODE
 
@@ -31,14 +31,13 @@ typedef enum {
 
 } shrevent_category;
 
+typedef SDL_Event shrevent_data;
 // Should return true if handled.
-typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, void *data);
+typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, shrevent_data *data);
 
 typedef struct shrevent_registered {
-
 	void *listener;
 	shrevent_callback callback;
-
 } shrevent_registered;
 
 typedef struct shrevent_entry {
@@ -53,9 +52,10 @@ typedef struct shrevent_system {
 
 bool shrevent_initialize();
 void shrevent_shutdown();
+void shrevent_poll();
 bool shrevent_register(u16 code, void *listener, shrevent_callback on_event);
 bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event);
-bool shrevent_fire(u16 code, void *sender, void *data);
+bool shrevent_fire(u16 code, void *sender, shrevent_data *data);
 bool shrevent_in_category(shrevent_code code, shrevent_category category);
 bool shrevent_register_category(u16 category, void *listener, shrevent_callback on_event);
 bool shrevent_unregister_category(u16 category, void *listener, shrevent_callback on_event);
