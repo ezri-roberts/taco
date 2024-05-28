@@ -18,21 +18,12 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	bool quit = false;
-
-	while (!quit) {
-
-		SDL_Event event;
-
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-				case SDL_QUIT:
-					quit = true;
-					break;
-				default: break;
-			}
-		}
+	if (!shrapp_run()) {
+		SHR_FATAL("Application did not exit gracefully.");
+		return 1;
 	}
+
+	shrapp_shutdown();
 
 	return 0;
 }

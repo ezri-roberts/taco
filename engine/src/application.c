@@ -1,4 +1,5 @@
 #include "application.h"
+#include "window.h"
 
 static shrapp app = {};
 static bool initialized = false;
@@ -62,10 +63,10 @@ void shrapp_shutdown() {
 	}
 	darray_destroy(app.layers);
 
-	shrtimestep_destroy(app.timestep);
 	shrevent_shutdown();
 	shrinput_shutdown();
 	shrrenderer_shutdown();
+	shrwindow_shutdown();
 
 	SHR_INFO("App shutdown.");
 	initialized = false;
@@ -78,38 +79,54 @@ bool shrapp_run() {
 		return false;
 	}
 
-	if (app.running) {
+	while (app.running) {
 		if (!app.suspended) {
 
-			usize layer_amount = darray_length(app.layers);
+			SDL_Event event;
 
-			// Run layer update callbacks.
-			for (usize i = 0; i < layer_amount; i++) {
-
-				shrlayer *layer = app.layers[i];
-				if (layer->on_update) layer->on_update(0);
+			while (SDL_PollEvent(&event)) {
+				switch (event.type) {
+					case SDL_QUIT:
+						app.running = false;
+					break;
+					default: break;
+				}
 			}
-
-			shrapp_update();
-			shrinput_update();
-
-			// shrrenderer_begin();
-			//
-			// // Run layer draw callbacks.
-			// for (usize i = 0; i < layer_amount; i++) {
-			//
-			// 	shrlayer *layer = app.layers[i];
-			// 	if (layer->on_draw) layer->on_draw(0);
-			// }
-			//
-			// shrapp_draw();
-			// shrrenderer_end();
-
-			shrtimestep_end(app.timestep);
 		}
-
-		return true;
 	}
+
+	// if (app.running) {
+	// 	if (!app.suspended) {
+	//
+	// 		usize layer_amount = darray_length(app.layers);
+	//
+	// 		// Run layer update callbacks.
+	// 		for (usize i = 0; i < layer_amount; i++) {
+	//
+	// 			shrlayer *layer = app.layers[i];
+	// 			if (layer->on_update) layer->on_update(0);
+	// 		}
+	//
+	// 		shrapp_update();
+	// 		shrinput_update();
+	//
+	// 		// shrrenderer_begin();
+	// 		//
+	// 		// // Run layer draw callbacks.
+	// 		// for (usize i = 0; i < layer_amount; i++) {
+	// 		//
+	// 		// 	shrlayer *layer = app.layers[i];
+	// 		// 	if (layer->on_draw) layer->on_draw(0);
+	// 		// }
+	// 		//
+	// 		// shrapp_draw();
+	// 		// shrrenderer_end();
+	//
+	// 		shrtimestep_end(app.timestep);
+	// 	}
+	//
+	// 	return true;
+	// }
 
 	// sapp_quit();
 	return true;

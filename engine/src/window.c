@@ -39,6 +39,7 @@ bool shrwindow_initialize(const char *title, u32 width, u32 height) {
 }
 
 void shrwindow_shutdown() {
+	SDL_DestroyWindow(window.target);
 
 	initialized = false;
 	SHR_INFO("Window shutdown.");
