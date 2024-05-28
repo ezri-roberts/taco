@@ -1,5 +1,5 @@
 #include "event.h"
-#include <SDL2/SDL_video.h>
+#include "input.h"
 
 static shrevent_state state;
 static bool initialized;
@@ -130,9 +130,8 @@ void shrevent_poll() {
 			case SDL_KEYDOWN:
 			case SDL_KEYUP: {
 				bool pressed = (event.type == SDL_KEYDOWN);
-				// shrinput_process_key(e, pressed);
-				break;
-			}
+				shrinput_process_key(&event, pressed);
+			} break;
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_MOUSEBUTTONUP: {
 				bool pressed = (event.type == SDL_MOUSEBUTTONDOWN);

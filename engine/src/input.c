@@ -32,16 +32,16 @@ void shrinput_update() {
 	memcpy(&state.mouse_previous, &state.mouse_current, sizeof(shrmouse_state));
 }
 
-// void shrinput_process_key(const sapp_event *data, bool pressed) {
-//
-// 	shrinput_key key = (shrinput_key)data->key_code;
-//
-// 	if (state.keyboard_current.keys[key] != pressed) {
-//
-// 		state.keyboard_current.keys[key] = pressed;
-// 		shrevent_fire(pressed ? EVENT_KEY_PRESS : EVENT_KEY_RELEASE, 0, data);
-// 	}
-// }
+void shrinput_process_key(shrevent_data *data, bool pressed) {
+
+	shrinput_key key = (shrinput_key)data->key.keysym.sym;
+
+	if (state.keyboard_current.keys[key] != pressed) {
+
+		state.keyboard_current.keys[key] = pressed;
+		shrevent_fire(pressed ? EVENT_KEY_PRESS : EVENT_KEY_RELEASE, 0, data);
+	}
+}
 //
 // void shrinput_process_button(const sapp_event *data, bool pressed) {
 //

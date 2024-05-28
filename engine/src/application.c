@@ -24,12 +24,12 @@ bool shrapp_initialize() {
 		SHR_ERROR("Event system initialization failed.");
 		return false;
 	}
-	//
-	// if (!shrinput_initialize()) {
-	// 	SHR_ERROR("Input system initialization failed.");
-	// 	return false;
-	// }
-	//
+
+	if (!shrinput_initialize()) {
+		SHR_ERROR("Input system initialization failed.");
+		return false;
+	}
+
 	if (!shrrenderer_initialize()) {
 		SHR_ERROR("Renderer initialization failed.");
 		return false;
@@ -38,7 +38,7 @@ bool shrapp_initialize() {
 	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
 	shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
 	shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
-	// shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
+	shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	// shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	app.layers = darray_create(shrlayer*);
@@ -55,7 +55,7 @@ void shrapp_shutdown() {
 	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
 	shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
 	shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
-	// shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
+	shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
 	// shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	for (usize i = 0; i < darray_length(app.layers); i++) {
@@ -86,6 +86,7 @@ bool shrapp_run() {
 
 		if (!app.suspended) {
 
+			shrinput_update();
 		}
 	}
 
@@ -149,13 +150,13 @@ bool shrapp_on_event(u16 code, void *sender, void *listener, shrevent_data *data
 	// Was not handled.
 	return false;
 }
-//
-// bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data) {
-//
-// 	// Was not handled.
-// 	return false;
-// }
-//
+
+bool shrapp_on_key(u16 code, void *sender, void *listener, shrevent_data *data) {
+
+	// Was not handled.
+	return false;
+}
+
 void shrapp_layer_new(const char *name, shrlayer_desc desc) {
 
 	shrlayer *layer = shrlayer_new(name);

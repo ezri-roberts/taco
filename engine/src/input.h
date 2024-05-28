@@ -31,7 +31,7 @@ typedef struct shrinput_state {
 bool shrinput_initialize();
 void shrinput_shutdown();
 void shrinput_update();
-// void shrinput_process_key(const sapp_event *data, bool pressed);
+void shrinput_process_key(shrevent_data *data, bool pressed);
 // void shrinput_process_button(const sapp_event *data, bool pressed);
 // void shrinput_process_mouse_move(const sapp_event *data);
 // void shrinput_process_mouse_wheel(const sapp_event *data);
