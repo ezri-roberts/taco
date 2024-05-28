@@ -14,7 +14,7 @@ void engine_initialize(void) {
 
 void engine_shutdown(void) {
 	shrapp_shutdown();
-	sg_shutdown();
+	// sg_shutdown();
 	SHR_INFO("Engine shutdown.");
 }
 
@@ -25,42 +25,42 @@ void engine_update(void) {
 	}
 }
 
-void engine_event(const sapp_event *e) {
-
-	switch (e->type) {
-		case SAPP_EVENTTYPE_KEY_DOWN:
-		case SAPP_EVENTTYPE_KEY_UP: {
-			bool pressed = (e->type == SAPP_EVENTTYPE_KEY_DOWN);
-			shrinput_process_key(e, pressed);
-			break;
-		}
-		case SAPP_EVENTTYPE_MOUSE_DOWN:
-		case SAPP_EVENTTYPE_MOUSE_UP: {
-			bool pressed = (e->type == SAPP_EVENTTYPE_MOUSE_DOWN);
-			shrinput_process_button(e, pressed);
-			break;
-		}
-		case SAPP_EVENTTYPE_MOUSE_MOVE:
-			shrinput_process_mouse_move(e);
-		case SAPP_EVENTTYPE_MOUSE_SCROLL:
-			shrinput_process_mouse_wheel(e);
-		case SAPP_EVENTTYPE_MOUSE_ENTER:
-			shrevent_fire(EVENT_MOUSE_ENTER, 0, e); break;
-		case SAPP_EVENTTYPE_MOUSE_LEAVE:
-			shrevent_fire(EVENT_MOUSE_LEAVE, 0, e); break;
-		case SAPP_EVENTTYPE_QUIT_REQUESTED:
-			shrevent_fire(EVENT_APP_QUIT, 0, e); break;
-		case SAPP_EVENTTYPE_CHAR:
-			shrevent_fire(EVENT_CHAR, 0, e); break;
-		case SAPP_EVENTTYPE_RESIZED:
-			shrwindow_process_resize(e); break;
-		case SAPP_EVENTTYPE_UNFOCUSED:
-			shrevent_fire(EVENT_WINDOW_UNFOCUS, 0, e); break;
-		case SAPP_EVENTTYPE_FOCUSED:
-			shrevent_fire(EVENT_WINDOW_FOCUS, 0, e); break;
-		default: break;
-	}
-}
+// void engine_event(const sapp_event *e) {
+//
+// 	switch (e->type) {
+// 		case SAPP_EVENTTYPE_KEY_DOWN:
+// 		case SAPP_EVENTTYPE_KEY_UP: {
+// 			bool pressed = (e->type == SAPP_EVENTTYPE_KEY_DOWN);
+// 			shrinput_process_key(e, pressed);
+// 			break;
+// 		}
+// 		case SAPP_EVENTTYPE_MOUSE_DOWN:
+// 		case SAPP_EVENTTYPE_MOUSE_UP: {
+// 			bool pressed = (e->type == SAPP_EVENTTYPE_MOUSE_DOWN);
+// 			shrinput_process_button(e, pressed);
+// 			break;
+// 		}
+// 		case SAPP_EVENTTYPE_MOUSE_MOVE:
+// 			shrinput_process_mouse_move(e);
+// 		case SAPP_EVENTTYPE_MOUSE_SCROLL:
+// 			shrinput_process_mouse_wheel(e);
+// 		case SAPP_EVENTTYPE_MOUSE_ENTER:
+// 			shrevent_fire(EVENT_MOUSE_ENTER, 0, e); break;
+// 		case SAPP_EVENTTYPE_MOUSE_LEAVE:
+// 			shrevent_fire(EVENT_MOUSE_LEAVE, 0, e); break;
+// 		case SAPP_EVENTTYPE_QUIT_REQUESTED:
+// 			shrevent_fire(EVENT_APP_QUIT, 0, e); break;
+// 		case SAPP_EVENTTYPE_CHAR:
+// 			shrevent_fire(EVENT_CHAR, 0, e); break;
+// 		case SAPP_EVENTTYPE_RESIZED:
+// 			shrwindow_process_resize(e); break;
+// 		case SAPP_EVENTTYPE_UNFOCUSED:
+// 			shrevent_fire(EVENT_WINDOW_UNFOCUS, 0, e); break;
+// 		case SAPP_EVENTTYPE_FOCUSED:
+// 			shrevent_fire(EVENT_WINDOW_FOCUS, 0, e); break;
+// 		default: break;
+// 	}
+// }
 
 void engine_log_callback(
         const char* tag,                // always "sapp"

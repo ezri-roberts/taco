@@ -2,7 +2,6 @@
 #define TIMESTEP_H
 
 #include "shrpch.h"
-#include "sokol_time.h"
 
 typedef struct shrtimestep {
 	u64 start;

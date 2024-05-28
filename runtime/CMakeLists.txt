@@ -3,7 +3,7 @@ fips_begin_app(runtime windowed)
 fips_dir(src)
 fips_files(
 	runtime.c
-	ui_layer.c
+	# ui_layer.c
 )
 
 fips_deps(engine)

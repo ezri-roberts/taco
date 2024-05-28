@@ -18,8 +18,8 @@ fips_files(
 fips_dir(src/containers)
 fips_files(darray.c darray.h)
 
-fips_dir(src/dbui)
-fips_files(dbui.c dbui.h)
+# fips_dir(src/dbui)
+# fips_files(dbui.c dbui.h)
 
 fips_dir(src/renderer)
 fips_files(
@@ -33,9 +33,11 @@ fips_dir(src/event)
 fips_files(event.c event.h)
 
 fips_deps(log_lib)
-fips_deps(rres)
+fips_deps(glad)
+# fips_deps(rres)
 
-fips_libs(X11 Xi Xcursor GL dl pthread m)
+# fips_libs(X11 Xi Xcursor GL dl pthread m)
+fips_libs(SDL2 m)
 
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
 	add_definitions(-DSHR_DEBUG)
@@ -80,7 +82,7 @@ else()
     endif()
 endif()
 
-fips_dir(src/renderer/shaders)
-sokol_shader(tri.glsl ${slang})
+# fips_dir(src/renderer/shaders)
+# sokol_shader(tri.glsl ${slang})
 
 fips_end_lib()

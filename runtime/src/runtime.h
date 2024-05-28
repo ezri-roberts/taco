@@ -8,7 +8,7 @@ void dbui_layer_attach(void *data);
 void dbui_layer_detach(void *data);
 void dbui_layer_update(void *data);
 void dbui_layer_draw(void *data);
-bool dbui_layer_event(u16 code, void *sender, void *listener, const sapp_event *data);
+// bool dbui_layer_event(u16 code, void *sender, void *listener, const sapp_event *data);
 
 // Triangle Layer.
 void tri_layer_attach(void *data);

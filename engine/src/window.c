@@ -30,11 +30,11 @@ void shrwindow_get_data(shrwindow_data *data) {
 	*data = window.data;
 }
 
-void shrwindow_process_resize(const sapp_event *data) {
-
-	window.data.width = data->window_width;
-	window.data.height = data->window_height;
-
-	shrevent_fire(EVENT_WINDOW_RESIZE, 0, data);
-}
-
+// void shrwindow_process_resize(const sapp_event *data) {
+//
+// 	window.data.width = data->window_width;
+// 	window.data.height = data->window_height;
+//
+// 	shrevent_fire(EVENT_WINDOW_RESIZE, 0, data);
+// }
+//

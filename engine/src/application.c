@@ -28,14 +28,13 @@ bool shrapp_initialize() {
 		return false;
 	}
 
-	shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
-	shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
-	shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
-	shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
-	shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
+	// shrevent_register(EVENT_APP_QUIT, 0, shrapp_on_event);
+	// shrevent_register(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
+	// shrevent_register(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
+	// shrevent_register(EVENT_KEY_PRESS, 0, shrapp_on_key);
+	// shrevent_register(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	app.layers = darray_create(shrlayer*);
-	app.timestep = shrtimestep_new();
 	
 	app.running = true;
 	app.suspended = false;
@@ -46,11 +45,11 @@ bool shrapp_initialize() {
 
 void shrapp_shutdown() {
 
-	shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
-	shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
-	shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
-	shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
-	shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
+	// shrevent_unregister(EVENT_APP_QUIT, 0, shrapp_on_event);
+	// shrevent_unregister(EVENT_WINDOW_UNFOCUS, 0, shrapp_on_event);
+	// shrevent_unregister(EVENT_WINDOW_FOCUS, 0, shrapp_on_event);
+	// shrevent_unregister(EVENT_KEY_PRESS, 0, shrapp_on_key);
+	// shrevent_unregister(EVENT_KEY_RELEASE, 0, shrapp_on_key);
 
 	for (usize i = 0; i < darray_length(app.layers); i++) {
 		shrlayer *layer = app.layers[i];
@@ -76,8 +75,6 @@ bool shrapp_run() {
 
 	if (app.running) {
 		if (!app.suspended) {
-
-			shrtimestep_start(app.timestep);
 
 			usize layer_amount = darray_length(app.layers);
 
@@ -109,40 +106,40 @@ bool shrapp_run() {
 		return true;
 	}
 
-	sapp_quit();
+	// sapp_quit();
 	return true;
 }
 
-bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
-
-	switch (code) {
-		case EVENT_APP_QUIT: {
-			SHR_INFO("[EVENT][WINDOW_CLOSE] recieved, shutting down.");
-			app.running = false;
-			return true;
-		}
-		case EVENT_WINDOW_UNFOCUS: {
-			SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
-			app.suspended = true;
-			return true;
-		}
-		case EVENT_WINDOW_FOCUS: {
-			SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
-			app.suspended = false;
-			return true;
-		}
-	}
-
-	// Was not handled.
-	return false;
-}
-
-bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data) {
-
-	// Was not handled.
-	return false;
-}
-
+// bool shrapp_on_event(u16 code, void *sender, void *listener, const sapp_event *data) {
+//
+// 	switch (code) {
+// 		case EVENT_APP_QUIT: {
+// 			SHR_INFO("[EVENT][WINDOW_CLOSE] recieved, shutting down.");
+// 			app.running = false;
+// 			return true;
+// 		}
+// 		case EVENT_WINDOW_UNFOCUS: {
+// 			SHR_INFO("[EVENT][WINDOW_UNFOCUS] recieved.");
+// 			app.suspended = true;
+// 			return true;
+// 		}
+// 		case EVENT_WINDOW_FOCUS: {
+// 			SHR_INFO("[EVENT][WINDOW_FOCUS] recieved.");
+// 			app.suspended = false;
+// 			return true;
+// 		}
+// 	}
+//
+// 	// Was not handled.
+// 	return false;
+// }
+//
+// bool shrapp_on_key(u16 code, void *sender, void *listener, const sapp_event *data) {
+//
+// 	// Was not handled.
+// 	return false;
+// }
+//
 void shrapp_layer_new(const char *name, shrlayer_desc desc) {
 
 	shrlayer *layer = shrlayer_new(name);

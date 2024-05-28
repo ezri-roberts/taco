@@ -7,7 +7,7 @@
 void engine_initialize(void);
 void engine_update(void);
 void engine_shutdown(void);
-void engine_event(const sapp_event *e);
+// void engine_event(const sapp_event *e);
 void engine_log_callback(
         const char* tag,                // always "sapp"
         u32 log_level,             		// 0=panic, 1=error, 2=warning, 3=info

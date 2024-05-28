@@ -79,27 +79,27 @@ bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event) {
 	return false;
 }
 
-bool shrevent_fire(u16 code, void *sender, const sapp_event *data) {
-
-	if (!initialized) return false;
-
-	if (state.registered[code].events == 0) {
-		return false;
-	}
-
-	u64 registered_count = darray_length(state.registered[code].events);
-	for (u64 i = 0; i < registered_count; ++i) {
-
-		shrevent_registered e = state.registered[code].events[i];
-		if (e.callback(code, sender, e.listener, data)) {
-			// Has been handled. Do not send to other listeners.
-			return true;
-		}
-	}
-
-	// Not found.
-	return false;
-}
+// bool shrevent_fire(u16 code, void *sender, const sapp_event *data) {
+//
+// 	if (!initialized) return false;
+//
+// 	if (state.registered[code].events == 0) {
+// 		return false;
+// 	}
+//
+// 	u64 registered_count = darray_length(state.registered[code].events);
+// 	for (u64 i = 0; i < registered_count; ++i) {
+//
+// 		shrevent_registered e = state.registered[code].events[i];
+// 		if (e.callback(code, sender, e.listener, data)) {
+// 			// Has been handled. Do not send to other listeners.
+// 			return true;
+// 		}
+// 	}
+//
+// 	// Not found.
+// 	return false;
+// }
 
 bool shrevent_register_multi(u16 *events, void *listener, shrevent_callback on_event) {
 

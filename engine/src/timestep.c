@@ -10,7 +10,7 @@ shrtimestep* shrtimestep_new() {
 	timestep->frame = 0.0f;
 	timestep->time = 0.0f;
 
-	stm_setup();
+	// stm_setup();
 
 	return timestep;
 }
@@ -26,10 +26,10 @@ void shrtimestep_start(shrtimestep *timestep) {
 	// timestep->delta = timestep->time - timestep->last;
 	// timestep->last = timestep->time;
 
-	u64 count = sapp_frame_count();
-	f64 dur = (f64)sapp_frame_duration();
-
-	SHR_INFO("Count: %i, Duration: %lf", count, dur);
+	// u64 count = sapp_frame_count();
+	// f64 dur = (f64)sapp_frame_duration();
+	//
+	// SHR_INFO("Count: %i, Duration: %lf", count, dur);
 
 	// f32 sec = stm_sec(timestep->delta);
 	// f32 mil = stm_ms(timestep->delta);

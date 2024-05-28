@@ -9,10 +9,10 @@
 #include "types.h"
 #include "core.h"
 
-#include "sokol_app.h"
-#include "sokol_gfx.h"
-#include "sokol_log.h"
-#include "sokol_glue.h"
+// #include "sokol_app.h"
+// #include "sokol_gfx.h"
+// #include "sokol_log.h"
+// #include "sokol_glue.h"
 
 // #define NK_INCLUDE_FIXED_TYPES
 // #define NK_INCLUDE_STANDARD_IO

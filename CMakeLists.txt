@@ -11,16 +11,18 @@ include_directories(
 	include
 	engine/src
 	engine/lib/log
-	engine/lib/sokol
-	engine/lib/nuklear
+	# engine/lib/sokol
+	# engine/lib/nuklear
+	engine/lib/glad/include
 	engine/lib/cglm/include
 	/home/user/proj/c/fips-build/shraybn/linux-make-debug/engine
 )
 
 fips_setup()
-add_subdirectory(engine/lib/rres)
+# add_subdirectory(engine/lib/rres)
 add_subdirectory(engine/lib/log)
-add_subdirectory(packer)
+add_subdirectory(engine/lib/glad)
+# add_subdirectory(packer)
 add_subdirectory(engine)
 add_subdirectory(runtime)
 # add_subdirectory(editor)

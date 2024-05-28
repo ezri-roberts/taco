@@ -6,7 +6,7 @@
 #endif
 
 #ifdef SHR_PLATFORM_LINUX
-	#define SOKOL_GLCORE
+	// #define SOKOL_GLCORE
 #endif // DEBUG
 
 #ifdef SHR_PATFORM_WINDOWS

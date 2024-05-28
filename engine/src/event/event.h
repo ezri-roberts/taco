@@ -32,7 +32,7 @@ typedef enum {
 } shrevent_category;
 
 // Should return true if handled.
-typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, const sapp_event *data);
+typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, void *data);
 
 typedef struct shrevent_registered {
 
@@ -55,7 +55,7 @@ bool shrevent_initialize();
 void shrevent_shutdown();
 bool shrevent_register(u16 code, void *listener, shrevent_callback on_event);
 bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event);
-bool shrevent_fire(u16 code, void *sender, const sapp_event *data);
+bool shrevent_fire(u16 code, void *sender, void *data);
 bool shrevent_in_category(shrevent_code code, shrevent_category category);
 bool shrevent_register_category(u16 category, void *listener, shrevent_callback on_event);
 bool shrevent_unregister_category(u16 category, void *listener, shrevent_callback on_event);
