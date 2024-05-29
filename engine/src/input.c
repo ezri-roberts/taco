@@ -55,22 +55,21 @@ void shrinput_process_button(shrevent_data *data, bool pressed) {
 	}
 }
 
-// void shrinput_process_mouse_move(const sapp_event *data) {
-//
-// 	const i16 x = data->mouse_x;
-// 	const i16 y = data->mouse_y;
-//
-//
-// 	if (state.mouse_current.position[0] != x || state.mouse_current.position[1] != y) {
-//
-// 		glm_vec2_copy(
-// 			(vec2){data->mouse_x, data->mouse_y},
-// 			state.mouse_current.position
-// 		);
-//
-// 		shrevent_fire(EVENT_MOUSE_MOVE, 0, data);
-// 	}
-// }
+void shrinput_process_mouse_move(shrevent_data *data) {
+
+	const i16 x = data->button.x;
+	const i16 y = data->button.y;
+
+	if (state.mouse_current.position[0] != x || state.mouse_current.position[1] != y) {
+
+		glm_vec2_copy(
+			(vec2){x, y},
+			state.mouse_current.position
+		);
+
+		shrevent_fire(EVENT_MOUSE_MOVE, 0, data);
+	}
+}
 //
 // void shrinput_process_mouse_wheel(const sapp_event *data) {
 // 	shrevent_fire(EVENT_MOUSE_SCROLL, 0, data);

@@ -139,7 +139,7 @@ void shrevent_poll() {
 				break;
 			}
 			case SDL_MOUSEMOTION:
-				// shrinput_process_mouse_move(e);
+				shrinput_process_mouse_move(&event);
 			break;
 			case SDL_MOUSEWHEEL:
 				// shrinput_process_mouse_wheel(e);
