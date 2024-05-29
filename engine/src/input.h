@@ -6,10 +6,11 @@
 #include "event/event.h"
 
 typedef enum shrinput_button {
-	BUTTON_LEFT,
-	BUTTON_RIGHT,
-	BUTTON_MIDDLE,
-	BUTTON_MAX
+	BUTTON_UNKNOWN = 0,
+	BUTTON_LEFT    = 1,
+	BUTTON_MIDDLE  = 2,
+	BUTTON_RIGHT   = 3,
+	BUTTON_MAX     = 4,
 } shrinput_button;
 
 typedef struct shrkeyboard_state {
@@ -32,7 +33,7 @@ bool shrinput_initialize();
 void shrinput_shutdown();
 void shrinput_update();
 void shrinput_process_key(shrevent_data *data, bool pressed);
-// void shrinput_process_button(const sapp_event *data, bool pressed);
+void shrinput_process_button(shrevent_data *data, bool pressed);
 // void shrinput_process_mouse_move(const sapp_event *data);
 // void shrinput_process_mouse_wheel(const sapp_event *data);
 

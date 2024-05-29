@@ -135,7 +135,7 @@ void shrevent_poll() {
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_MOUSEBUTTONUP: {
 				bool pressed = (event.type == SDL_MOUSEBUTTONDOWN);
-				// shrinput_process_button(e, pressed);
+				shrinput_process_button(&event, pressed);
 				break;
 			}
 			case SDL_MOUSEMOTION:

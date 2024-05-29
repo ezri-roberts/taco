@@ -1,4 +1,5 @@
 #include "input.h"
+#include <SDL2/SDL_mouse.h>
 
 static shrinput_state state = {};
 static bool initialized = false;
@@ -42,18 +43,18 @@ void shrinput_process_key(shrevent_data *data, bool pressed) {
 		shrevent_fire(pressed ? EVENT_KEY_PRESS : EVENT_KEY_RELEASE, 0, data);
 	}
 }
-//
-// void shrinput_process_button(const sapp_event *data, bool pressed) {
-//
-// 	shrinput_button button = (shrinput_button)data->mouse_button;
-//
-// 	if (state.mouse_current.buttons[button] != pressed) {
-//
-// 		state.mouse_current.buttons[button] = pressed;
-// 		shrevent_fire(pressed ? EVENT_MOUSE_PRESS : EVENT_MOUSE_RELEASE, 0, data);
-// 	}
-// }
-//
+
+void shrinput_process_button(shrevent_data *data, bool pressed) {
+
+	shrinput_button button = (shrinput_button)data->button.button;
+
+	if (state.mouse_current.buttons[button] != pressed) {
+
+		state.mouse_current.buttons[button] = pressed;
+		shrevent_fire(pressed ? EVENT_MOUSE_PRESS : EVENT_MOUSE_RELEASE, 0, data);
+	}
+}
+
 // void shrinput_process_mouse_move(const sapp_event *data) {
 //
 // 	const i16 x = data->mouse_x;
