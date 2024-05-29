@@ -86,6 +86,14 @@ bool shrapp_run() {
 
 		if (!app.suspended) {
 
+			if (input_key_pressed(KEY_A)) {
+				SHR_TRACE("KEY_A");
+			}
+
+			if (input_button_pressed(BUTTON_LEFT)) {
+				SHR_TRACE("BUTTON_LEFT");
+			}
+
 			shrinput_update();
 		}
 	}

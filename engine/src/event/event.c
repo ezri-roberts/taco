@@ -80,7 +80,7 @@ bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event) {
 	return false;
 }
 
-bool shrevent_fire(u16 code, void *sender, shrevent_data *data) {
+bool shrevent_fire(u16 code, void *sender, const shrevent_data *data) {
 
 	if (!initialized) return false;
 
@@ -127,23 +127,19 @@ void shrevent_poll() {
 
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
+
 			case SDL_KEYDOWN:
-			case SDL_KEYUP: {
-				bool pressed = (event.type == SDL_KEYDOWN);
-				shrinput_process_key(&event, pressed);
-			} break;
+				shrinput_process_key(&event, true); break;
+			case SDL_KEYUP:
+				shrinput_process_key(&event, false); break;
 			case SDL_MOUSEBUTTONDOWN:
-			case SDL_MOUSEBUTTONUP: {
-				bool pressed = (event.type == SDL_MOUSEBUTTONDOWN);
-				shrinput_process_button(&event, pressed);
-				break;
-			}
+				shrinput_process_button(&event, true); break;
+			case SDL_MOUSEBUTTONUP:
+				shrinput_process_button(&event, false); break;
 			case SDL_MOUSEMOTION:
-				shrinput_process_mouse_move(&event);
-			break;
+				shrinput_process_mouse_move(&event); break;
 			case SDL_MOUSEWHEEL:
-				// shrinput_process_mouse_wheel(e);
-			break;
+				shrinput_process_mouse_wheel(&event); break;
 			case SDL_QUIT:
 				shrevent_fire(EVENT_APP_QUIT, 0, &event); break;
 
@@ -153,7 +149,7 @@ void shrevent_poll() {
 				} else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
 					shrevent_fire(EVENT_WINDOW_FOCUS, 0, &event);
 				}
-			} break;
+			};
 
 			default: break;
 		}

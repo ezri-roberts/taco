@@ -32,10 +32,10 @@ typedef struct shrinput_state {
 bool shrinput_initialize();
 void shrinput_shutdown();
 void shrinput_update();
-void shrinput_process_key(shrevent_data *data, bool pressed);
-void shrinput_process_button(shrevent_data *data, bool pressed);
-void shrinput_process_mouse_move(shrevent_data *data);
-// void shrinput_process_mouse_wheel(const sapp_event *data);
+void shrinput_process_key(const shrevent_data *data, bool pressed);
+void shrinput_process_button(const shrevent_data *data, bool pressed);
+void shrinput_process_mouse_move(const shrevent_data *data);
+void shrinput_process_mouse_wheel(const shrevent_data *data);
 
 // Keyboard Input.
 bool input_key_down(shrinput_key key);

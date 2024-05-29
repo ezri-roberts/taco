@@ -12,8 +12,6 @@ bool shrrenderer_initialize() {
 	initialized = false;
 
 	memset(&renderer, 0, sizeof(shrrenderer));
-	// memset(&renderer.pipeline, 0, sizeof(sg_pipeline));
-	// memset(&renderer.bind, 0, sizeof(sg_bindings));
 
 	#if defined (SHR_GLCORE)
 

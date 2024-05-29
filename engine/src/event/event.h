@@ -33,7 +33,7 @@ typedef enum {
 
 typedef SDL_Event shrevent_data;
 // Should return true if handled.
-typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, shrevent_data *data);
+typedef bool (*shrevent_callback)(u16 code, void *sender, void *listener, const shrevent_data *data);
 
 typedef struct shrevent_registered {
 	void *listener;
@@ -55,7 +55,7 @@ void shrevent_shutdown();
 void shrevent_poll();
 bool shrevent_register(u16 code, void *listener, shrevent_callback on_event);
 bool shrevent_unregister(u16 code, void *listener, shrevent_callback on_event);
-bool shrevent_fire(u16 code, void *sender, shrevent_data *data);
+bool shrevent_fire(u16 code, void *sender, const shrevent_data *data);
 bool shrevent_in_category(shrevent_code code, shrevent_category category);
 bool shrevent_register_category(u16 category, void *listener, shrevent_callback on_event);
 bool shrevent_unregister_category(u16 category, void *listener, shrevent_callback on_event);

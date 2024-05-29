@@ -33,20 +33,20 @@ void shrinput_update() {
 	memcpy(&state.mouse_previous, &state.mouse_current, sizeof(shrmouse_state));
 }
 
-void shrinput_process_key(shrevent_data *data, bool pressed) {
+void shrinput_process_key(const shrevent_data *data, bool pressed) {
 
-	shrinput_key key = (shrinput_key)data->key.keysym.sym;
+	u16 key = data->key.keysym.sym;
 
 	if (state.keyboard_current.keys[key] != pressed) {
 
 		state.keyboard_current.keys[key] = pressed;
-		shrevent_fire(pressed ? EVENT_KEY_PRESS : EVENT_KEY_RELEASE, 0, data);
+		// shrevent_fire(pressed ? EVENT_KEY_PRESS : EVENT_KEY_RELEASE, 0, data);
 	}
 }
 
-void shrinput_process_button(shrevent_data *data, bool pressed) {
+void shrinput_process_button(const shrevent_data *data, bool pressed) {
 
-	shrinput_button button = (shrinput_button)data->button.button;
+	u8 button = data->button.button;
 
 	if (state.mouse_current.buttons[button] != pressed) {
 
@@ -55,10 +55,10 @@ void shrinput_process_button(shrevent_data *data, bool pressed) {
 	}
 }
 
-void shrinput_process_mouse_move(shrevent_data *data) {
+void shrinput_process_mouse_move(const shrevent_data *data) {
 
-	const i16 x = data->button.x;
-	const i16 y = data->button.y;
+	const i16 x = data->motion.x;
+	const i16 y = data->motion.y;
 
 	if (state.mouse_current.position[0] != x || state.mouse_current.position[1] != y) {
 
@@ -70,10 +70,10 @@ void shrinput_process_mouse_move(shrevent_data *data) {
 		shrevent_fire(EVENT_MOUSE_MOVE, 0, data);
 	}
 }
-//
-// void shrinput_process_mouse_wheel(const sapp_event *data) {
-// 	shrevent_fire(EVENT_MOUSE_SCROLL, 0, data);
-// }
+
+void shrinput_process_mouse_wheel(const shrevent_data *data) {
+	shrevent_fire(EVENT_MOUSE_SCROLL, 0, data);
+}
 
 // Keyboard Input.
 bool input_key_down(shrinput_key key) {
